@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/06 12:51:12 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/06 13:05:00 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,5 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <unistd.h>
-
 
 #endif
