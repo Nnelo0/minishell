@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/06 12:19:30 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/06 13:04:46 by ebroudic         ###   ########.fr       */
+/*   Created: 2024/10/17 10:45:27 by ebroudic          #+#    #+#             */
+/*   Updated: 2025/01/06 12:49:03 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,3 +25,11 @@ int	ft_strcmp(const char *s1, const char *s2)
 	}
 	return (0);
 }
+/*int main()
+{
+	const char *s1 = "Hello";
+	const char *s2 = "Hella";
+	printf("%d\n", ft_strncmp(s1, s2, 5));
+	printf("%d\n", strncmp(s1, s2, 5));
+	return 0;
+}*/
