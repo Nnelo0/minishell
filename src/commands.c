@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/06 15:15:23 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/06 15:32:06 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	ft_yes(void)
 void	ft_exit(char *input)
 {
 	free(input);
-	return (0);
 }
 
 void	commands(char *input)
