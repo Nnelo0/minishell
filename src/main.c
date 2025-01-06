@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/06 13:04:54 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/06 13:17:22 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,6 @@ void	handle_prompt(void)
 int	main(void)
 {
 	handle_prompt();
+	prinft("a");
 	return (0);
 }
