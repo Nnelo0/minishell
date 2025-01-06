@@ -6,11 +6,18 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/06 12:20:36 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/06 12:44:56 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	keypress(char *input)
+{
+	if (!input)
+		return (0);
+	return (1);
+}
 
 void	handle_prompt(void)
 {
@@ -19,7 +26,7 @@ void	handle_prompt(void)
 	while (1)
 	{
 		input = readline("minishell> ");
-		if (!input)
+		if (!keypress(input))
 			break ;
 		if (ft_strcmp(input, "exit") == 0)
 		{
