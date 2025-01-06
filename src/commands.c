@@ -1,42 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/06 15:14:50 by ebroudic         ###   ########.fr       */
+/*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
+/*   Updated: 2025/01/06 15:15:23 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	keypress(char *input)
+void	ft_yes(void)
 {
-	if (!input)
-		return (0);
-	return (1);
-}
-
-void	handle_prompt(void)
-{
-	char	*input;
-
 	while (1)
-	{
-		input = readline("minishell> ");
-		if (!keypress(input))
-			break ;
-		command(input);
-		if (*input)
-			add_history(input);
-		free(input);
-	}
+		printf("y\n");
 }
 
-int	main(void)
+void	ft_exit(char *input)
 {
-	handle_prompt();
+	free(input);
 	return (0);
+}
+
+void	commands(char *input)
+{
+	if (ft_strncmp(input, "exit", 4) == 0 && (input[4] == ' ' || input[4] == '\0'))
+		ft_exit(input);
+	if (ft_strcmp(input, "yes") == 0)
+		ft_yes();
 }
