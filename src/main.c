@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/06 11:48:20 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/06 12:20:36 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ void	handle_prompt(void)
 		input = readline("minishell> ");
 		if (!input)
 			break ;
-		if (strcmp(input, "exit") == 0)
+		if (ft_strcmp(input, "exit") == 0)
 		{
 			free(input);
 			break ;
 		}
-		if (strcmp(input, "y") == 0 || strcmp(input, "yes") == 0)
+		if (ft_strcmp(input, "yes") == 0)
 		{
 			while (1)
 				printf("y\n");
@@ -37,7 +37,7 @@ void	handle_prompt(void)
 	}
 }
 
-int main(void)
+int	main(void)
 {
 	handle_prompt();
 	return (0);
