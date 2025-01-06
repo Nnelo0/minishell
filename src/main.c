@@ -47,6 +47,5 @@ void	handle_prompt(void)
 int	main(void)
 {
 	handle_prompt();
-	prinft("a");
 	return (0);
 }
