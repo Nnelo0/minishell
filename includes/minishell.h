@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/06 15:15:47 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/06 15:36:38 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 # include "pipex.h"
 
 void	ft_yes(void);
-void	ft_exit(char *input);
+int		ft_exit(char *input);
 
-void	commands(char *input);
+int		commands(char *input);
 
 #endif
