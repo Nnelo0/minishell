@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -Iincludes
 SRCS = src/*.c \
 
 LIBFTDIR = libft
@@ -9,7 +9,7 @@ LIBFT = $(LIBFTDIR)/libft.a
 all: $(LIBFT) $(NAME)
 
 $(NAME): $(SRCS) $(LIBFT)
-	$(CC) -I. -I$(LIBFTDIR) $(SRCS) $(LIBFT) $(CFLAGS) -o $(NAME)
+	$(CC) -I. -I$(LIBFTDIR) $(SRCS) $(LIBFT) $(CFLAGS) -o $(NAME) -lreadline
 	@echo "Compiled $(NAME) successfully!"
 
 $(LIBFT):

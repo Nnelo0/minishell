@@ -1,0 +1,11 @@
+{
+	"files.associations": {
+		"*.tcc": "c",
+		"string": "c",
+		"istream": "c",
+		"streambuf": "c",
+		"history.h": "c",
+		"minishell.h": "c",
+		"libft.h": "c"
+	}
+}
