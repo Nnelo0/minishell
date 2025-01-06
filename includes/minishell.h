@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/06 15:03:32 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/06 15:51:36 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,12 @@ typedef struct s_shell
 {
 	volatile	sig_atomic_t	signal_status;
 }	t_shell;
+
 void	handle_prompt(t_shell *shell);
 int		keypress(char *input, t_shell *shell);
 void	handle_sigint(int sig);
-void	handle_sigquit(int sig);
+void	ft_yes(char *input, t_shell *shell);
+int		ft_exit(char *input);
+int		commands(char *input, t_shell *shell);
 
 #endif

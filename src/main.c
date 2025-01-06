@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/06 15:26:33 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/06 15:59:07 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,6 @@ void	handle_sigint(int sig)
 {
 	(void)sig;
 	write(1, "\nminishell> ", 12);
-}
-
-void	handle_sigquit(int sig)
-{
-	(void)sig;
-	write(1, "minishell> ", 12);
 }
 
 int	keypress(char *input, t_shell *shell)
@@ -39,7 +33,10 @@ int	keypress(char *input, t_shell *shell)
 		return (1);
 	}
 	if (!input)
+	{
+		printf("exit\n");
 		return (0);
+	}
 	return (1);
 }
 
@@ -52,16 +49,8 @@ void	handle_prompt(t_shell *shell)
 		input = readline("minishell> ");
 		if (!keypress(input, shell))
 			break ;
-		if (strcmp(input, "exit") == 0)
-		{
-			free(input);
+		if (!commands(input, shell))
 			break ;
-		}
-		if (strcmp(input, "yes") == 0)
-		{
-			while (1)
-				printf("y\n");
-		}
 		if (*input)
 			add_history(input);
 		free(input);
