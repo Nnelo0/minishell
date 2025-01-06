@@ -1,10 +1,10 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -Iincludes
+CFLAGS = -Wall -Werror -Wextra
 SRCS = src/*.c \
 
 LIBFTDIR = libft
-LIBFT = $(LIBFTDIR)/libft.a
+LIBFT = $(LIBFTDIR)/libft.a 
 
 all: $(LIBFT) $(NAME)
 
