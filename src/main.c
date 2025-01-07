@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/07 11:05:52 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/07 12:27:49 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	handle_prompt(t_shell *shell, char **envp)
 		input = readline("minishell> ");
 		if (!keypress(input, shell))
 			break ;
-		if (!commands(input, envp))
+		if (!commands(input, envp, shell))
 			break ;
 		if (*input)
 			add_history(input);

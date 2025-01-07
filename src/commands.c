@@ -3,14 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/07 11:06:25 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/07 13:41:55 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	ft_cd(t_shell *shell, char **envp)
+{
+	char	*home;
+	char	*target;
+	char	cwd[1024];
+
+	(void)envp;
+	home = getenv("HOME");
+	if (!shell->args[1])
+	{
+		if (!home)
+		{
+			printf("cd: HOME not set\n");
+			return ;
+		}
+		target = home;
+	}
+	else if (shell->args[2])
+	{
+		fprintf(stderr, "cd: too many arguments\n");
+		return ;
+	}
+	else
+		target = shell->args[1];
+	if (chdir(target) == -1)
+	{
+		perror("cd");
+		return ;
+	}
+	if (getcwd(cwd, sizeof(cwd)) && setenv("PWD", cwd, 1) == -1)
+	{
+		perror("cd: Failed to set PWD");
+		return ;
+	}
+}
 
 int	ft_exit(char *input)
 {
@@ -69,8 +105,9 @@ void	ft_echo(char *input)
 	ft_printf("\n");
 }
 
-int	commands(char *input, char **envp)
+int	commands(char *input, char **envp, t_shell *shell)
 {
+	shell->args = ft_split(input, ' ');
 	if (!ft_quotes(input))
 		ft_printf("open quote\n");
 	if (ft_strncmp(input, "exit", 4) == 0
@@ -79,6 +116,12 @@ int	commands(char *input, char **envp)
 	if (ft_strncmp(input, "echo", 4) == 0
 		&& (input[4] == ' ' || input[4] == '\0'))
 		ft_echo(input);
-	ft_shell(input, envp);
+	if (ft_strncmp(input, "cd", 2) == 0
+		&& (input[2] == ' ' || input[2] == '\0'))
+	{
+		ft_cd(shell, envp);
+		return (1);
+	}
+	ft_shell(input, envp, shell);
 	return (1);
 }
