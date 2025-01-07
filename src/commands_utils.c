@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/07 12:28:56 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/07 12:29:56 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	command_shell(char *input, char **envp, t_shell *shell)
 	path = find_command_path(*shell->args, envp);
 	if (!path)
 	{
-		ft_printf("command not foundsadd: %s\n", input);
+		ft_printf("command not found: %s\n", input);
 		free(path);
 		exit(EXIT_FAILURE);
 	}
