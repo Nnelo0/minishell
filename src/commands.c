@@ -6,11 +6,18 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/07 14:21:03 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/07 15:14:51 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	ft_exe(t_shell *shell, char **envp)
+{
+	char *exe;
+
+	exe = find_command_path(shell->args[0], envp)
+}
 
 int	ft_cd(t_shell *shell)
 {
@@ -24,7 +31,7 @@ int	ft_cd(t_shell *shell)
 			return (printf("cd: HOME not set\n"));
 	}
 	else if (shell->args[2])
-		return (fprintf(stderr, "cd: too many arguments\n"));
+		return (printf(stderr, "cd: too many arguments\n"));
 	else
 		target = shell->args[1];
 	if (chdir(target) == -1)
