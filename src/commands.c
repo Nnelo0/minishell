@@ -6,17 +6,11 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/07 10:49:28 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/07 11:06:25 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	ft_yes(void)
-{
-	while (1)
-		printf("y\n");
-}
 
 int	ft_exit(char *input)
 {
@@ -82,8 +76,6 @@ int	commands(char *input, char **envp)
 	if (ft_strncmp(input, "exit", 4) == 0
 		&& (input[4] == ' ' || input[4] == '\0'))
 		return (ft_exit(input));
-	// if (ft_strcmp(input, "yes") == 0)
-	// 	ft_yes();
 	if (ft_strncmp(input, "echo", 4) == 0
 		&& (input[4] == ' ' || input[4] == '\0'))
 		ft_echo(input);

@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/07 11:02:53 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/07 11:05:52 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ void	handle_sigint(int sig)
 {
 	(void)sig;
 	if (waitpid(-1, NULL, WNOHANG) == 0)
-    {
-        ft_printf("\n");
-        return ;
-    }
+	{
+		ft_printf("\n");
+		return ;
+	}
 	write(1, "\nminishell> ", 12);
 }
 
