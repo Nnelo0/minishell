@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/07 15:14:51 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/07 16:50:05 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,33 @@
 
 int	ft_exe(t_shell *shell, char **envp)
 {
-	char *exe;
+	int		status;
+	pid_t	pid;
 
-	exe = find_command_path(shell->args[0], envp)
+	if (!shell->args || !shell->args[0])
+		return (printf("minishell: command not found\n"));
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		return (1);
+	}
+	if (pid == 0)
+	{
+		if (execve(shell->args[0], shell->args, envp) == -1)
+		{
+			perror("minishell");
+			exit(1);
+		}
+	}
+	else
+		waitpid(pid, &status, 0);
+	return (0);
 }
 
 int	ft_cd(t_shell *shell)
 {
 	char	*target;
-	char	cwd[1024];
 
 	if (!shell->args[1])
 	{
@@ -31,17 +49,12 @@ int	ft_cd(t_shell *shell)
 			return (printf("cd: HOME not set\n"));
 	}
 	else if (shell->args[2])
-		return (printf(stderr, "cd: too many arguments\n"));
+		return (printf("cd: too many arguments\n"));
 	else
 		target = shell->args[1];
 	if (chdir(target) == -1)
 	{
 		perror("cd");
-		return (1);
-	}
-	if (getcwd(cwd, sizeof(cwd)) && setenv("PWD", cwd, 1) == -1)
-	{
-		perror("cd: Failed to set PWD");
 		return (1);
 	}
 	return (1);
@@ -130,7 +143,7 @@ int	commands(char *input, char **envp, t_shell *shell)
 	}
 	if (ft_strncmp(input, "./", 2) == 0)
 	{
-		ft_exe(shell, shell);
+		ft_exe(shell, envp);
 		return (1);
 	}
 	ft_shell(input, envp, shell);
