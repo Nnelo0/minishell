@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/07 12:48:37 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/07 15:50:11 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ int	ft_quotes(char *input)
 	double_open = 0;
 	while (input[i])
 	{
-		if (input[i] == 39)
+		if (input[i] == 39 && double_open == 0)
 			single_open = !single_open;
-		else if (input[i] == 34)
+		else if (input[i] == 34 && single_open == 0)
 			double_open = !double_open;
 		i++;
 	}
@@ -51,8 +51,6 @@ void	ft_echo(char *input)
 		i = 8;
 		while (input[i])
 		{
-			while (input[i] == 34 || input[i] == 39)
-				i++;
 			write(1, &input[i], 1);
 			i++;
 		}
@@ -61,23 +59,49 @@ void	ft_echo(char *input)
 	i = 5;
 	while (input[i])
 	{
-		while (input[i] == 34 || input[i] == 39)
-			i++;
 		write(1, &input[i], 1);
 		i++;
 	}
 	ft_printf("\n");
 }
 
+void	ft_remove_quotes(char *input)
+{
+	int		i;
+	int		j;
+	char	quote_type;
+
+	i = 0;
+	j = 0;
+	quote_type = '\0';
+	while (input[i])
+	{
+		if ((input[i] == 39 || input[i] == 34) && quote_type == '\0')
+			quote_type = input[i];
+		else if (input[i] == quote_type)
+			quote_type = '\0';
+		else
+		{
+			input[j] = input[i];
+			j++;
+		}
+		i++;
+	}
+	if (quote_type != '\0')
+		input[++j] = quote_type;
+	input[j] = '\0';
+}
+
 int	commands(char *input, char **envp, t_shell *shell)
 {
-	while (*input  && (*input == ' ' || *input == '\t'))
+	while (*input && (*input == ' ' || *input == '\t'))
 		input++;
 	if (*input == '\0')
 		return (1);
 	shell->args = ft_split(input, ' ');
 	if (!ft_quotes(input))
-		return(ft_printf("open quote\n"));
+		return (ft_printf("open quote\n"));
+	ft_remove_quotes(input);
 	if (ft_strncmp(input, "exit", 4) == 0
 		&& (input[4] == ' ' || input[4] == '\0'))
 		return (ft_exit(input));

@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/07 12:28:11 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/07 15:41:32 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_shell
 {
 	sig_atomic_t	signal_status;
 	char			**args;
+	char			*inputsave;
 }	t_shell;
 
 void	handle_prompt(t_shell *shell, char **envp);
