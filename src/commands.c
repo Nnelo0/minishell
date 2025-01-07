@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/07 11:06:25 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/07 12:28:43 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,9 @@ void	ft_echo(char *input)
 	ft_printf("\n");
 }
 
-int	commands(char *input, char **envp)
+int	commands(char *input, char **envp, t_shell *shell)
 {
+	shell->args = ft_split(input, ' ');
 	if (!ft_quotes(input))
 		ft_printf("open quote\n");
 	if (ft_strncmp(input, "exit", 4) == 0
@@ -79,6 +80,6 @@ int	commands(char *input, char **envp)
 	if (ft_strncmp(input, "echo", 4) == 0
 		&& (input[4] == ' ' || input[4] == '\0'))
 		ft_echo(input);
-	ft_shell(input, envp);
+	ft_shell(input, envp, shell);
 	return (1);
 }
