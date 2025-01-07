@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/07 08:52:08 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/07 09:09:19 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,35 +26,22 @@ int	ft_exit(char *input)
 int		ft_quotes(char *input)
 {
 	int	i;
-	int	j;
+	int	single_open;
+	int	double_open;
 
 	i = 0;
+	single_open = 0;
+	double_open = 0;
 	while (input[i])
 	{
-		if (input[i] == 34)
-		{
-			j = i;
-			while (input[j])
-			{
-				if (input[i] == 34)
-					return (1);
-				j++;
-			}
-			return (0);
-		}
 		if (input[i] == 39)
-		{
-			j = i;
-			while (input[j])
-			{
-				if (input[i] == 39)
-					return (1);
-				j++;
-			}
-			return (0);
-		}
+			single_open = !single_open;
+		else if (input[i] == 34)
+			double_open = !double_open;
 		i++;
 	}
+	if (single_open || double_open)
+		return (0);
 	return (1);
 }
 
@@ -88,7 +75,7 @@ void	ft_echo(char *input)
 int	commands(char *input)
 {
 	if (!ft_quotes(input))
-		printf
+		ft_printf("open quote\n");
 	if (ft_strncmp(input, "exit", 4) == 0 && (input[4] == ' ' || input[4] == '\0'))
 			return(ft_exit(input));
 	if (ft_strcmp(input, "yes") == 0)
