@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/06 15:51:36 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/07 11:06:29 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,19 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <unistd.h>
+# include "pipex.h"
 # include <signal.h>
 
 typedef struct s_shell
 {
-	volatile	sig_atomic_t	signal_status;
+	volatile sig_atomic_t	signal_status;
 }	t_shell;
 
-void	handle_prompt(t_shell *shell);
+void	handle_prompt(t_shell *shell, char **envp);
 int		keypress(char *input, t_shell *shell);
 void	handle_sigint(int sig);
-void	ft_yes(char *input, t_shell *shell);
 int		ft_exit(char *input);
-int		commands(char *input, t_shell *shell);
+int		commands(char *input, char **envp);
+void	ft_shell(char *input, char **envp);
 
 #endif
