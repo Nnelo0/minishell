@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/07 14:06:39 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/07 14:21:03 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,11 @@ int	commands(char *input, char **envp, t_shell *shell)
 		&& (input[2] == ' ' || input[2] == '\0'))
 	{
 		ft_cd(shell);
+		return (1);
+	}
+	if (ft_strncmp(input, "./", 2) == 0)
+	{
+		ft_exe(shell, shell);
 		return (1);
 	}
 	ft_shell(input, envp, shell);
