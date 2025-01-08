@@ -6,15 +6,29 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/07 16:50:05 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/08 15:14:49 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+void free_args(char **args)
+{
+	int	i;
+
+	i = 0;
+	if (!args)
+		return ;
+	while (args[i])
+	{
+		free(args[i]);
+		i++;
+	}
+	free(args);
+}
+
 int	ft_exe(t_shell *shell, char **envp)
 {
-	int		status;
 	pid_t	pid;
 
 	if (!shell->args || !shell->args[0])
@@ -30,11 +44,13 @@ int	ft_exe(t_shell *shell, char **envp)
 		if (execve(shell->args[0], shell->args, envp) == -1)
 		{
 			perror("minishell");
+			free_args(shell->args);
 			exit(1);
 		}
 	}
-	else
-		waitpid(pid, &status, 0);
+	wait(NULL);
+	free_args(shell->args);
+	shell->args = NULL;
 	return (0);
 }
 
