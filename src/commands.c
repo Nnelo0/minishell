@@ -6,13 +6,45 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/08 15:14:49 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/08 16:24:44 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void free_args(char **args)
+void	ft_pwd(void)
+{
+	char	*cwd;
+	char	*buffer;
+
+	buffer = (char *)malloc(sizeof(char) * 4096);
+	if (!buffer)
+	{
+		perror("malloc");
+		return ;
+	}
+	cwd = getcwd(buffer, 4096);
+	if (!cwd)
+	{
+		perror("");
+		return ;
+	}
+	printf("%s\n", cwd);
+}
+
+void	ft_env(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i])
+	{
+		printf("%s\n", envp[i]);
+		i++;
+	}
+}
+
+void	free_args(char **args)
 {
 	int	i;
 
@@ -162,6 +194,16 @@ int	commands(char *input, char **envp, t_shell *shell)
 		ft_exe(shell, envp);
 		return (1);
 	}
-	ft_shell(input, envp, shell);
+	if (ft_strncmp(input, "env", 3) == 0 && input[3] == '\0')
+	{
+		ft_env(envp);
+		return (1);
+	}
+	if (ft_strncmp(input, "pwd", 3) == 0 && input[3] == '\0')
+	{
+		ft_pwd();
+		return (1);
+	}
+	//ft_shell(input, envp, shell);
 	return (1);
 }
