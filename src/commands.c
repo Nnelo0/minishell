@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/07 15:50:11 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:49:30 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,64 @@ void	ft_remove_quotes(char *input)
 		input[++j] = quote_type;
 	input[j] = '\0';
 }
+int ft_pipe(char *input, char **envp, t_shell *shell)
+{
+	(void)shell;
+	char	**cmds;
+	int		pipefd[2];
+    pid_t	pid;
+	int		i;
+	int		prev_fd;
+	char	*path;
+	
+	i = 0;
+	prev_fd = 0;
+	cmds = ft_split(input, '|');
+	if (!cmds)
+		return (1);
+	while (cmds[i])
+	{
+		if (cmds[i + 1] && pipe(pipefd) == -1)
+		{
+			free_cmd(cmds);
+			return (1);
+		}
+		pid = fork();
+		if (pid == -1)
+		{
+			free_cmd(cmds);
+			return (1);
+		}
+		if (pid == 0)
+		{
+			if (cmds[i + 1])
+				dup2(pipefd[1], STDOUT_FILENO);
+			if (prev_fd != 0)
+                dup2(prev_fd, STDIN_FILENO);
+			close(pipefd[0]);
+            close(pipefd[1]);
+			path = find_command_path(cmds[i], envp);
+			if (!path)
+			{
+				ft_printf("command not found: %s\n", input);
+				free(path);
+				free_cmd(cmds);
+				exit(EXIT_FAILURE);
+			}
+			execve(path, cmds, envp);
+			ft_printf("command not found: %s\n", input);
+			free(path);
+			free_cmd(cmds);
+			exit(EXIT_FAILURE);
+		}
+		i++;
+	}
+	if (prev_fd != 0)
+        close(prev_fd);
+	while (wait(NULL) > 0);
+    free_cmd(cmds);
+    return (1);
+}
 
 int	commands(char *input, char **envp, t_shell *shell)
 {
@@ -101,6 +159,8 @@ int	commands(char *input, char **envp, t_shell *shell)
 	shell->args = ft_split(input, ' ');
 	if (!ft_quotes(input))
 		return (ft_printf("open quote\n"));
+	if (ft_strchr(input, '|'))
+		return (ft_pipe(input, envp, shell));
 	ft_remove_quotes(input);
 	if (ft_strncmp(input, "exit", 4) == 0
 		&& (input[4] == ' ' || input[4] == '\0'))
