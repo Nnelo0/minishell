@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/08 15:00:36 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/09 08:48:46 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@ void	command_shell(char *input, char **envp, t_shell *shell)
 	{
 		ft_printf("command not found: %s\n", input);
 		free(path);
+		free_args(shell->args);
 		exit(EXIT_FAILURE);
 	}
 	execve(path, shell->args, envp);
 	ft_printf("command not found: %s\n", input);
 	free(path);
+	free_args(shell->args);
 	exit(EXIT_FAILURE);
 }
 

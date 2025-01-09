@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/08 16:23:40 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/01/09 09:04:26 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_exit(char *input)
+int	ft_exit(char *input, t_shell *shell)
 {
 	printf("exit\n");
 	free(input);
+	free_args(shell->args);
 	return (0);
 }
 
@@ -95,7 +96,7 @@ int	commands(char *input, char **envp, t_shell *shell)
 	ft_remove_quotes(input);
 	if (ft_strncmp(input, "exit", 4) == 0
 		&& (input[4] == ' ' || input[4] == '\0'))
-		return (ft_exit(input));
+		return (ft_exit(input, shell));
 	if (ft_strncmp(input, "echo", 4) == 0
 		&& (input[4] == ' ' || input[4] == '\0'))
 		return (ft_echo(input));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 16:17:37 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/08 16:22:49 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/01/09 09:38:56 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,22 +65,21 @@ int	ft_echo(char *input)
 {
 	int	i;
 
-	if (input[5] == '-' && input[6] == 'n'
-		&& (input[7] == ' ' || input[7] == '\0'))
+	if (ft_strlen(input) >= 5 && input[4] == ' ')
 	{
-		i = 8;
-		while (input[i])
+		if (input[5] == '-' && input[6] == 'n'
+			&& (input[7] == ' ' || input[7] == '\0'))
 		{
-			write(1, &input[i], 1);
-			i++;
+			i = 7;
+			while (input[i] == ' ')
+				i++;
+			if (input[i] == '\0')
+				return (1);
+			ft_printf("%s", input + i);
+			return (1);
 		}
-		return (1);
-	}
-	i = 5;
-	while (input[i])
-	{
-		write(1, &input[i], 1);
-		i++;
+		i = 5;
+		ft_printf("%s", input + i);
 	}
 	ft_printf("\n");
 	return (1);
