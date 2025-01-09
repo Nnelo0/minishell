@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/08 19:45:35 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/01/09 10:46:44 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@ void	command_shell(char *input, char **envp, t_shell *shell)
 	{
 		ft_printf("command not found: %s\n", input);
 		free(path);
+		free_args(shell->args);
 		exit(EXIT_FAILURE);
 	}
 	execve(path, shell->args, envp);
 	ft_printf("command not found: %s\n", input);
 	free(path);
+	free_args(shell->args);
 	exit(EXIT_FAILURE);
 }
 
@@ -39,4 +41,39 @@ void	ft_shell(char *input, char **envp, t_shell *shell)
 	if (pid == 0)
 		command_shell(input, envp, shell);
 	wait(NULL);
+}
+
+int	ft_pwd(void)
+{
+	char	*cwd;
+	char	*buffer;
+
+	buffer = (char *)malloc(sizeof(char) * 4096);
+	if (!buffer)
+	{
+		perror("malloc");
+		return (1);
+	}
+	cwd = getcwd(buffer, 4096);
+	if (!cwd)
+	{
+		perror("");
+		return (1);
+	}
+	printf("%s\n", cwd);
+	free(buffer);
+	return (1);
+}
+
+int	ft_env(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i])
+	{
+		printf("%s\n", envp[i]);
+		i++;
+	}
+	return (1);
 }
