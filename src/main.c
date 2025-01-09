@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/08 15:53:33 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/09 10:42:36 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	handle_prompt(t_shell *shell, char **envp)
 			add_history(input);
 		if (!commands(input, envp, shell))
 			break ;
+		if (shell->args)
+			free_args(shell->args);
 		free(input);
 	}
 }

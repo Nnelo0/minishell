@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/07 12:28:11 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/09 11:44:33 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,7 @@ void	handle_sigint(int sig);
 int		ft_exit(char *input);
 int		commands(char *input, char **envp, t_shell *shell);
 void	ft_shell(char *input, char **envp, t_shell *shell);
+void	free_args(char **args);
+int		ft_export(char **envp, t_shell *shell);
 
 #endif

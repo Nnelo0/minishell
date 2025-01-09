@@ -6,19 +6,11 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/09 10:28:30 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/09 11:40:51 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void ft_export(char **envp)
-{
-	int	i;
-
-	if (!envp)
-		return ;
-}
 
 void	ft_pwd(void)
 {
@@ -216,9 +208,10 @@ int	commands(char *input, char **envp, t_shell *shell)
 	if (ft_strncmp(input, "export", 6) == 0
 		&& (input[6] == ' ' || input[6] == '\0'))
 	{
-		ft_export(envp);
+		printf("%s\n\n", input);
+		ft_export(envp, shell);
 		return (1);
 	}
-	//ft_shell(input, envp, shell);
+	ft_shell(input, envp, shell);
 	return (1);
 }
