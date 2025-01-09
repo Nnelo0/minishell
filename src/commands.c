@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/09 10:54:24 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/09 11:10:55 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,6 @@ int	ft_exit(char *input, t_shell *shell)
 	free(input);
 	free_args(shell->args);
 	return (0);
-}
-
-void	free_args(char **args)
-{
-	int	i;
-
-	i = 0;
-	if (!args)
-		return ;
-	while (args[i])
-	{
-		free(args[i]);
-		i++;
-	}
-	free(args);
 }
 
 int	ft_exe(t_shell *shell, char **envp)
@@ -84,16 +69,8 @@ int	ft_cd(t_shell *shell)
 	return (1);
 }
 
-int	commands(char *input, char **envp, t_shell *shell)
+int	which_commands(char *input, char **envp, t_shell *shell)
 {
-	while (*input && (*input == ' ' || *input == '\t'))
-		input++;
-	if (*input == '\0')
-		return (1);
-	shell->args = ft_split(input, ' ');
-	if (!ft_quotes(input))
-		return (ft_printf("open quote\n"));
-	ft_remove_quotes(input);
 	if (ft_strncmp(input, "exit", 4) == 0
 		&& (input[4] == ' ' || input[4] == '\0'))
 		return (ft_exit(input, shell));
@@ -110,5 +87,19 @@ int	commands(char *input, char **envp, t_shell *shell)
 	if (ft_strncmp(input, "pwd", 3) == 0 && input[3] == '\0')
 		return (ft_pwd());
 	ft_shell(input, envp, shell);
+	return (1);
+}
+
+int	commands(char *input, char **envp, t_shell *shell)
+{
+	while (*input && (*input == ' ' || *input == '\t'))
+		input++;
+	if (*input == '\0')
+		return (1);
+	shell->args = ft_split(input, ' ');
+	if (!ft_quotes(input))
+		return (ft_printf("open quote\n"));
+	ft_remove_quotes(input);
+	which_commands(input, envp, shell);
 	return (1);
 }
