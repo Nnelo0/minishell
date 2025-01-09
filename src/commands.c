@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/09 09:04:26 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/09 10:50:02 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,13 @@ int	commands(char *input, char **envp, t_shell *shell)
 		return (ft_echo(input));
 	if (ft_strncmp(input, "cd", 2) == 0
 		&& (input[2] == ' ' || input[2] == '\0'))
-	{
-		ft_cd(shell);
-		return (1);
-	}
+		return(ft_cd(shell));
 	if (ft_strncmp(input, "./", 2) == 0)
 		return (ft_exe(shell, envp));
+	if (ft_strncmp(input, "env", 3) == 0 && input[3] == '\0')
+		return (ft_env(envp));
+	if (ft_strncmp(input, "pwd", 3) == 0 && input[3] == '\0')
+		return (ft_pwd());
 	ft_shell(input, envp, shell);
 	return (1);
 }

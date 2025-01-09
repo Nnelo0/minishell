@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/09 09:04:42 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/09 10:46:59 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,7 @@ int		ft_quotes(char *input);
 void	ft_remove_quotes(char *input);
 int		ft_echo(char *input);
 void	free_args(char **args);
+int		ft_env(char **envp);
+int		ft_pwd(void);
 
 #endif
