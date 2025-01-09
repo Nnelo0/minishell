@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/09 14:49:01 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/09 15:06:15 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,6 @@ int	ft_pipe(char *input, char **envp, t_shell *shell)
 	shell->cmds = ft_split(input, '|');
 	if (!shell->cmds)
 		return (1);
-	shell->envp1 = envp;
 	ft_command_pipe(shell->cmds, shell);
 	while (wait(NULL) > 0)
 		;
