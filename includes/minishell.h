@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/09 13:30:31 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/09 14:28:15 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <unistd.h>
-# include "pipex.h"
 # include <signal.h>
+# include <sys/wait.h>
 
 typedef struct s_shell
 {
@@ -46,5 +46,6 @@ int		ft_env(char **envp);
 int		ft_pwd(void);
 int		ft_pipe(char *input, char **envp, t_shell *shell);
 int		which_commands(char *input, char **envp, t_shell *shell);
+char	*find_command_path(char *cmd, char **envp);
 
 #endif

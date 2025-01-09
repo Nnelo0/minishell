@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/09 14:24:25 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/09 14:29:42 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ void	ft_execute_command(t_shell *shell, int pipefd[2], int prev_fd, int i)
 	{
 		ft_printf("command not found: %s\n", shell->cmds[i]);
 		free(path);
-		free_cmd(shell->cmds);
+		free_args(shell->cmds);
 		exit(EXIT_FAILURE);
 	}
 	execve(path, args, shell->envp1);
 	ft_printf("command not found: %s\n", shell->cmds[i]);
 	free(path);
-	free_cmd(shell->cmds);
+	free_args(shell->cmds);
 	exit(EXIT_FAILURE);
 }
 
@@ -51,10 +51,10 @@ int	ft_command_pipe(char **cmds, t_shell *shell)
 	while (cmds[i])
 	{
 		if (cmds[i + 1] && pipe(pipefd) == -1)
-			return (free_cmd(cmds), 1);
+			return (free_args(cmds), 1);
 		pid = fork();
 		if (pid == -1)
-			return (free_cmd(cmds), 1);
+			return (free_args(cmds), 1);
 		if (pid == 0)
 			ft_execute_command(shell, pipefd, prev_fd, i);
 		if (prev_fd != 0)
@@ -77,6 +77,35 @@ int	ft_pipe(char *input, char **envp, t_shell *shell)
 	ft_command_pipe(shell->cmds, shell);
 	while (wait(NULL) > 0)
 		;
-	free_cmd(shell->cmds);
+	free_args(shell->cmds);
 	return (1);
+}
+
+char	*find_command_path(char *cmd, char **envp)
+{
+	char	**paths;
+	char	*path;
+	int		i;
+	char	*part_path;
+
+	i = 0;
+	while (ft_strnstr(envp[i], "PATH", 4) == 0)
+		i++;
+	paths = ft_split(envp[i] + 5, ':');
+	i = 0;
+	while (paths[i])
+	{
+		part_path = ft_strjoin(paths[i], "/");
+		path = ft_strjoin(part_path, cmd);
+		free(part_path);
+		if (access(path, F_OK) == 0)
+		{
+			free_args(paths);
+			return (path);
+		}
+		free(path);
+		i++;
+	}
+	free_args(paths);
+	return (0);
 }
