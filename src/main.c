@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/09 12:20:55 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:47:38 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,33 @@ void	handle_prompt(t_shell *shell, char **envp)
 	}
 }
 
+t_list	*copy_env(char **envp)
+{
+	t_list	*new_list;
+	int		i;
+
+	i = 0;
+	while (envp[i])
+	{
+		new_list = malloc(sizeof(t_list));
+		if (!new_list)
+		{
+			ft_lstclear(&new_list);
+			return (NULL);
+		}
+		new_list->content = envp[i];
+		new_list->next = NULL;
+		ft_lstadd_back(&new_list, ft_strdup(envp[i]));
+	}
+	return (&new_list);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
+	t_list	*list_env;
 
+	shell.env = copy_env();
 	(void)argc;
 	(void)argv;
 	shell.signal_status = 0;

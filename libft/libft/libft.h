@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:14:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/06 12:48:35 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/09 14:32:10 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 /*			structure			*/
 typedef struct s_list
 {
-	int				content;
+	char			*content;
 	struct s_list	*next;
 }					t_list;
 

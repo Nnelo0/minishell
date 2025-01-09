@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/09 12:18:15 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:31:16 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,16 @@ typedef struct s_shell
 {
 	sig_atomic_t	signal_status;
 	char			**args;
+	t_list			env;
+	t_list			export;
 }	t_shell;
+
+typedef struct s_env
+{
+	char			*name;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
 
 void	handle_prompt(t_shell *shell, char **envp);
 int		keypress(char *input, t_shell *shell);
