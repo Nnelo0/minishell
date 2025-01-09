@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/09 10:46:59 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:30:31 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ typedef struct s_shell
 {
 	sig_atomic_t	signal_status;
 	char			**args;
+	char			**envp1;
+	char			**cmds;
 }	t_shell;
 
 void	handle_prompt(t_shell *shell, char **envp);
@@ -42,5 +44,7 @@ int		ft_echo(char *input);
 void	free_args(char **args);
 int		ft_env(char **envp);
 int		ft_pwd(void);
+int		ft_pipe(char *input, char **envp, t_shell *shell);
+int		which_commands(char *input, char **envp, t_shell *shell);
 
 #endif
