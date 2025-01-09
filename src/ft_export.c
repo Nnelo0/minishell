@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 11:25:25 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/01/09 12:15:43 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/09 12:22:18 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,8 @@ int	ft_export(char **envp, t_shell *shell)
 {
 	if (!shell->args[1])
 		ft_export_no_arg(envp);
-	else if (!shell->args[2])
-		ft_export_with_arg(envp);
+//	else if (!shell->args[2])
+//		ft_export_with_arg(envp);
 	else
 		return (printf("minishell: export: too many arguments\n"));
 	return (1);

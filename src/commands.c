@@ -6,58 +6,18 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/09 11:40:51 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/09 12:20:30 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	ft_pwd(void)
+int	ft_exit(char *input, t_shell *shell)
 {
-	char	*cwd;
-	char	*buffer;
-
-	buffer = (char *)malloc(sizeof(char) * 4096);
-	if (!buffer)
-	{
-		perror("malloc");
-		return ;
-	}
-	cwd = getcwd(buffer, 4096);
-	if (!cwd)
-	{
-		perror("");
-		return ;
-	}
-	printf("%s\n", cwd);
-	free(buffer);
-}
-
-void	ft_env(char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-	{
-		printf("%s\n", envp[i]);
-		i++;
-	}
-}
-
-void	free_args(char **args)
-{
-	int	i;
-
-	i = 0;
-	if (!args)
-		return ;
-	while (args[i])
-	{
-		free(args[i]);
-		i++;
-	}
-	free(args);
+	printf("exit\n");
+	free(input);
+	free_args(shell->args);
+	return (0);
 }
 
 int	ft_exe(t_shell *shell, char **envp)
@@ -84,7 +44,7 @@ int	ft_exe(t_shell *shell, char **envp)
 	wait(NULL);
 	free_args(shell->args);
 	shell->args = NULL;
-	return (0);
+	return (1);
 }
 
 int	ft_cd(t_shell *shell)
@@ -109,61 +69,28 @@ int	ft_cd(t_shell *shell)
 	return (1);
 }
 
-int	ft_exit(char *input)
+int	which_commands(char *input, char **envp, t_shell *shell)
 {
-	printf("exit\n");
-	free(input);
-	return (0);
-}
-
-int	ft_quotes(char *input)
-{
-	int	i;
-	int	single_open;
-	int	double_open;
-
-	i = 0;
-	single_open = 0;
-	double_open = 0;
-	while (input[i])
-	{
-		if (input[i] == 39)
-			single_open = !single_open;
-		else if (input[i] == 34)
-			double_open = !double_open;
-		i++;
-	}
-	if (single_open || double_open)
-		return (0);
+	if (ft_strncmp(input, "exit", 4) == 0
+		&& (input[4] == ' ' || input[4] == '\0'))
+		return (ft_exit(input, shell));
+	if (ft_strncmp(input, "echo", 4) == 0
+		&& (input[4] == ' ' || input[4] == '\0'))
+		return (ft_echo(input));
+	if (ft_strncmp(input, "cd", 2) == 0
+		&& (input[2] == ' ' || input[2] == '\0'))
+		return (ft_cd(shell));
+	if (ft_strncmp(input, "./", 2) == 0)
+		return (ft_exe(shell, envp));
+	if (ft_strncmp(input, "env", 3) == 0 && input[3] == '\0')
+		return (ft_env(envp));
+	if (ft_strncmp(input, "pwd", 3) == 0 && input[3] == '\0')
+		return (ft_pwd());
+	if (ft_strncmp(input, "export", 6) == 0
+		&& (input[6] == ' ' || input[6] == '\0'))
+		return (ft_export(envp, shell));
+	ft_shell(input, envp, shell);
 	return (1);
-}
-
-void	ft_echo(char *input)
-{
-	int	i;
-
-	if (input[5] == '-' && input[6] == 'n'
-		&& (input[7] == ' ' || input[7] == '\0'))
-	{
-		i = 8;
-		while (input[i])
-		{
-			while (input[i] == 34 || input[i] == 39)
-				i++;
-			write(1, &input[i], 1);
-			i++;
-		}
-		return ;
-	}
-	i = 5;
-	while (input[i])
-	{
-		while (input[i] == 34 || input[i] == 39)
-			i++;
-		write(1, &input[i], 1);
-		i++;
-	}
-	ft_printf("\n");
 }
 
 int	commands(char *input, char **envp, t_shell *shell)
@@ -175,43 +102,7 @@ int	commands(char *input, char **envp, t_shell *shell)
 	shell->args = ft_split(input, ' ');
 	if (!ft_quotes(input))
 		return (ft_printf("open quote\n"));
-	if (ft_strncmp(input, "exit", 4) == 0
-		&& (input[4] == ' ' || input[4] == '\0'))
-		return (ft_exit(input));
-	if (ft_strncmp(input, "echo", 4) == 0
-		&& (input[4] == ' ' || input[4] == '\0'))
-	{
-		ft_echo(input);
-		return (1);
-	}
-	if (ft_strncmp(input, "cd", 2) == 0
-		&& (input[2] == ' ' || input[2] == '\0'))
-	{
-		ft_cd(shell);
-		return (1);
-	}
-	if (ft_strncmp(input, "./", 2) == 0)
-	{
-		ft_exe(shell, envp);
-		return (1);
-	}
-	if (ft_strncmp(input, "env", 3) == 0 && input[3] == '\0')
-	{
-		ft_env(envp);
-		return (1);
-	}
-	if (ft_strncmp(input, "pwd", 3) == 0 && input[3] == '\0')
-	{
-		ft_pwd();
-		return (1);
-	}
-	if (ft_strncmp(input, "export", 6) == 0
-		&& (input[6] == ' ' || input[6] == '\0'))
-	{
-		printf("%s\n\n", input);
-		ft_export(envp, shell);
-		return (1);
-	}
-	ft_shell(input, envp, shell);
+	ft_remove_quotes(input);
+	which_commands(input, envp, shell);
 	return (1);
 }

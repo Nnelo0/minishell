@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/09 10:42:36 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/09 12:20:55 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ void	handle_prompt(t_shell *shell, char **envp)
 		if (!commands(input, envp, shell))
 			break ;
 		if (shell->args)
+		{
 			free_args(shell->args);
+			shell->args = NULL;
+		}
 		free(input);
 	}
 }
@@ -71,6 +74,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	shell.signal_status = 0;
+	shell.args = NULL;
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	handle_prompt(&shell, envp);
