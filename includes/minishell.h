@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/09 16:31:16 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/10 13:03:59 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,24 @@
 # include "pipex.h"
 # include <signal.h>
 
+typedef struct s_env
+{
+	char			*value;
+	struct s_env	*next;
+}	t_env;
+
+typedef struct s_export
+{
+	char			*value;
+	struct s_export	*next;
+}	t_export;
+
 typedef struct s_shell
 {
 	sig_atomic_t	signal_status;
 	char			**args;
-	t_list			env;
-	t_list			export;
+	t_env			*env_list;
 }	t_shell;
-
-typedef struct s_env
-{
-	char			*name;
-	char			*value;
-	struct s_env	*next;
-}	t_env;
 
 void	handle_prompt(t_shell *shell, char **envp);
 int		keypress(char *input, t_shell *shell);
@@ -49,7 +53,7 @@ int		ft_quotes(char *input);
 void	ft_remove_quotes(char *input);
 int		ft_echo(char *input);
 void	free_args(char **args);
-int		ft_env(char **envp);
+int		ft_env(t_shell *shell);
 int		ft_pwd(void);
 int		ft_export(char **envp, t_shell *shell);
 

@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/09 16:47:38 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/10 12:46:57 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,39 +67,85 @@ void	handle_prompt(t_shell *shell, char **envp)
 	}
 }
 
-t_list	*copy_env(char **envp)
+t_env	*create_env_node(const char *env_var)
 {
-	t_list	*new_list;
+	t_env	*new_node;
+
+	new_node = (t_env *)malloc(sizeof(t_env));
+	if (!new_node)
+		return (NULL);
+	new_node->value = strdup(env_var);
+	if (!new_node->value)
+	{
+		free(new_node);
+		return (NULL);
+	}
+	new_node->next = NULL;
+	return (new_node);
+}
+
+void	append_env_node(t_env **head, const char *env_var)
+{
+	t_env	*new_node;
+	t_env	*temp;
+
+	new_node = create_env_node(env_var);
+	if (!new_node)
+		return ;
+	if (*head == NULL)
+	{
+		*head = new_node;
+	}
+	else
+	{
+		temp = *head;
+		while (temp->next)
+			temp = temp->next;
+		temp->next = new_node;
+	}
+}
+
+t_env	*init_env_list(char **env)
+{
+	t_env	*env_list;
 	int		i;
 
+	env_list = NULL;
 	i = 0;
-	while (envp[i])
+	while (env[i])
 	{
-		new_list = malloc(sizeof(t_list));
-		if (!new_list)
-		{
-			ft_lstclear(&new_list);
-			return (NULL);
-		}
-		new_list->content = envp[i];
-		new_list->next = NULL;
-		ft_lstadd_back(&new_list, ft_strdup(envp[i]));
+		append_env_node(&env_list, env[i]);
+		i++;
 	}
-	return (&new_list);
+	return (env_list);
 }
+
+void	free_env_list(t_env *env_list)
+{
+	t_env	*temp;
+
+	while (env_list)
+	{
+		temp = env_list->next;
+		free(env_list->value);
+		free(env_list);
+		env_list = temp;
+	}
+}
+
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
-	t_list	*list_env;
 
-	shell.env = copy_env();
 	(void)argc;
 	(void)argv;
+	shell.env_list = init_env_list(envp);
 	shell.signal_status = 0;
 	shell.args = NULL;
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	handle_prompt(&shell, envp);
+	free_env_list(shell.env_list);
 	return (0);
 }
