@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/10 12:43:33 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/10 13:20:49 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,9 @@
 
 int	ft_exit(char *input, t_shell *shell)
 {
-	(void)shell;
-	printf("exit\n");
+	ft_printf("exit\n");
 	free(input);
-	if (shell->args)
-		free_args(shell->args);
+	free_args(shell->args);
 	return (0);
 }
 
@@ -106,6 +104,5 @@ int	commands(char *input, char **envp, t_shell *shell)
 	if (!ft_quotes(input))
 		return (ft_printf("open quote\n"));
 	ft_remove_quotes(input);
-	which_commands(input, envp, shell);
-	return (1);
+	return (which_commands(input, envp, shell));
 }

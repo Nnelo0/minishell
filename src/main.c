@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/10 12:46:42 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/10 13:21:31 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,8 @@ void	handle_prompt(t_shell *shell, char **envp)
 			break ;
 		if (*input)
 			add_history(input);
-		if (!commands(input, envp, shell))
-		{
-			free(input);
+		if (commands(input, envp, shell) == 0)
 			break ;
-		}
 		if (shell->args)
 			free_args(shell->args);
 		if (input)

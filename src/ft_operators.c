@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 08:45:49 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/10 12:34:24 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/10 15:15:59 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,6 @@ int	ft_input_redirection(char *input, t_shell *shell)
 		args[1] = ft_strtrim(args[1], " ");
 		free(tmp);
 	}
-	printf("\n0:%s\n", args[0]);
-	printf("\n1:%s\n", args[1]);
-	printf("\n2:%s\n", args[2]);
 	fd_files = open(args[1], O_RDONLY);
 	if (fd_files == -1)
 	{
