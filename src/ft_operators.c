@@ -6,22 +6,54 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 15:34:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/14 14:10:55 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/14 16:49:47 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_strlen_array(char **array)
+int	ft_strlen_tab(char **tab)
 {
 	int	i;
 
 	i = 0;
-	if (!array)
+	if (!tab)
 		return (0);
-	while (array[i] != NULL)
+	while (tab[i] != NULL)
 		i++;
 	return (i);
+}
+char	**ft_split_chevrons(char *input)
+{
+	char	**res;
+	char	*start;
+	int		i;
+	int		j;
+
+	if (!input)
+		return (NULL);
+	res = malloc(sizeof (char *) * (ft_strlen(input) + 1));
+	if (!res)
+		return (NULL);
+	i = 0;
+	j = 0;
+	start = input;
+	while (input[i])
+	{
+		if(input[i] == '<' || input[i] == '>' || input[i] == ' ')
+		{
+			if (start != input + i)
+				res[j++] = ft_substr(start, 0, input + i - start);
+			if (input[i] != ' ')
+            	res[j++] = ft_substr(input + i, 0, 1);
+            start = input + i + 1;
+		}
+		i++;
+	}
+	if (start != input + i)
+		res[j++] = ft_substr(start, 0, input + i - start);
+	res[j] = NULL;
+	return (res);
 }
 
 int	ft_input_redirection(char *input, t_shell *shell)
@@ -43,10 +75,10 @@ int	ft_input_redirection(char *input, t_shell *shell)
 	path = NULL;
 	cmd_args = NULL;
 	commands = NULL;
-	args = ft_split(input, ' ');
+	args = ft_split_chevrons(input);
 	if (!args)
 		return (write(2, "ft_split failed\n", 23), 1);
-	files = malloc(sizeof (char *) * (ft_strlen_array(args) + 1));
+	files = malloc(sizeof (char *) * (ft_strlen_tab(args) + 1));
 	if (!files)
 	{
 		free_args(args);
@@ -124,6 +156,7 @@ int	ft_input_redirection(char *input, t_shell *shell)
 		}
 		close(fd_files);
 		cmd_args = ft_split(commands, ' ');
+		//which_commands(cmd_args[0], shell->envp1, shell);
 		path = find_command_path(cmd_args[0], shell->envp1);
 		if (!path)
 		{
@@ -131,7 +164,8 @@ int	ft_input_redirection(char *input, t_shell *shell)
 			free(commands);
 			free_args(cmd_args);
 			free_args(files);
-			exit(EXIT_FAILURE);
+			free_args(args);
+			exit(127);
 		}
 		execve(path, cmd_args, shell->envp1);
 		ft_printf("command not found: %s\n", args[0]);
@@ -139,7 +173,8 @@ int	ft_input_redirection(char *input, t_shell *shell)
 		free(commands);
 		free_args(cmd_args);
 		free_args(files);
-		exit(EXIT_FAILURE);
+		free_args(args);
+		exit(127);
 	}
 	close(fd_files);
 	wait(NULL);
