@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/14 16:28:04 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/15 13:40:07 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	ft_shell(char *input, char **envp, t_shell *shell)
 int	ft_pwd(void)
 {
 	char	*pwd;
-	
+
 	pwd = getcwd(NULL, 0);
 	ft_printf("%s\n", pwd);
 	free(pwd);
