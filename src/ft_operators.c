@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 15:34:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/16 15:04:35 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/16 15:32:52 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,20 @@ char	**ft_split_chevrons(char *input, int i, int j)
 	return (res[j] = NULL, res);
 }
 
+void	parse_commands(char **commands, char *tmp, char *args)
+{
+	char	*tmp_cmd;
+
+	tmp = ft_strjoin(*commands, " ");
+	tmp_cmd = ft_strjoin(tmp, args);
+	free(tmp);
+	free(*commands);
+	*commands = tmp_cmd;
+}
+
 int	parse_redirection(char **args, char **commands, char **files, int *fcount)
 {
 	char	*tmp;
-	char	*tmp_cmd;
 	int		i;
 
 	i = -1;
@@ -74,13 +84,7 @@ int	parse_redirection(char **args, char **commands, char **files, int *fcount)
 		else if (!*commands)
 			*commands = ft_strdup(args[i]);
 		else
-		{
-			tmp = ft_strjoin(*commands, " ");
-			tmp_cmd = ft_strjoin(tmp, args[i]);
-			free(tmp);
-			free(*commands);
-			*commands = tmp_cmd;
-		}
+			parse_commands(commands, tmp, args[i]);
 	}
 	files[(*fcount)] = NULL;
 	return (1);
@@ -152,14 +156,15 @@ int	ft_input_redirection(char *input, t_shell *shell)
 		return (free_args(args), free_args(files), 1);
 	fd_files = open(files[fcount - 1], O_RDONLY);
 	if (fd_files == -1)
-		return (perror(files[fcount - 1]), free(shell->cmd), free_args(args), free_args(files), 1);
+		return (perror(files[fcount - 1]), free(shell->cmd), free_args(args),
+			free_args(files), 1);
 	pid = fork();
 	if (pid == -1)
-		return (free(shell->cmd), free_args(args), free_args(files), close(fd_files), perror("fork failed"), 1);
+		return (free(shell->cmd), free_args(args), free_args(files),
+			close(fd_files), perror("fork failed"), 1);
 	if (pid == 0)
 		ft_execute_cmd(fd_files, args, files, shell);
 	close(fd_files);
-	while (wait(NULL) > 0)
-		;
+	wait(NULL);
 	return (free(shell->cmd), free_args(args), free_args(files), 1);
 }
