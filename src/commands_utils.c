@@ -6,31 +6,35 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/15 13:40:07 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:28:45 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_shell(char *input, char **envp, t_shell *shell)
+int	ft_shell(char *input, char **envp)
 {
 	pid_t	pid;
 	char	*path;
+	char	**cmd;
 
-	path = find_command_path(*shell->args, envp);
+	cmd = ft_split(input, ' ');
+	path = find_command_path(cmd[0], envp);
 	if (!path)
-		return (ft_printf("command not found: %s\n", input));
+		return (printf("command not found: %s\n", input), free_args(cmd), 127);
 	pid = fork();
 	if (pid == -1)
 		return (0);
 	if (pid == 0)
 	{
-		execve(path, shell->args, envp);
+		execve(path, cmd, envp);
 		ft_printf("command not found: %s\n", input);
 		free(path);
-		exit(EXIT_FAILURE);
+		free_args(cmd);
+		exit(127);
 	}
 	free(path);
+	free_args(cmd);
 	wait(NULL);
 	return (1);
 }

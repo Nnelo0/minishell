@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/14 16:19:22 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/16 14:59:32 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_shell
 	char			**args;
 	char			**envp1;
 	char			**cmds;
+	char			*cmd;
 }	t_shell;
 
 void	handle_prompt(t_shell *shell, char **envp);
@@ -37,7 +38,7 @@ int		keypress(char *input, t_shell *shell);
 void	handle_sigint(int sig);
 int		ft_exit(char *input, t_shell *shell);
 int		commands(char *input, char **envp, t_shell *shell);
-int		ft_shell(char *input, char **envp, t_shell *shell);
+int		ft_shell(char *input, char **envp);
 int		ft_quotes(char *input);
 void	ft_remove_quotes(char *input);
 int		ft_echo(char *input);
