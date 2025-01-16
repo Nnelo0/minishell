@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 15:34:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/16 15:32:52 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:00:53 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	parse_redirection(char **args, char **commands, char **files, int *fcount)
 	int		i;
 
 	i = -1;
+	*fcount = 0;
 	while (args[++i])
 	{
 		tmp = args[i];
@@ -140,14 +141,9 @@ int	ft_input_redirection(char *input, t_shell *shell)
 	int		fd_files;
 	int		fcount;
 
-	if (!is_valid_chevrons(input))
-		return (ft_printf("invalid '<'\n"));
-	fd_files = 0;
-	fcount = 0;
-	shell->cmd = NULL;
 	args = ft_split_chevrons(input, -1, 0);
 	if (!args)
-		return (write(2, "ft_split failed\n", 23), 1);
+		return (write(2, "ft_split failed\n", 16), 1);
 	files = malloc(sizeof (char *) * (ft_strlen_tab(args) + 1));
 	if (!files)
 		return (free_args(args), write(2, "allocation failed\n", 18), 1);
@@ -156,15 +152,11 @@ int	ft_input_redirection(char *input, t_shell *shell)
 		return (free_args(args), free_args(files), 1);
 	fd_files = open(files[fcount - 1], O_RDONLY);
 	if (fd_files == -1)
-		return (perror(files[fcount - 1]), free(shell->cmd), free_args(args),
-			free_args(files), 1);
+		return (perror(files[fcount - 1]), free(shell->cmd), free_args(args), free_args(files), 1);
 	pid = fork();
 	if (pid == -1)
-		return (free(shell->cmd), free_args(args), free_args(files),
-			close(fd_files), perror("fork failed"), 1);
+		return (free(shell->cmd), free_args(args), free_args(files), close(fd_files), perror("fork failed"), 1);
 	if (pid == 0)
 		ft_execute_cmd(fd_files, args, files, shell);
-	close(fd_files);
-	wait(NULL);
-	return (free(shell->cmd), free_args(args), free_args(files), 1);
+	return (close(fd_files), wait(NULL), free(shell->cmd), free_args(args), free_args(files), 1);
 }
