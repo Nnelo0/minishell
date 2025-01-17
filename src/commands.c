@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/16 15:40:18 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/17 09:38:34 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	which_commands(char *input, char **envp, t_shell *shell)
 	if (ft_strchr(input, '|'))
 		return (ft_pipe(input, envp, shell));
 	if (ft_strchr(input, '<'))
-		return (ft_input_redirection(input, shell));
+		return (ft_input_redirection(shell->ipt_rdct, shell));
 	if (ft_strncmp(input, "exit", 4) == 0
 		&& (input[4] == ' ' || input[4] == '\0'))
 		return (ft_exit(input, shell));
@@ -101,10 +101,15 @@ int	commands(char *input, char **envp, t_shell *shell)
 	if (*input == '\0')
 		return (1);
 	shell->args = ft_split(input, ' ');
+	shell->cmd = NULL;
+	shell->ipt_rdct = NULL;
 	if (!ft_quotes(input))
 		return (ft_printf("open quote\n"));
 	ft_remove_quotes(input);
 	if (!is_valid_chevrons(input))
 		return (ft_printf("invalid '<'\n"));
+	shell->ipt_rdct = ft_split_chevrons(input, -1, 0);
+	if (!shell->ipt_rdct)
+		return (write(2, "ft_split failed\n", 16), 1);
 	return (which_commands(input, envp, shell));
 }

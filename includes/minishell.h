@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/16 15:40:41 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/17 09:38:51 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_shell
 	char			**envp1;
 	char			**cmds;
 	char			*cmd;
+	char			**ipt_rdct;
 }	t_shell;
 
 void	handle_prompt(t_shell *shell, char **envp);
@@ -48,7 +49,8 @@ int		ft_pwd(void);
 int		ft_pipe(char *input, char **envp, t_shell *shell);
 int		which_commands(char *input, char **envp, t_shell *shell);
 char	*find_command_path(char *cmd, char **envp);
-int		ft_input_redirection(char *input, t_shell *shell);
+int		ft_input_redirection(char **args, t_shell *shell);
 int		is_valid_chevrons(char *input);
+char	**ft_split_chevrons(char *input, int i, int j);
 
 #endif
