@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:39:51 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/17 09:40:44 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:49:38 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,10 @@ int	is_valid_chevrons(char *input)
 	expect_file = 0;
 	while (input[i])
 	{
-		if (input[i] == '<')
+		if (input[i] == '<' || input[i] == '>')
 		{
-			if (input[i + 1] == '<' || input[i + 1] == '\0')
+			if (input[i + 1] == '<' || input[i + 1] == '>'
+				|| input[i + 1] == '\0')
 				return (0);
 			expect_file = 1;
 		}

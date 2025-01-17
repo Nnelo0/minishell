@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/17 09:03:53 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/17 10:15:38 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ void	handle_prompt(t_shell *shell, char **envp)
 			free_args(shell->args);
 			shell->args = NULL;
 		}
+		if (shell->ipt_rdct)
+			free_args(shell->ipt_rdct);
 		if (input)
 			free(input);
 	}
