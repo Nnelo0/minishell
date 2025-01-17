@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:39:51 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/17 12:49:38 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/17 15:35:27 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,15 @@ char	**ft_split_chevrons(char *input, int i, int j)
 	start = input;
 	while (input[++i])
 	{
-		if (input[i] == '<' || input[i] == '>' || input[i] == ' ')
+		if ((input[i] == '<' || input[i] == '>') && (input[i + 1] == input[i]))
+		{
+			if (start != input + i)
+				res[j++] = ft_substr(start, 0, input + i - start);
+			res[j++] = ft_substr(input + i, 0, 2);
+			i++;
+			start = input + i + 1;
+		}
+		else if (input[i] == '<' || input[i] == '>' || input[i] == ' ')
 		{
 			if (start != input + i)
 				res[j++] = ft_substr(start, 0, input + i - start);
@@ -50,8 +58,7 @@ int	is_valid_chevrons(char *input)
 	{
 		if (input[i] == '<' || input[i] == '>')
 		{
-			if (input[i + 1] == '<' || input[i + 1] == '>'
-				|| input[i + 1] == '\0')
+			if (input[i + 1] == '\0')
 				return (0);
 			expect_file = 1;
 		}

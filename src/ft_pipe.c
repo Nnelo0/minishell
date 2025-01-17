@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/16 12:54:04 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:59:42 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,29 +43,14 @@ char	*find_command_path(char *cmd, char **envp)
 
 void	ft_execute_command(t_shell *shell, int pipefd[2], int prev_fd, int i)
 {
-	char	*path;
-	char	**args;
-
 	if (shell->cmds[i + 1])
 		dup2(pipefd[1], STDOUT_FILENO);
 	if (prev_fd != 0)
 		dup2(prev_fd, STDIN_FILENO);
 	close(pipefd[0]);
 	close(pipefd[1]);
-	args = ft_split(shell->cmds[i], ' ');
-	path = find_command_path(args[0], shell->envp1);
-	if (!path)
-	{
-		ft_printf("command not found: %s\n", shell->cmds[i]);
-		free(path);
-		free_args(shell->cmds);
-		exit(EXIT_FAILURE);
-	}
-	execve(path, args, shell->envp1);
-	ft_printf("command not found: %s\n", shell->cmds[i]);
-	free(path);
-	free_args(shell->cmds);
-	exit(EXIT_FAILURE);
+	which_commands(shell->cmds[i], shell->envp1, shell);
+	exit (0);
 }
 
 int	ft_command_pipe(char **cmds, t_shell *shell)

@@ -6,26 +6,31 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:53:07 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/17 12:50:37 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/17 15:21:37 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	parse_out_redirec(char **args, char **commands, char **files, int *fcount)
+int	parse_out_redirec(char **args, char **commands, char **files, int *fcount, int *append)
 {
 	char	*tmp;
 	int		i;
 
 	i = -1;
 	*fcount = 0;
+	*append = 0;
 	while (args[++i])
 	{
 		tmp = args[i];
 		args[i] = ft_strtrim(args[i], " ");
 		free(tmp);
-		if (ft_strcmp(args[i], ">") == 0)
+		if (ft_strcmp(args[i], ">") == 0 || ft_strcmp(args[i], ">>") == 0)
 		{
+			if (ft_strcmp(args[i], ">>") == 0)
+				*append = 1;
+			else
+				*append = 0;
 			if (args[i + 1])
 				files[(*fcount)++] = ft_strdup(args[i++ + 1]);
 			else
@@ -65,15 +70,21 @@ int	ft_output_redirection(char **args, t_shell *shell, int i)
 	pid_t	pid;
 	int		fd_files;
 	int		fcount;
+	int		append;
 
 	files = malloc(sizeof (char *) * (ft_strlen_tab(args) + 1));
 	if (!files)
 		return (write(2, "allocation failed\n", 18), 1);
-	parse_out_redirec(args, &shell->cmd, files, &fcount);
+	parse_out_redirec(args, &shell->cmd, files, &fcount, &append);
 	if (!shell->cmd)
 		return (free_args(files), 1);
 	while (--fcount >= 0 && ++i + 1)
-		fd_files = open(files[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	{
+		if (append)
+			fd_files = open(files[i], O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			fd_files = open(files[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	}
 	if (fd_files == -1)
 		return (perror(files[fcount - 1]), free(shell->cmd),
 			free_args(files), 1);
