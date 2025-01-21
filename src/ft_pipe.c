@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/21 12:22:44 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:01:38 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	ft_execute_command(t_shell *shell, int pipefd[2], int prev_fd, int i)
 	close(pipefd[0]);
 	close(pipefd[1]);
 	printf("{%s}",shell->cmd[i]);
-	which_commands(shell->cmds[i], shell->envp1, shell);
+	//which_commands(shell->cmds[i], shell->envp1, shell);
 	exit (0);
 }
 
