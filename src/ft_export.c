@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 11:25:25 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/01/21 17:28:36 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/21 17:32:33 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int ft_export_whith_arg(t_shell *shell)
 		j = 0;
 		while (shell->args[i][j])
 		{
-			
 			j++;
 		}
 	}
