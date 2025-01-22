@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/21 17:13:51 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:15:28 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,8 @@ t_env		*init_env_list(char **env);
 void		free_env_list(t_env *env_list);
 t_export	*init_export_list(char **env);
 void		free_export_list(t_export *export_list);
+void		append_env_node(t_env **head, const char *env_var);
+void		append_export_node(t_export **head, const char *export_var);
+void		ft_sort_export_list(t_export *export_list);
 
 #endif
