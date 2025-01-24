@@ -74,10 +74,8 @@ int	which_commands(char *input, char **envp, t_shell *shell)
 {
 	if (ft_strchr(input, '|'))
 		return (ft_pipe(input, envp, shell));
-	if (ft_strchr(input, '<'))
-		return (ft_input_redirection(shell->ipt_rdct, shell));
-	if (ft_strchr(input, '>'))
-		return (ft_output_redirection(shell->ipt_rdct, shell, -1));
+	if (ft_strchr(input, '<') || ft_strchr(input, '>'))
+		return (ft_redirection(shell));
 	if (ft_strncmp(input, "exit", 4) == 0
 		&& (input[4] == ' ' || input[4] == '\0'))
 		return (ft_exit(input, shell));
@@ -93,7 +91,7 @@ int	which_commands(char *input, char **envp, t_shell *shell)
 		return (ft_env(envp));
 	if (ft_strncmp(input, "pwd", 3) == 0 && input[3] == '\0')
 		return (ft_pwd());
-	return (ft_shell(input, envp));
+	return (ft_shell(input, envp, shell));
 }
 
 int	commands(char *input, char **envp, t_shell *shell)
@@ -110,6 +108,8 @@ int	commands(char *input, char **envp, t_shell *shell)
 	ft_remove_quotes(input);
 	if (!is_valid_chevrons(input))
 		return (ft_printf("invalid '<'\n"));
+	if (!is_valid_pipe(input))
+		return (ft_printf("invalid pipes\n"));
 	shell->ipt_rdct = ft_split_chevrons(input, -1, 0);
 	if (!shell->ipt_rdct)
 		return (write(2, "ft_split failed\n", 16), 1);

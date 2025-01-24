@@ -12,12 +12,18 @@
 
 #include "../includes/minishell.h"
 
-int	ft_shell(char *input, char **envp)
+int	ft_shell(char *input, char **envp, t_shell *shell)
 {
 	pid_t	pid;
 	char	*path;
 	char	**cmd;
+	int		in;
+	int		out;
 
+	in = dup(STDIN_FILENO);
+	out = dup(STDOUT_FILENO);
+	if (in == -1 || out == -1)
+		return (perror("dup failed"), 1);
 	cmd = ft_split(input, ' ');
 	path = find_command_path(cmd[0], envp);
 	if (!path)
@@ -27,12 +33,30 @@ int	ft_shell(char *input, char **envp)
 		return (0);
 	if (pid == 0)
 	{
+		if (shell->fd_in != -1 && dup2(shell->fd_in, STDIN_FILENO) == -1)
+		{
+			perror("dup2 failed");
+			close(shell->fd_in);
+			free(shell->cmd);
+			exit(127);
+		}
+		if (shell->fd_out != -1 && dup2(shell->fd_out, STDOUT_FILENO) == -1 )
+		{
+			perror("dup2 failed");
+			close(shell->fd_out);
+			free(shell->cmd);
+			exit(127);
+		}
 		execve(path, cmd, envp);
 		ft_printf("command not found: %s\n", input);
 		free(path);
 		free_args(cmd);
 		exit(127);
 	}
+	if (dup2(in, STDIN_FILENO) == -1 || dup2(out, STDOUT_FILENO) == -1)
+		return (perror("dup2 failed"), close(in), close(out), 1);
+	close(in);
+	close(out);
 	free(path);
 	free_args(cmd);
 	wait(NULL);

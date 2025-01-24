@@ -65,7 +65,10 @@ void	handle_prompt(t_shell *shell, char **envp)
 			shell->args = NULL;
 		}
 		if (shell->ipt_rdct)
+		{
 			free_args(shell->ipt_rdct);
+			shell->ipt_rdct = NULL;
+		}
 		if (input)
 			free(input);
 	}
@@ -81,6 +84,8 @@ int	main(int argc, char **argv, char **envp)
 	shell.args = NULL;
 	shell.envp1 = envp;
 	shell.ipt_rdct = NULL;
+	shell.fd_in = -1;
+	shell.fd_out = -1;
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	handle_prompt(&shell, envp);

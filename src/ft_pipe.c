@@ -10,6 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_pipe.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
+/*   Updated: 2025/01/21 15:02:28 by ebroudic         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 char	*find_command_path(char *cmd, char **envp)
@@ -49,8 +61,7 @@ void	ft_execute_command(t_shell *shell, int pipefd[2], int prev_fd, int i)
 		dup2(prev_fd, STDIN_FILENO);
 	close(pipefd[0]);
 	close(pipefd[1]);
-	printf("{%c}",shell->cmd[i]);
-	//which_commands(shell->cmds[i], shell->envp1, shell);
+	which_commands(shell->cmds[i], shell->envp1, shell);
 	exit (0);
 }
 
@@ -71,7 +82,16 @@ int	ft_command_pipe(char **cmds, t_shell *shell)
 		if (pid == -1)
 			return (free_args(cmds), 1);
 		if (pid == 0)
-			ft_execute_command(shell, pipefd, prev_fd, i);
+		{
+			if (shell->cmds[i + 1])
+				dup2(pipefd[1], STDOUT_FILENO);
+			if (prev_fd != 0)
+				dup2(prev_fd, STDIN_FILENO);
+			close(pipefd[0]);
+			close(pipefd[1]);
+			which_commands(shell->cmds[i], shell->envp1, shell);
+			exit (0);
+		}
 		if (prev_fd != 0)
 			close(prev_fd);
 		if (cmds[i + 1])
@@ -113,6 +133,8 @@ int	ft_pipe(char *input, char **envp, t_shell *shell)
 	shell->cmds = ft_split(input, '|');
 	if (!shell->cmds)
 		return (1);
+	//for (int i = 0; shell->cmds[i]; i++)
+	//	printf("{%d} [%s]\n", i, shell->cmds[i]);
 	shell->envp1 = envp;
 	ft_command_pipe(shell->cmds, shell);
 	while (wait(NULL) > 0)
