@@ -84,8 +84,8 @@ int	main(int argc, char **argv, char **envp)
 	shell.args = NULL;
 	shell.envp1 = envp;
 	shell.ipt_rdct = NULL;
-	shell.fd_in = -1;
 	shell.fd_out = -1;
+	shell.fd_in = -1;
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	handle_prompt(&shell, envp);

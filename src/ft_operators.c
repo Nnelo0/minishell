@@ -69,11 +69,11 @@ int	parse_redirection(char **args, char **commands, char **out_file, char **in_f
 		{
 			if (args[i + 1])
 			{
-				 free(*in_file);
+				free(*in_file);
 				*in_file = ft_strdup(args[++i]);
 			}
 			else
-				return (free_args(args), free(*commands), 1);
+				return (free(*in_file), free_args(args), free(*commands), 1);
 		}
 		if (ft_strcmp(args[i], ">") == 0 || ft_strcmp(args[i], ">>") == 0)
 		{
@@ -83,11 +83,11 @@ int	parse_redirection(char **args, char **commands, char **out_file, char **in_f
 				*append = 0;
 			if (args[i + 1])
 			{
-				//free(out_file);
+				free(*out_file);
 				*out_file = ft_strdup(args[i++ + 1]);
 			}
 			else
-				return (free_args(args), free(*commands), 1);
+				return (free(*in_file), free_args(args), free(*commands), 1);
 		}
 		else if (!*commands)
 			*commands = ft_strdup(args[i]);
@@ -99,7 +99,6 @@ int	parse_redirection(char **args, char **commands, char **out_file, char **in_f
 
 int	ft_redirection(t_shell *shell)
 {
-	//char	**files;
 	int		append;
 	char	*in_file;
 	char	*out_file;
@@ -108,11 +107,8 @@ int	ft_redirection(t_shell *shell)
 	shell->fd_in = -1;
 	in_file = NULL;
 	out_file = NULL;
-	//files = malloc(sizeof (char *) * (ft_strlen_tab(shell->ipt_rdct) + 1));
-	//if (!files)
-	//	return (write(2, "allocation failed\n", 18), 1);
 	parse_redirection(shell->ipt_rdct, &shell->cmd, &out_file, &in_file, &append);
-    if (!shell->cmd)
+	if (!shell->cmd)
 		return (1);
 	if (in_file)
 	{
@@ -134,5 +130,5 @@ int	ft_redirection(t_shell *shell)
 		close(shell->fd_in);
 	if (shell->fd_out != -1)
 		close(shell->fd_out);
-	return (wait(NULL), free(shell->cmd), 1);
+	return (wait(NULL), free(in_file), free(out_file), free(shell->cmd), 1);
 }

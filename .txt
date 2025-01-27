@@ -1,1 +1,0 @@
-ne surtout pas faire "command < files | command > files", ne pas melanger les chevrons different et les pipes ensemble sinon fork bomb :(
