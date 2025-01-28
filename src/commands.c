@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/28 16:24:10 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/09 11:10:55 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,14 +82,10 @@ int	which_commands(char *input, char **envp, t_shell *shell)
 		return (ft_cd(shell));
 	if (ft_strncmp(input, "./", 2) == 0)
 		return (ft_exe(shell, envp));
-	if (ft_strncmp(input, "env", 3) == 0
-		&& (input[3] == ' ' || input[3] == '\0'))
-		return (ft_env(shell));
+	if (ft_strncmp(input, "env", 3) == 0 && input[3] == '\0')
+		return (ft_env(envp));
 	if (ft_strncmp(input, "pwd", 3) == 0 && input[3] == '\0')
 		return (ft_pwd());
-	if (ft_strncmp(input, "export", 6) == 0
-		&& (input[6] == ' ' || input[6] == '\0'))
-		return (ft_export(input, shell));
 	ft_shell(input, envp, shell);
 	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/28 16:52:12 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/09 10:46:59 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,48 +24,23 @@
 # include "pipex.h"
 # include <signal.h>
 
-typedef struct s_env
-{
-	char			*value;
-	struct s_env	*next;
-}	t_env;
-
-typedef struct s_export
-{
-	char			*value;
-	struct s_export	*next;
-}	t_export;
-
 typedef struct s_shell
 {
 	sig_atomic_t	signal_status;
 	char			**args;
-	t_env			*env_list;
-	t_export		*export_list;
 }	t_shell;
 
-void		handle_prompt(t_shell *shell, char **envp);
-int			keypress(char *input, t_shell *shell);
-void		handle_sigint(int sig);
-int			ft_exit(char *input, t_shell *shell);
-int			commands(char *input, char **envp, t_shell *shell);
-void		ft_shell(char *input, char **envp, t_shell *shell);
-int			ft_quotes(char *input);
-void		ft_remove_quotes(char *input);
-int			ft_echo(char *input);
-void		free_args(char **args);
-int			ft_env(t_shell *shell);
-int			ft_pwd(void);
-int			ft_export(char *input, t_shell *shell);
-t_env		*init_env_list(char **env);
-void		free_env_list(t_env *env_list);
-t_export	*init_export_list(char **env);
-void		free_export_list(t_export *export_list);
-void		append_env_node(t_env **head, const char *env_var);
-void		append_export_node(t_export **head, const char *export_var);
-void		ft_sort_export_list(t_export *export_list);
-void		verif_env(t_env **head, const char *env_var, t_env *new_node);
-void		verif_export(t_export **head, const char *exp_var, t_export *new);
-char		**ft_split_export(char const *s, char c);
+void	handle_prompt(t_shell *shell, char **envp);
+int		keypress(char *input, t_shell *shell);
+void	handle_sigint(int sig);
+int		ft_exit(char *input, t_shell *shell);
+int		commands(char *input, char **envp, t_shell *shell);
+void	ft_shell(char *input, char **envp, t_shell *shell);
+int		ft_quotes(char *input);
+void	ft_remove_quotes(char *input);
+int		ft_echo(char *input);
+void	free_args(char **args);
+int		ft_env(char **envp);
+int		ft_pwd(void);
 
 #endif

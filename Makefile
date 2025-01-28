@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g
+CFLAGS = -Wall -Werror -Wextra
 SRCS = src/*.c \
 
 LIBFTDIR = libft

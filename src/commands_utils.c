@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/10 12:39:44 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/09 11:10:15 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,19 +65,16 @@ int	ft_pwd(void)
 	return (1);
 }
 
-int	ft_env(t_shell *shell)
+int	ft_env(char **envp)
 {
-	t_env	*temp;
+	int	i;
 
-	if (!shell || !shell->env_list)
-		return (1);
-	temp = shell->env_list;
-	while (temp)
+	i = 0;
+	while (envp[i])
 	{
-		printf("%s\n", temp->value);
-		temp = temp->next;
+		printf("%s\n", envp[i]);
+		i++;
 	}
-	free(temp);
 	return (1);
 }
 
