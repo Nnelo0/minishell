@@ -34,6 +34,8 @@ typedef struct s_shell
 	char			**ipt;
 	int				fd_in;
 	int				fd_out;
+	char			*in_file;
+	char			**out_file;
 }	t_shell;
 
 void	handle_prompt(t_shell *shell, char **envp);
