@@ -33,7 +33,8 @@ char	**ft_split_chevrons(char *input, int i, int j)
 			i++;
 			start = input + i + 1;
 		}
-		else if (input[i] == '<' || input[i] == '>' || input[i] == ' ' || input[i] == '|')
+		else if (input[i] == '<' || input[i] == '>' || input[i] == ' '
+			|| input[i] == '|')
 		{
 			if (start != input + i)
 				res[j++] = ft_substr(start, 0, input + i - start);

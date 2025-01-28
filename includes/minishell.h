@@ -31,7 +31,7 @@ typedef struct s_shell
 	char			**envp1;
 	char			*cmd;
 	char			**cmds;
-	char			**ipt_rdct;
+	char			**ipt;
 	int				fd_in;
 	int				fd_out;
 }	t_shell;

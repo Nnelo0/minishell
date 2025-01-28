@@ -51,7 +51,7 @@ void	parse_commands(char **commands, char *tmp, char *args)
 	*commands = tmp_cmd;
 }
 
-int	parse_redirection(char **args, char **commands, char **out_file, char **in_file, int *append)
+int	parse_redirection(t_shell *shell, char **out_file, int *out_count, char **in_file, int *append)
 {
 	char	*tmp;
 	int		i;
@@ -59,41 +59,41 @@ int	parse_redirection(char **args, char **commands, char **out_file, char **in_f
 	i = -1;
 	*append = 0;
 	*in_file = NULL;
-	*out_file = NULL;
-	while (args[++i])
+	*out_count = 0;
+	while (shell->ipt[++i])
 	{
-		tmp = args[i];
-		args[i] = ft_strtrim(args[i], " ");
+		tmp = shell->ipt[i];
+		shell->ipt[i] = ft_strtrim(shell->ipt[i], " ");
 		free(tmp);
-		if (ft_strcmp(args[i], "<") == 0)
+		if (ft_strcmp(shell->ipt[i], "<") == 0)
 		{
-			if (args[i + 1])
+			if (shell->ipt[i + 1])
 			{
 				free(*in_file);
-				*in_file = ft_strdup(args[++i]);
+				*in_file = ft_strdup(shell->ipt[++i]);
 			}
 			else
-				return (free(*in_file), free_args(args), free(*commands), 1);
+				return (free(*in_file), free_args(shell->ipt), free(*shell->cmds), 1);
 		}
-		if (ft_strcmp(args[i], ">") == 0 || ft_strcmp(args[i], ">>") == 0)
+		else if (ft_strcmp(shell->ipt[i], ">") == 0 || ft_strcmp(shell->ipt[i], ">>") == 0)
 		{
-			if (ft_strcmp(args[i], ">>") == 0)
+			if (ft_strcmp(shell->ipt[i], ">>") == 0)
 				*append = 1;
 			else
 				*append = 0;
-			if (args[i + 1])
+			if (shell->ipt[i + 1])
 			{
-				free(*out_file);
-				*out_file = ft_strdup(args[i++ + 1]);
+				out_file[(*out_count)++] = ft_strdup(shell->ipt[i++ + 1]);
 			}
 			else
-				return (free(*in_file), free_args(args), free(*commands), 1);
+				return (out_file[(*out_count)] = NULL, free(*in_file), free_args(shell->ipt), free(*commands), 1);
 		}
-		else if (!*commands)
-			*commands = ft_strdup(args[i]);
+		else if (!*shell->cmds)
+			*shell->cmds = ft_strdup(shell->ipt[i]);
 		else
-			parse_commands(commands, tmp, args[i]);
+			parse_commands(shell->cmds, tmp, shell->ipt[i]);
 	}
+	out_file[(*out_count)] = NULL;
 	return (1);
 }
 
@@ -101,34 +101,38 @@ int	ft_redirection(t_shell *shell)
 {
 	int		append;
 	char	*in_file;
-	char	*out_file;
+	char	**out_file;
+	int		i;
+	int		out_count;
 
-	shell->fd_out = -1;
-	shell->fd_in = -1;
 	in_file = NULL;
-	out_file = NULL;
-	parse_redirection(shell->ipt_rdct, &shell->cmd, &out_file, &in_file, &append);
+	out_file = malloc(sizeof(char *) * (ft_strlen_tab(shell->ipt) + 1));
+	if (!out_file)
+		return (1);
+	out_count = 0;
+	parse_redirection(shell, out_file, &out_count, &in_file, &append);
 	if (!shell->cmd)
 		return (1);
 	if (in_file)
 	{
 		shell->fd_in = open(in_file, O_RDONLY);
 		if (shell->fd_in == -1)
-		return (perror(in_file), free(shell->cmd), 1);
+		return (perror(in_file), free(shell->cmd), free(in_file), 1);
 	}
-	if (out_file)
+	i = -1;
+	while (--out_count >= 0 && ++i + 1)
 	{
 		if (append)
-			shell->fd_out = open(out_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			shell->fd_out = open(out_file[i], O_WRONLY | O_CREAT | O_APPEND, 0644);
 		else
-			shell->fd_out = open(out_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (shell->fd_out == -1)
-			return (perror(out_file), free(shell->cmd), 1);
+			shell->fd_out = open(out_file[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (out_count != 0)
+			close(shell->fd_out);
 	}
 	which_commands(shell->cmd, shell->envp1, shell);
 	if (shell->fd_in != -1)
 		close(shell->fd_in);
 	if (shell->fd_out != -1)
 		close(shell->fd_out);
-	return (wait(NULL), free(in_file), free(out_file), free(shell->cmd), 1);
+	return (wait(NULL), free(in_file), free(shell->cmd), free_args(out_file), 1);
 }

@@ -27,7 +27,7 @@ int	ft_shell(char *input, char **envp, t_shell *shell)
 	cmd = ft_split(input, ' ');
 	path = find_command_path(cmd[0], envp);
 	if (!path)
-		return (printf("command not found: %s\n", input), close(in),
+		return (printf("%s: command not found\n", input), close(in),
 			close(out), free_args(cmd), 127);
 	pid = fork();
 	if (pid == -1)

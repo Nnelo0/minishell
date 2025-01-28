@@ -102,7 +102,7 @@ int	commands(char *input, char **envp, t_shell *shell)
 		return (1);
 	shell->args = ft_split(input, ' ');
 	shell->cmd = NULL;
-	shell->ipt_rdct = NULL;
+	shell->ipt = NULL;
 	if (!ft_quotes(input))
 		return (ft_printf("open quote\n"));
 	ft_remove_quotes(input);
@@ -110,8 +110,8 @@ int	commands(char *input, char **envp, t_shell *shell)
 		return (ft_printf("invalid '<'\n"));
 	if (!is_valid_pipe(input))
 		return (ft_printf("invalid pipes\n"));
-	shell->ipt_rdct = ft_split_chevrons(input, -1, 0);
-	if (!shell->ipt_rdct)
+	shell->ipt = ft_split_chevrons(input, -1, 0);
+	if (!shell->ipt)
 		return (write(2, "ft_split failed\n", 16), 1);
 	return (which_commands(input, envp, shell));
 }
