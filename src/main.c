@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/09 11:03:01 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/21 17:13:08 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,14 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	shell.env_list = init_env_list(envp);
+	shell.export_list = init_export_list(envp);
 	shell.signal_status = 0;
 	shell.args = NULL;
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	handle_prompt(&shell, envp);
+	free_env_list(shell.env_list);
+	free_export_list(shell.export_list);
 	return (0);
 }
