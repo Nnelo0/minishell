@@ -121,8 +121,6 @@ int	ft_pipe(char *input, char **envp, t_shell *shell)
 	shell->cmds = ft_split(input, '|');
 	if (!shell->cmds)
 		return (1);
-	//for (int i = 0; shell->cmds[i]; i++)
-	//	printf("{%d} [%s]\n", i, shell->cmds[i]);
 	shell->envp1 = envp;
 	ft_command_pipe(shell->cmds, shell);
 	while (wait(NULL) > 0)

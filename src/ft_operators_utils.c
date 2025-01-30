@@ -71,3 +71,50 @@ int	is_valid_chevrons(char *input)
 	}
 	return (expect_file == 0);
 }
+
+int	parse_in(t_shell *shell, int i)
+{
+	if (ft_strcmp(shell->ipt[i], "<") == 0)
+	{
+		if (shell->ipt[i + 1])
+		{
+			free(shell->in_file);
+			shell->in_file = ft_strdup(shell->ipt[++i]);
+		}
+		else
+			return (free(shell->in_file), free_args(shell->ipt),
+				free(shell->cmd), 1);
+	}
+	return (0);
+}
+
+int	parse_out(t_shell *shell, int i, int *out_count, int *append)
+{
+	if (ft_strcmp(shell->ipt[i], ">") == 0
+		|| ft_strcmp(shell->ipt[i], ">>") == 0)
+	{
+		if (ft_strcmp(shell->ipt[i], ">>") == 0)
+			*append = 1;
+		else
+			*append = 0;
+		if (shell->ipt[i + 1])
+			shell->out_file[(*out_count)++] = ft_strdup(shell->ipt[++i]);
+		else
+			return (shell->out_file[(*out_count)] = NULL,
+				free(shell->in_file), free_args(shell->ipt),
+				free(shell->cmd), 1);
+	}
+	return (0);
+}
+
+int	ft_strlen_tab(char **tab)
+{
+	int	i;
+
+	i = 0;
+	if (!tab)
+		return (0);
+	while (tab[i] != NULL)
+		i++;
+	return (i);
+}
