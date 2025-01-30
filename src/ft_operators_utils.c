@@ -19,26 +19,19 @@ char	**ft_split_chevrons(char *input, int i, int j)
 
 	if (!input)
 		return (NULL);
-	res = malloc(sizeof (char *) * (ft_strlen(input) + 1));
+	res = malloc(sizeof(char *) * (ft_strlen(input) + 1));
 	if (!res)
 		return (NULL);
 	start = input;
 	while (input[++i])
 	{
-		if ((input[i] == '<' || input[i] == '>') && (input[i + 1] == input[i]))
+		if (ft_strchr("<>| ", input[i]))
 		{
 			if (start != input + i)
 				res[j++] = ft_substr(start, 0, input + i - start);
-			res[j++] = ft_substr(input + i, 0, 2);
-			i++;
-			start = input + i + 1;
-		}
-		else if (input[i] == '<' || input[i] == '>' || input[i] == ' '
-			|| input[i] == '|')
-		{
-			if (start != input + i)
-				res[j++] = ft_substr(start, 0, input + i - start);
-			if (input[i] != ' ')
+			if ((ft_strchr("<>", input[i]) && input[i] == input[i + 1]))
+				res[j++] = ft_substr(input + i++, 0, 2);
+			else if (input[i] != ' ')
 				res[j++] = ft_substr(input + i, 0, 1);
 			start = input + i + 1;
 		}
