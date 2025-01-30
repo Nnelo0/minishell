@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 11:25:25 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/01/30 14:22:10 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:01:19 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	equal_found(char *arg, t_shell *shell)
 	export_list = shell->export_list;
 	ft_remove_quotes(arg);
 	append_env_node(&env_list, arg);
-	append_export_node(&export_list, arg);
+	append_exp_node(&export_list, arg, 1);
 	ft_sort_export_list(export_list);
 }
 
@@ -58,7 +58,7 @@ void	equal_not_found(char *arg, t_shell *shell)
 
 	export_list = shell->export_list;
 	ft_remove_quotes(arg);
-	append_export_node(&export_list, arg);
+	append_exp_node(&export_list, arg, 1);
 	ft_sort_export_list(export_list);
 }
 
@@ -81,7 +81,7 @@ int	ft_export(t_shell *shell)
 {
 	char	**args;
 
-	args = ft_split_export(shell->input, ' ');
+	args = ft_split_quote(shell->input, ' ');
 	if (!args[1])
 		ft_export_no_arg(shell);
 	else

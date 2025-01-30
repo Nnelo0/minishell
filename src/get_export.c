@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:04:05 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/01/30 14:11:10 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:22:28 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_export	*create_export_node(const char *export_var)
 	return (new_node);
 }
 
-void	append_export_node(t_export **head, const char *export_var)
+void	append_exp_node(t_export **head, const char *export_var, int tpe)
 {
 	t_export	*new_node;
 
@@ -41,7 +41,7 @@ void	append_export_node(t_export **head, const char *export_var)
 		*head = new_node;
 	}
 	else
-		verif_export(head, export_var, new_node);
+		verif_exp(head, export_var, new_node, tpe);
 }
 
 void	ft_sort_export_list(t_export *export_list)
@@ -79,7 +79,7 @@ t_export	*init_export_list(char **env)
 	i = 0;
 	while (env[i])
 	{
-		append_export_node(&export_list, env[i]);
+		append_exp_node(&export_list, env[i], 1);
 		i++;
 	}
 	ft_sort_export_list(export_list);

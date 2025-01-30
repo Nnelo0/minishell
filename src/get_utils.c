@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:18:50 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/01/30 14:23:16 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:21:33 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,38 +65,36 @@ void	export_utils(int type, t_export *pv, t_export *temp, t_export *new)
 		free(temp->value);
 		free(temp);
 	}
-	else if (type == 3)
+	else if (type == 2)
 	{
 		free(new->value);
 		free(new);
 	}
 }
 
-void	verif_export(t_export **head, const char *exp_var, t_export *new)
+void	verif_exp(t_export **head, const char *var, t_export *new, int tpe)
 {
 	t_export	*temp;
 	t_export	*prev;
 	char		**check_args;
 	char		**check_list;
-	int			type;
 
-	type = 1;
-	if (!ft_strchr(exp_var, '='))
-		type = 3;
-	check_args = ft_split(exp_var, '=');
+	check_args = ft_split(var, '=');
 	temp = *head;
 	prev = NULL;
-	while (temp && type != 3)
+	while (temp && tpe != 2)
 	{
 		check_list = ft_split(temp->value, '=');
 		if (ft_strcmp(check_args[0], check_list[0]) == 0)
-			type = 0;
+			tpe = 0;
 		free_args(check_list);
-		if (type == 0)
+		if (!ft_strchr(var, '=') && tpe == 0)
+			tpe = 2;
+		if (tpe == 0)
 			break ;
 		prev = temp;
 		temp = temp->next;
 	}
-	export_utils(type, prev, temp, new);
+	export_utils(tpe, prev, temp, new);
 	free_args(check_args);
 }

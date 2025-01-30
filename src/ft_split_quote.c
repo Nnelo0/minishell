@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_export_utils.c                                  :+:      :+:    :+:   */
+/*   ft_split_quote.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:29:58 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/01/30 12:04:09 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:01:58 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ static int	copy_word(char **dsa, const char *s, char c)
 	return (1);
 }
 
-char	**ft_split_export(char const *s, char c)
+char	**ft_split_quote(char const *s, char c)
 {
 	char	**dsa;
 

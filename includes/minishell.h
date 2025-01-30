@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/30 11:47:32 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:02:14 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,11 @@ void		free_env_list(t_env *env_list);
 t_export	*init_export_list(char **env);
 void		free_export_list(t_export *export_list);
 void		append_env_node(t_env **head, const char *env_var);
-void		append_export_node(t_export **head, const char *export_var);
+void		append_exp_node(t_export **head, const char *export_var, int tpe);
 void		ft_sort_export_list(t_export *export_list);
 void		verif_env(t_env **head, const char *env_var, t_env *new_node);
-void		verif_export(t_export **head, const char *exp_var, t_export *new);
-char		**ft_split_export(char const *s, char c);
+void		verif_exp(t_export **head, const char *var, t_export *new, int tpe);
+char		**ft_split_quote(char const *s, char c);
+int			ft_unset(t_shell *shell);
 
 #endif
