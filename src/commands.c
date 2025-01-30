@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/21 16:12:20 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/30 14:20:53 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,10 +100,12 @@ int	commands(char *input, char **envp, t_shell *shell)
 		input++;
 	if (*input == '\0')
 		return (1);
+	shell->input = ft_strdup(input);
 	shell->args = ft_split(input, ' ');
 	if (!ft_quotes(input))
 		return (ft_printf("open quote\n"));
 	ft_remove_quotes(input);
 	which_commands(input, envp, shell);
+	free(shell->input);
 	return (1);
 }

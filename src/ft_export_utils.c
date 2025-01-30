@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:29:58 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/01/28 16:55:33 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:04:09 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ static int	count_word(char const *s, char c)
 			count++;
 			while (s[i] != '\0')
 			{
-				if (s[i] != 39 || s[i] != 34)
-					quote = -quote;
+				if (s[i] == 39 || s[i] == 34)
+					quote = !quote;
 				if (s[i] == c && quote == 1)
 					break ;
 				i++;
@@ -68,7 +68,7 @@ static int	dup_word(char **dsa, const char *s, char c, int *i)
 	quote = 1;
 	while (s[j] != '\0')
 	{
-		if (s[j] != 39 || s[j] != 34)
+		if (s[j] == 39 || s[j] == 34)
 			quote = -quote;
 		if (s[j] == c && quote == 1)
 			break ;
@@ -101,7 +101,7 @@ static int	copy_word(char **dsa, const char *s, char c)
 				return (0);
 			while (*s != '\0')
 			{
-				if (*s != 39 || *s != 34)
+				if (*s == 39 || *s == 34)
 					quote = -quote;
 				if (*s == c && quote == 1)
 					break ;

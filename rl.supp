@@ -1,31 +1,14 @@
 {
-    <readline>
-    Memcheck:Leak
-    ...
-    fun:rl_initialize
+	ignore_libreadline_leaks
+	Memcheck:Leak
+	match-leak-kinds: reachable
+	...
+	obj:*/libreadline.so.*
 }
 {
-    <readline>
-    Memcheck:Leak
-    ...
-    fun:readline_internal_setup
-}
-{
-    <readline>
-    Memcheck:Leak
-    ...
-    fun:rl_set_prompt
-}
-{
-    <readline>
-    Memcheck:Leak
-    ...
-    fun:readline_internal_char
-}
-{
-    <readline>
-    Memcheck:Leak
-    ...
-    fun:xmalloc
-    fun:add_history
+	std
+	Memcheck:Leak
+	match-leak-kinds: reachable
+	...
+	obj:*/usr/bin/*
 }

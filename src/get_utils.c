@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:18:50 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/01/28 16:10:27 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/30 14:23:16 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,21 @@ void	verif_env(t_env **head, const char *env_var, t_env *new_node)
 	free_args(check_args);
 }
 
-void	export_utils(int type, t_export *pv, t_export *temp, t_export *new_node)
+void	export_utils(int type, t_export *pv, t_export *temp, t_export *new)
 {
 	if (type == 1)
-		pv->next = new_node;
-	else
+		pv->next = new;
+	else if (type == 0)
 	{
-		new_node->next = temp->next;
-		pv->next = new_node;
+		new->next = temp->next;
+		pv->next = new;
 		free(temp->value);
 		free(temp);
+	}
+	else if (type == 3)
+	{
+		free(new->value);
+		free(new);
 	}
 }
 
@@ -75,20 +80,20 @@ void	verif_export(t_export **head, const char *exp_var, t_export *new)
 	char		**check_list;
 	int			type;
 
+	type = 1;
+	if (!ft_strchr(exp_var, '='))
+		type = 3;
 	check_args = ft_split(exp_var, '=');
 	temp = *head;
 	prev = NULL;
-	type = 1;
-	while (temp)
+	while (temp && type != 3)
 	{
 		check_list = ft_split(temp->value, '=');
 		if (ft_strcmp(check_args[0], check_list[0]) == 0)
-		{
 			type = 0;
-			free_args(check_list);
-			break ;
-		}
 		free_args(check_list);
+		if (type == 0)
+			break ;
 		prev = temp;
 		temp = temp->next;
 	}

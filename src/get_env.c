@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 16:07:31 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/01/21 17:03:42 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/30 14:16:18 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,14 @@ t_env	*create_env_node(const char *env_var)
 void	append_env_node(t_env **head, const char *env_var)
 {
 	t_env	*new_node;
-	t_env	*temp;
 
 	new_node = create_env_node(env_var);
 	if (!new_node)
 		return ;
 	if (*head == NULL)
-	{
 		*head = new_node;
-	}
 	else
-	{
-		temp = *head;
-		while (temp->next)
-			temp = temp->next;
-		temp->next = new_node;
-	}
+		verif_env(head, env_var, new_node);
 }
 
 t_env	*init_env_list(char **env)
