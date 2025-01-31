@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/08 16:17:37 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/09 09:38:56 by ebroudic         ###   ########.fr       */
+/*   Created: 2025/01/31 13:37:06 by ebroudic          #+#    #+#             */
+/*   Updated: 2025/01/31 13:44:13 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,12 @@ int	ft_echo(char *input)
 				i++;
 			if (input[i] == '\0')
 				return (1);
-			ft_printf("%s", input + i);
+			printf("%s", input + i);
 			return (1);
 		}
 		i = 5;
-		ft_printf("%s", input + i);
+		printf("%s", input + i);
 	}
-	ft_printf("\n");
+	printf("\n");
 	return (1);
 }

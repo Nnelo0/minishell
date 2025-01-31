@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/21 15:02:28 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/31 13:44:22 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ char	*find_command_path(char *cmd, char **envp)
 	char	*part_path;
 
 	i = 0;
-	while (ft_strnstr(envp[i], "PATH", 4) == 0)
+	while (ft_strnstr(envp[i], "PATH=", 5) == 0)
 		i++;
+	if (!envp[i])
+		return (NULL);
 	paths = ft_split(envp[i] + 5, ':');
 	i = 0;
 	while (paths[i])
@@ -30,10 +32,7 @@ char	*find_command_path(char *cmd, char **envp)
 		path = ft_strjoin(part_path, cmd);
 		free(part_path);
 		if (access(path, F_OK) == 0)
-		{
-			free_args(paths);
-			return (path);
-		}
+			return (free_args(paths), path);
 		free(path);
 		i++;
 	}
@@ -117,7 +116,7 @@ int	is_valid_pipe(char *input)
 int	ft_pipe(char *input, char **envp, t_shell *shell)
 {
 	if (!is_valid_pipe(input))
-		return (ft_printf("invalid pipes\n"));
+		return (printf("invalid pipes\n"));
 	shell->cmds = ft_split(input, '|');
 	if (!shell->cmds)
 		return (1);

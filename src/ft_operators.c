@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 15:34:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/17 12:49:14 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:18:11 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ int	parse_redirection(t_shell *shell, int *out_count, int *append)
 		tmp = shell->ipt[i];
 		shell->ipt[i] = ft_strtrim(shell->ipt[i], " ");
 		free(tmp);
-		if (parse_in(shell, i))
+		if (parse_heredoc(shell, &i))
+			return (1);
+		else if (parse_in(shell, i))
 			return (1);
 		else if (parse_out(shell, i, out_count, append))
 			return (1);
