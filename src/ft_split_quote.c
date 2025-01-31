@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   ft_split_quote.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/18 13:26:07 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/13 13:59:33 by ebroudic         ###   ########.fr       */
+/*   Created: 2025/01/28 16:29:58 by cle-berr          #+#    #+#             */
+/*   Updated: 2025/01/30 16:01:58 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/minishell.h"
 
 static int	count_word(char const *s, char c)
 {
 	int		i;
 	int		count;
+	int		quote;
 
 	count = 0;
 	i = 0;
+	quote = 1;
 	while (s[i] != '\0')
 	{
 		if (s[i] == c)
@@ -26,8 +28,14 @@ static int	count_word(char const *s, char c)
 		else if (s[i] != c)
 		{
 			count++;
-			while (s[i] != '\0' && s[i] != c)
+			while (s[i] != '\0')
+			{
+				if (s[i] == 39 || s[i] == 34)
+					quote = !quote;
+				if (s[i] == c && quote == 1)
+					break ;
 				i++;
+			}
 		}
 	}
 	return (count);
@@ -53,11 +61,19 @@ static char	*ft_strndup(const char *s, size_t n)
 
 static int	dup_word(char **dsa, const char *s, char c, int *i)
 {
+	int	quote;
 	int	j;
 
 	j = 0;
-	while (s[j] != '\0' && s[j] != c)
+	quote = 1;
+	while (s[j] != '\0')
+	{
+		if (s[j] == 39 || s[j] == 34)
+			quote = -quote;
+		if (s[j] == c && quote == 1)
+			break ;
 		j++;
+	}
 	dsa[*i] = ft_strndup(s, j);
 	if (!dsa[*i])
 	{
@@ -73,16 +89,24 @@ static int	dup_word(char **dsa, const char *s, char c, int *i)
 static int	copy_word(char **dsa, const char *s, char c)
 {
 	int		i;
+	int		quote;
 
 	i = 0;
+	quote = 1;
 	while (*s != '\0')
 	{
 		if (*s != c)
 		{
 			if (!dup_word(dsa, s, c, &i))
 				return (0);
-			while (*s != '\0' && *s != c)
+			while (*s != '\0')
+			{
+				if (*s == 39 || *s == 34)
+					quote = -quote;
+				if (*s == c && quote == 1)
+					break ;
 				s++;
+			}
 		}
 		else
 			s++;
@@ -91,7 +115,7 @@ static int	copy_word(char **dsa, const char *s, char c)
 	return (1);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split_quote(char const *s, char c)
 {
 	char	**dsa;
 
@@ -104,22 +128,3 @@ char	**ft_split(char const *s, char c)
 		return (NULL);
 	return (dsa);
 }
-
-/* int main()
-{
-	char *s;
-	char c;
-	char **res;
-	int	i;
-	
-	s = "hello, dsadwa,d,a ,d,,,,,,, dwadwa,,world ,,d test";
-	c = ',';
-	res = ft_split(s, c);
-	i = 0;
-	while (res[i] != NULL)
-	{
-		printf("Segment %d : %s\n", i, res[i]);	
-		i++;
-	}
-    return 0;
-} */
