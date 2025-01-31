@@ -1,0 +1,8 @@
+exit avec les exit codes (echo $?)
+heredoc
+ctrl + C
+variable d'environnement
+pipe (liaison avec redirection)
+echo qui marche pas bien avec les espaces
+peut etre cd qui marche pas bien
+je crois c tout
