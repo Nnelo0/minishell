@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/17 14:50:01 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/31 10:17:21 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,12 @@ int	main(int argc, char **argv, char **envp)
 	shell.ipt = NULL;
 	shell.fd_out = -1;
 	shell.fd_in = -1;
+	shell.env_list = init_env_list(envp);
+	shell.export_list = init_export_list(envp);
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	handle_prompt(&shell, envp);
+	free_env_list(shell.env_list);
+	free_export_list(shell.export_list);
 	return (0);
 }

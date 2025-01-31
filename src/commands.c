@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/17 12:47:50 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/31 12:27:48 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,19 +87,29 @@ int	which_commands(char *input, char **envp, t_shell *shell)
 		return (ft_cd(shell));
 	if (ft_strncmp(input, "./", 2) == 0)
 		return (ft_exe(shell, envp));
-	if (ft_strncmp(input, "env", 3) == 0 && input[3] == '\0')
-		return (ft_env(envp));
+	if (ft_strncmp(input, "env", 3) == 0
+		&& (input[3] == ' ' || input[3] == '\0'))
+		return (ft_env(shell));
 	if (ft_strncmp(input, "pwd", 3) == 0 && input[3] == '\0')
 		return (ft_pwd());
+	if (ft_strncmp(input, "export", 6) == 0
+		&& (input[6] == ' ' || input[6] == '\0'))
+		return (ft_export(shell));
+	if (ft_strncmp(input, "unset", 5) == 0
+		&& (input[5] == ' ' || input[5] == '\0'))
+		return (ft_unset(shell));
 	return (ft_shell(input, envp, shell));
 }
 
 int	commands(char *input, char **envp, t_shell *shell)
 {
+	int	res;
+
 	while (*input && (*input == ' ' || *input == '\t'))
 		input++;
 	if (*input == '\0')
 		return (1);
+	shell->input = ft_strdup(input);
 	shell->args = ft_split(input, ' ');
 	shell->cmd = NULL;
 	shell->ipt = NULL;
@@ -113,5 +123,7 @@ int	commands(char *input, char **envp, t_shell *shell)
 	shell->ipt = ft_split_chevrons(input, -1, 0);
 	if (!shell->ipt)
 		return (write(2, "ft_split failed\n", 16), 1);
-	return (which_commands(input, envp, shell));
+	res = which_commands(input, envp, shell);
+	free(shell->input);
+	return (res);
 }
