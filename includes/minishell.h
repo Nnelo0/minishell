@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/17 12:47:57 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/31 09:37:23 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ typedef struct s_shell
 	int				fd_out;
 	char			*in_file;
 	char			**out_file;
+	int				in;
+	int				out;
 }	t_shell;
 
 void	handle_prompt(t_shell *shell, char **envp);
