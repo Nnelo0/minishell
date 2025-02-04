@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/31 13:44:02 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/03 15:12:07 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,12 +114,12 @@ int	commands(char *input, char **envp, t_shell *shell)
 	shell->cmd = NULL;
 	shell->ipt = NULL;
 	if (!ft_quotes(input))
-		return (printf("open quote\n"));
+		return (free(shell->input), printf("open quote\n"), 1);
 	ft_remove_quotes(input);
 	if (!is_valid_chevrons(input))
-		return (printf("invalid '<'\n"));
+		return (free(shell->input), printf("invalid '<' or '>'\n"), 1);
 	if (!is_valid_pipe(input))
-		return (printf("invalid pipes\n"));
+		return (free(shell->input), printf("invalid pipes\n"), 1);
 	shell->ipt = ft_split_chevrons(input, -1, 0);
 	if (!shell->ipt)
 		return (write(2, "ft_split failed\n", 16), 1);

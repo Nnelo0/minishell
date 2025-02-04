@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/16 12:28:45 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/03 15:04:47 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int	ft_shell(char *input, char **envp, t_shell *shell)
 	if (dup2(shell->in, STDIN_FILENO) == -1
 		|| dup2(shell->out, STDOUT_FILENO) == -1)
 		return (perror("dup2 failed"), close(shell->in), close(shell->out), 1);
+	unlink(".tmp_heredoc");
 	return (close(shell->in), close(shell->out), free(path),
 		free_args(cmd), wait(NULL), 1);
 }

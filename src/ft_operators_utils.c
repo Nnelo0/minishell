@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:39:51 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/31 15:29:18 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/03 12:57:17 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,24 +63,6 @@ int	is_valid_chevrons(char *input)
 		i++;
 	}
 	return (expect_file == 0);
-}
-
-int	parse_heredoc(t_shell *shell, int *i)
-{
-	if (ft_strcmp(shell->ipt[*i], "<<") == 0)
-	{
-		if (shell->ipt[*i + 1])
-		{
-			if (shell->fd_in != -1)
-				close(shell->fd_in);
-			read_heredoc(shell, shell->ipt[++(*i)]);
-			if (shell->fd_in == -1)
-				return (1);
-		}
-		else
-			return (1);
-	}
-	return (0);
 }
 
 int	parse_in(t_shell *shell, int i)

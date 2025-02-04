@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/31 15:28:58 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/04 09:12:55 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,7 @@ void		verif_env(t_env **head, const char *env_var, t_env *new_node);
 void		verif_exp(t_export **head, const char *var, t_export *new, int tpe);
 char		**ft_split_quote(char const *s, char c);
 int			ft_unset(t_shell *shell);
-void 		read_heredoc(t_shell *shell, char *delimiter);
-int			parse_heredoc(t_shell *shell, int *i);
-
+void		read_heredoc(t_shell *shell, char *delimiter);
+int			parse_heredoc(t_shell *shell, int i);
 
 #endif
