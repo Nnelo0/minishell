@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/03 15:12:07 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:36:34 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	ft_exit(char *input, t_shell *shell)
 	printf("exit\n");
 	free(input);
 	free_args(shell->args);
+	free_args(shell->ipt);
 	rl_clear_history();
 	return (0);
 }

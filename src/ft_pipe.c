@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/31 13:44:22 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:51:39 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*find_command_path(char *cmd, char **envp)
 	char	*part_path;
 
 	i = 0;
-	while (ft_strnstr(envp[i], "PATH=", 5) == 0)
+	while (envp[i] && ft_strnstr(envp[i], "PATH=", 5) == 0)
 		i++;
 	if (!envp[i])
 		return (NULL);
@@ -40,19 +40,7 @@ char	*find_command_path(char *cmd, char **envp)
 	return (0);
 }
 
-void	ft_execute_command(t_shell *shell, int pipefd[2], int prev_fd, int i)
-{
-	if (shell->cmds[i + 1])
-		dup2(pipefd[1], STDOUT_FILENO);
-	if (prev_fd != 0)
-		dup2(prev_fd, STDIN_FILENO);
-	close(pipefd[0]);
-	close(pipefd[1]);
-	which_commands(shell->cmds[i], shell->envp1, shell);
-	exit (0);
-}
-
-int	ft_command_pipe(char **cmds, t_shell *shell)
+int	ft_command_pipe(t_shell *shell)
 {
 	int		pipefd[2];
 	pid_t	pid;
@@ -61,13 +49,13 @@ int	ft_command_pipe(char **cmds, t_shell *shell)
 
 	i = 0;
 	prev_fd = 0;
-	while (cmds[i])
+	while (shell->cmds[i])
 	{
-		if (cmds[i + 1] && pipe(pipefd) == -1)
-			return (free_args(cmds), 1);
+		if (shell->cmds[i + 1] && pipe(pipefd) == -1)
+			return (free_args(shell->cmds), 1);
 		pid = fork();
 		if (pid == -1)
-			return (free_args(cmds), 1);
+			return (free_args(shell->cmds), 1);
 		if (pid == 0)
 		{
 			if (shell->cmds[i + 1])
@@ -77,11 +65,11 @@ int	ft_command_pipe(char **cmds, t_shell *shell)
 			close(pipefd[0]);
 			close(pipefd[1]);
 			which_commands(shell->cmds[i], shell->envp1, shell);
-			exit (0);
+			exit(127);
 		}
 		if (prev_fd != 0)
 			close(prev_fd);
-		if (cmds[i + 1])
+		if (shell->cmds[i + 1])
 			prev_fd = pipefd[0];
 		close(pipefd[1]);
 		i++;
@@ -117,11 +105,14 @@ int	ft_pipe(char *input, char **envp, t_shell *shell)
 {
 	if (!is_valid_pipe(input))
 		return (printf("invalid pipes\n"));
+	//printf("[%s]\n", input);
 	shell->cmds = ft_split(input, '|');
 	if (!shell->cmds)
 		return (1);
 	shell->envp1 = envp;
-	ft_command_pipe(shell->cmds, shell);
+	//for (int i = 0; shell->cmds[i]; i++)
+	//	printf("{%s}\n", shell->cmds[i]);
+	ft_command_pipe(shell);
 	while (wait(NULL) > 0)
 		;
 	free_args(shell->cmds);

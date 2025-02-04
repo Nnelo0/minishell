@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:26:07 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/13 13:59:33 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:44:48 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,16 +104,16 @@ char	**ft_split(char const *s, char c)
 		return (NULL);
 	return (dsa);
 }
-
-/* int main()
+/* 
+int main()
 {
 	char *s;
 	char c;
 	char **res;
 	int	i;
 	
-	s = "hello, dsadwa,d,a ,d,,,,,,, dwadwa,,world ,,d test";
-	c = ',';
+	s = "ls > test | wc < test";
+	c = '|';
 	res = ft_split(s, c);
 	i = 0;
 	while (res[i] != NULL)
