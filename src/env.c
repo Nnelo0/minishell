@@ -1,26 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2024/12/20 17:37:22 by ebroudic         ###   ########.fr       */
+/*   Created: 2025/01/31 09:36:00 by ebroudic          #+#    #+#             */
+/*   Updated: 2025/01/31 10:18:47 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "../includes/minishell.h"
 
-# include "libft/libft/libft.h"
-# include "libft/printf/ft_printf.h"
-# include <sys/wait.h>
+int	ft_pwd(void)
+{
+	char	*pwd;
 
-void	open_files(int files[2], char **argv, int fd[2]);
-char	*find_command_path(char *cmd, char **envp);
-void	close_all(int files[2], int fd[2]);
-void	check_command(char **argv, char **envp);
-void	free_cmd(char **cmd);
-void	check_arg(char **argv);
-#endif
+	pwd = getcwd(NULL, 0);
+	ft_printf("%s\n", pwd);
+	free(pwd);
+	return (1);
+}
+
+int	ft_env(t_shell *shell)
+{
+	t_env	*temp;
+
+	if (!shell || !shell->env_list)
+		return (1);
+	temp = shell->env_list;
+	while (temp)
+	{
+		printf("%s\n", temp->value);
+		temp = temp->next;
+	}
+	free(temp);
+	return (1);
+}

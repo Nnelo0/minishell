@@ -1,5 +1,5 @@
 NAME = minishell
-CC = cc
+CC = clang
 CFLAGS = -Wall -Werror -Wextra -g
 SRCS = src/*.c \
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 16:17:37 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/09 09:38:56 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:45:27 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,15 @@ void	ft_remove_quotes(char *input)
 int	ft_echo(char *input)
 {
 	int	i;
+	char	**args;
 
-	if (ft_strlen(input) >= 5 && input[4] == ' ')
+	i = 1;
+	args = ft_split_quote(input, ' ');
+	if (ft_strcmp(args[1], "-n") == 0)
+		while (args[++i])
+			printf("%s", args[i]);
+	return (1);
+	/* if (ft_strlen(input) >= 5 && input[4] == ' ')
 	{
 		if (input[5] == '-' && input[6] == 'n'
 			&& (input[7] == ' ' || input[7] == '\0'))
@@ -82,5 +89,5 @@ int	ft_echo(char *input)
 		ft_printf("%s", input + i);
 	}
 	ft_printf("\n");
-	return (1);
+	return (1); */
 }
