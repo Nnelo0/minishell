@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/04 15:51:39 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:24:51 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ int	ft_command_pipe(t_shell *shell)
 	{
 		if (shell->cmds[i + 1] && pipe(pipefd) == -1)
 			return (free_args(shell->cmds), 1);
+		//if (ft_strchr(shell->cmds[i], '<') || ft_strchr(shell->cmds[i], '>'))
+    	//	ft_redirection(shell); //ca fait segfault mais c un test
 		pid = fork();
 		if (pid == -1)
 			return (free_args(shell->cmds), 1);
@@ -65,7 +67,13 @@ int	ft_command_pipe(t_shell *shell)
 			close(pipefd[0]);
 			close(pipefd[1]);
 			which_commands(shell->cmds[i], shell->envp1, shell);
-			exit(127);
+			free_args(shell->ipt);
+			free(shell->input);
+			free_args(shell->args);
+			free_env_list(shell->env_list);
+			free_export_list(shell->export_list);
+			free_args(shell->cmds);
+			exit(0);
 		}
 		if (prev_fd != 0)
 			close(prev_fd);
@@ -105,13 +113,13 @@ int	ft_pipe(char *input, char **envp, t_shell *shell)
 {
 	if (!is_valid_pipe(input))
 		return (printf("invalid pipes\n"));
-	//printf("[%s]\n", input);
+	printf("[%s]\n", input);
 	shell->cmds = ft_split(input, '|');
 	if (!shell->cmds)
 		return (1);
 	shell->envp1 = envp;
-	//for (int i = 0; shell->cmds[i]; i++)
-	//	printf("{%s}\n", shell->cmds[i]);
+	for (int i = 0; shell->cmds[i]; i++)
+		printf("{%s}\n", shell->cmds[i]);
 	ft_command_pipe(shell);
 	while (wait(NULL) > 0)
 		;
