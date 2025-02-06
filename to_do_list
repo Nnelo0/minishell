@@ -1,4 +1,4 @@
-exit avec les exit codes (echo $?)
+exit avec les exit codes (echo $?) 126 pour is_directory et permission denied 127 pour commande qui marche pas 0 pour commande qui marche 
 heredoc
 ctrl + C
 variable d'environnement
