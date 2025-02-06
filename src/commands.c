@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/04 09:50:07 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/06 12:48:31 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	which_commands(char *input, char **envp, t_shell *shell)
 		return (ft_exit(input, shell));
 	if (ft_strncmp(input, "echo", 4) == 0
 		&& (input[4] == ' ' || input[4] == '\0'))
-		return (ft_echo(shell->input));
+		return (ft_echo(shell->input, shell, 0, 1));
 	if (ft_strncmp(input, "cd", 2) == 0
 		&& (input[2] == ' ' || input[2] == '\0'))
 		return (ft_cd(shell));
@@ -115,15 +115,13 @@ int	commands(char *input, char **envp, t_shell *shell)
 	shell->cmd = NULL;
 	shell->ipt = NULL;
 	if (!ft_quotes(input))
-		return (ft_printf("open quote\n"));
+		return (free(shell->input), ft_printf("open quote\n"));
 	ft_remove_quotes(input);
 	if (!is_valid_chevrons(input))
-		return (ft_printf("invalid '<'\n"));
+		return (free(shell->input), ft_printf("invalid '<'\n"));
 	if (!is_valid_pipe(input))
-		return (ft_printf("invalid pipes\n"));
+		return (free(shell->input), ft_printf("invalid pipes\n"));
 	shell->ipt = ft_split_chevrons(input, -1, 0);
-	if (!shell->ipt)
-		return (write(2, "ft_split failed\n", 16), 1);
 	res = which_commands(input, envp, shell);
 	free(shell->input);
 	return (res);

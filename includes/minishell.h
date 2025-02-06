@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/31 10:19:52 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:10:45 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_shell
 	char			*input;
 	t_env			*env_list;
 	t_export		*export_list;
+	int				output;
 }	t_shell;
 
 void		handle_prompt(t_shell *shell, char **envp);
@@ -63,7 +64,7 @@ int			commands(char *input, char **envp, t_shell *shell);
 int			ft_shell(char *input, char **envp, t_shell *shell);
 int			ft_quotes(char *input);
 void		ft_remove_quotes(char *input);
-int			ft_echo(char *input);
+int			ft_echo(char *input, t_shell *shell, int n, int i);
 void		free_args(char **args);
 int			ft_env(t_shell *shell);
 int			ft_pwd(void);

@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:04:05 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/01/30 15:22:28 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:10:09 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	ft_sort_export_list(t_export *export_list)
 		next = current->next;
 		while (next)
 		{
-			if (strcmp(current->value, next->value) > 0)
+			if (ft_strcmp(current->value, next->value) > 0)
 			{
 				temp = current->value;
 				current->value = next->value;
