@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/04 09:12:55 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/06 14:23:51 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_shell
 	int				in;
 	int				out;
 	char			*input;
+	int				pipefd[2];
 	t_env			*env_list;
 	t_export		*export_list;
 }	t_shell;

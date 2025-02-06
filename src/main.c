@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/03 15:11:50 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/06 13:14:33 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,13 @@ void	handle_sigint(int sig)
 	(void)sig;
 	if (waitpid(-1, NULL, WNOHANG) == 0)
 	{
-		printf("\n");
+		ft_printf("\n");
 		return ;
 	}
-	write(1, "\nminishell> ", 12);
+	ft_printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
 int	keypress(char *input, t_shell *shell)

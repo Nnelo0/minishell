@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/05 18:24:51 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/06 14:06:05 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ int	ft_command_pipe(t_shell *shell)
 	{
 		if (shell->cmds[i + 1] && pipe(pipefd) == -1)
 			return (free_args(shell->cmds), 1);
-		//if (ft_strchr(shell->cmds[i], '<') || ft_strchr(shell->cmds[i], '>'))
-    	//	ft_redirection(shell); //ca fait segfault mais c un test
+		if (ft_strchr(shell->cmds[i], '<') || ft_strchr(shell->cmds[i], '>'))
+    		ft_redirection(shell);
 		pid = fork();
 		if (pid == -1)
 			return (free_args(shell->cmds), 1);
@@ -118,8 +118,8 @@ int	ft_pipe(char *input, char **envp, t_shell *shell)
 	if (!shell->cmds)
 		return (1);
 	shell->envp1 = envp;
-	for (int i = 0; shell->cmds[i]; i++)
-		printf("{%s}\n", shell->cmds[i]);
+	//for (int i = 0; shell->cmds[i]; i++)
+	//	printf("{%s}\n", shell->cmds[i]);
 	ft_command_pipe(shell);
 	while (wait(NULL) > 0)
 		;

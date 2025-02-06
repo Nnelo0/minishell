@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/04 13:36:34 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/06 13:00:05 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,22 @@ int	ft_exe(t_shell *shell, char **envp)
 		return (printf("minishell: command not found\n"));
 	pid = fork();
 	if (pid == -1)
-	{
-		perror("fork");
-		return (1);
-	}
+		return (perror("fork"), 1);
 	if (pid == 0)
 	{
 		if (execve(shell->args[0], shell->args, envp) == -1)
 		{
-			perror("minishell");
+			perror(shell->args[0]);
+			free_args(shell->ipt);
+			free(shell->input);
 			free_args(shell->args);
-			exit(1);
+			free_env_list(shell->env_list);
+			free_export_list(shell->export_list);
+			exit(127);
 		}
 	}
 	wait(NULL);
-	free_args(shell->args);
-	shell->args = NULL;
-	return (1);
+	return (free_args(shell->args), shell->args = NULL, 1);
 }
 
 int	ft_cd(t_shell *shell)
@@ -64,19 +63,18 @@ int	ft_cd(t_shell *shell)
 	else
 		target = shell->args[1];
 	if (chdir(target) == -1)
-	{
-		perror("cd");
-		return (1);
-	}
+		return (perror(target), 1);
 	return (1);
 }
 
 int	which_commands(char *input, char **envp, t_shell *shell)
 {
-	if (ft_strchr(input, '|'))
-		return (ft_pipe(input, envp, shell));
 	if (ft_strchr(input, '<') || ft_strchr(input, '>'))
 		return (ft_redirection(shell));
+	if (ft_strchr(input, '|'))
+		return (ft_pipe(input, envp, shell));
+	/* if (ft_strchr(input, '<') || ft_strchr(input, '>'))
+		return (ft_redirection(shell)); */
 	if (ft_strncmp(input, "exit", 4) == 0
 		&& (input[4] == ' ' || input[4] == '\0'))
 		return (ft_exit(input, shell));
@@ -122,8 +120,8 @@ int	commands(char *input, char **envp, t_shell *shell)
 	if (!is_valid_pipe(input))
 		return (free(shell->input), printf("invalid pipes\n"), 1);
 	shell->ipt = ft_split_chevrons(input, -1, 0);
-	if (!shell->ipt)
-		return (write(2, "ft_split failed\n", 16), 1);
+	for (int i = 0; shell->ipt[i]; i++)
+		printf("{%s}\n", shell->ipt[i]);
 	res = which_commands(input, envp, shell);
 	free(shell->input);
 	return (res);
