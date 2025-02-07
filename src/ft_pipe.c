@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/07 12:47:03 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/07 13:30:55 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,29 @@ char	*find_command_path(char *cmd, char **envp)
 	return (0);
 }
 
+void	pipe_commands_utils(t_shell *shell, int prev_fd, int pipefd[2], int i)
+{
+	if (prev_fd != -1)
+	{
+		dup2(prev_fd, STDIN_FILENO);
+		close(prev_fd);
+	}
+	if (shell->cmds[i + 1])
+	{
+		dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[1]);
+	}
+	close(pipefd[0]);
+	which_commands(shell->cmds[i], shell->envp1, shell);
+	free_args(shell->ipt);
+	free(shell->input);
+	free_args(shell->args);
+	free_env_list(shell->env_list);
+	free_export_list(shell->export_list);
+	free_args(shell->cmds);
+	exit(0);
+}
+
 int	ft_command_pipe(t_shell *shell)
 {
 	int		pipefd[2];
@@ -57,27 +80,7 @@ int	ft_command_pipe(t_shell *shell)
 		if (pid == -1)
 			return (free_args(shell->cmds), perror("fork error"), 1);
 		if (pid == 0)
-		{
-			if (prev_fd != -1)
-			{
-				dup2(prev_fd, STDIN_FILENO);
-				close(prev_fd);
-			}
-			if (shell->cmds[i + 1])
-			{
-				dup2(pipefd[1], STDOUT_FILENO);
-				close(pipefd[1]);
-			}
-			close(pipefd[0]);
-			which_commands(shell->cmds[i], shell->envp1, shell);
-			free_args(shell->ipt);
-			free(shell->input);
-			free_args(shell->args);
-			free_env_list(shell->env_list);
-			free_export_list(shell->export_list);
-			free_args(shell->cmds);
-			exit(0);
-		}
+			pipe_commands_utils(shell, prev_fd, pipefd, i);
 		if (prev_fd != -1)
 			close(prev_fd);
 		close(pipefd[1]);
