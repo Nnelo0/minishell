@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/07 12:52:23 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/07 13:35:11 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,14 @@ static void	ft_shell_utils(char *path, char **cmd, char **envp, t_shell *shell)
 	execve(path, cmd, envp);
 }
 
+void	verif_close(t_shell *shell)
+{
+	if (shell->fd_in != -1)
+		close(shell->fd_in);
+	if (shell->fd_out != -1)
+		close(shell->fd_out);
+}
+
 int	ft_shell(char *input, char **envp, t_shell *shell)
 {
 	pid_t	pid;
@@ -65,11 +73,7 @@ int	ft_shell(char *input, char **envp, t_shell *shell)
 	if (dup2(shell->in, STDIN_FILENO) == -1
 		|| dup2(shell->out, STDOUT_FILENO) == -1)
 		return (perror("dup2 failed"), close(shell->in), close(shell->out), 1);
-	unlink(".tmp_heredoc");
-	if (shell->fd_in != -1)
-		close(shell->fd_in);
-	if (shell->fd_out != -1)
-		close(shell->fd_out);
+	verif_close(shell);
 	return (shell->fd_in = -1, shell->fd_out = -1, close(shell->in)
 		, close(shell->out), free(path), free_args(cmd), wait(NULL), 1);
 }
