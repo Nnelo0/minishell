@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/07 10:09:15 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/07 12:52:23 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,8 @@ int	ft_shell(char *input, char **envp, t_shell *shell)
 		close(shell->fd_in);
 	if (shell->fd_out != -1)
 		close(shell->fd_out);
-	shell->fd_in = -1;
-	shell->fd_out = -1;
-	return (close(shell->in), close(shell->out), free(path),
-		free_args(cmd), wait(NULL), 1);
+	return (shell->fd_in = -1, shell->fd_out = -1, close(shell->in)
+		, close(shell->out), free(path), free_args(cmd), wait(NULL), 1);
 }
 
 void	free_args(char **args)

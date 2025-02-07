@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/07 10:28:10 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/07 12:47:03 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,22 +48,27 @@ int	ft_command_pipe(t_shell *shell)
 	int		prev_fd;
 
 	i = 0;
-	prev_fd = 0;
+	prev_fd = -1;
 	while (shell->cmds[i])
 	{
 		if (shell->cmds[i + 1] && pipe(pipefd) == -1)
-			return (free_args(shell->cmds), 1);
+			return (free_args(shell->cmds), perror("pipe error"), 1);
 		pid = fork();
 		if (pid == -1)
-			return (free_args(shell->cmds), 1);
+			return (free_args(shell->cmds), perror("fork error"), 1);
 		if (pid == 0)
 		{
-			if (shell->cmds[i + 1])
-				dup2(pipefd[1], STDOUT_FILENO);
-			if (prev_fd != 0)
+			if (prev_fd != -1)
+			{
 				dup2(prev_fd, STDIN_FILENO);
+				close(prev_fd);
+			}
+			if (shell->cmds[i + 1])
+			{
+				dup2(pipefd[1], STDOUT_FILENO);
+				close(pipefd[1]);
+			}
 			close(pipefd[0]);
-			close(pipefd[1]);
 			which_commands(shell->cmds[i], shell->envp1, shell);
 			free_args(shell->ipt);
 			free(shell->input);
@@ -73,14 +78,14 @@ int	ft_command_pipe(t_shell *shell)
 			free_args(shell->cmds);
 			exit(0);
 		}
-		if (prev_fd != 0)
+		if (prev_fd != -1)
 			close(prev_fd);
-		if (shell->cmds[i + 1])
-			prev_fd = pipefd[0];
-		close(pipefd[0]);
 		close(pipefd[1]);
+		prev_fd = pipefd[0];
 		i++;
 	}
+	if (prev_fd != -1)
+		close(prev_fd);
 	return (1);
 }
 

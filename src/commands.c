@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/07 10:34:17 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/07 12:47:45 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	which_commands(char *input, char **envp, t_shell *shell)
 	if (ft_strchr(input, '|'))
 		return (ft_pipe(input, envp, shell));
 	if (ft_strchr(input, '<') || ft_strchr(input, '>'))
-		return (ft_redirection(input ,shell));
+		return (ft_redirection(input, shell));
 	if (ft_strncmp(input, "exit", 4) == 0
 		&& (input[4] == ' ' || input[4] == '\0'))
 		return (ft_exit(input, shell));
