@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 09:36:00 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/31 13:43:39 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/07 14:49:16 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_pwd(void)
 	pwd = getcwd(NULL, 0);
 	printf("%s\n", pwd);
 	free(pwd);
-	return (1);
+	return (0);
 }
 
 int	ft_env(t_shell *shell)
@@ -35,5 +35,5 @@ int	ft_env(t_shell *shell)
 		temp = temp->next;
 	}
 	free(temp);
-	return (1);
+	return (0);
 }

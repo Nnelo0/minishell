@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/07 12:47:45 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/07 15:01:10 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,20 @@ int	ft_exit(char *input, t_shell *shell)
 {
 	printf("exit\n");
 	free(input);
+	free(shell->input);
 	free_args(shell->args);
 	free_args(shell->ipt);
+	free_env_list(shell->env_list);
+	free_export_list(shell->export_list);
 	rl_clear_history();
-	return (0);
+	exit(shell->status);
+	return (shell->status);
 }
 
 int	ft_exe(t_shell *shell, char **envp)
 {
 	pid_t	pid;
+	int		status;
 
 	if (!shell->args || !shell->args[0])
 		return (printf("minishell: command not found\n"));
@@ -44,8 +49,8 @@ int	ft_exe(t_shell *shell, char **envp)
 			exit(127);
 		}
 	}
-	wait(NULL);
-	return (free_args(shell->args), shell->args = NULL, 1);
+	waitpid(pid, &status, 0);
+	return (free_args(shell->args), shell->args = NULL, (status >> 8) & 0xFF);
 }
 
 int	ft_cd(t_shell *shell)
@@ -111,12 +116,12 @@ int	commands(char *input, char **envp, t_shell *shell)
 	shell->cmd = NULL;
 	shell->ipt = NULL;
 	if (!ft_quotes(input))
-		return (free(shell->input), printf("open quote\n"), 1);
+		return (free(shell->input), printf("open quote\n"), 127);
 	ft_remove_quotes(input);
 	if (!is_valid_chevrons(input))
-		return (free(shell->input), printf("invalid '<' or '>'\n"), 1);
+		return (free(shell->input), printf("invalid '<' or '>'\n"), 127);
 	if (!is_valid_pipe(input))
-		return (free(shell->input), printf("invalid pipes\n"), 1);
+		return (free(shell->input), printf("invalid pipes\n"), 127);
 	res = which_commands(input, envp, shell);
 	free(shell->input);
 	return (res);

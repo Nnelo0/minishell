@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/07 09:22:05 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/07 15:01:54 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,13 @@ int	keypress(char *input, t_shell *shell)
 	{
 		printf("exit\n");
 		rl_clear_history();
-		return (0);
+		free(input);
+		free_args(shell->args);
+		free_args(shell->ipt);
+		free_env_list(shell->env_list);
+		free_export_list(shell->export_list);
+		exit (shell->status);
+		return (shell->status);
 	}
 	return (1);
 }
@@ -60,8 +66,7 @@ void	handle_prompt(t_shell *shell, char **envp)
 			break ;
 		if (*input)
 			add_history(input);
-		if (commands(input, envp, shell) == 0)
-			break ;
+		shell->status = commands(input, envp, shell);
 		if (shell->args)
 		{
 			free_args(shell->args);
@@ -89,6 +94,7 @@ int	main(int argc, char **argv, char **envp)
 	shell.ipt = NULL;
 	shell.fd_out = -1;
 	shell.fd_in = -1;
+	shell.status = 0;
 	shell.env_list = init_env_list(envp);
 	shell.export_list = init_export_list(envp);
 	signal(SIGINT, handle_sigint);

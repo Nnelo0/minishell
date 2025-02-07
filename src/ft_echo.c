@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 13:37:06 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/31 13:44:13 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/07 14:49:37 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,13 @@ int	ft_echo(char *input)
 			while (input[i] == ' ')
 				i++;
 			if (input[i] == '\0')
-				return (1);
+				return (0);
 			printf("%s", input + i);
-			return (1);
+			return (0);
 		}
 		i = 5;
 		printf("%s", input + i);
 	}
 	printf("\n");
-	return (1);
+	return (0);
 }

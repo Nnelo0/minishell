@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/07 13:30:55 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/07 14:50:45 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	pipe_commands_utils(t_shell *shell, int prev_fd, int pipefd[2], int i)
 	free_env_list(shell->env_list);
 	free_export_list(shell->export_list);
 	free_args(shell->cmds);
-	exit(0);
+	exit(127);
 }
 
 int	ft_command_pipe(t_shell *shell)
@@ -75,10 +75,10 @@ int	ft_command_pipe(t_shell *shell)
 	while (shell->cmds[i])
 	{
 		if (shell->cmds[i + 1] && pipe(pipefd) == -1)
-			return (free_args(shell->cmds), perror("pipe error"), 1);
+			return (free_args(shell->cmds), perror("pipe error"), 127);
 		pid = fork();
 		if (pid == -1)
-			return (free_args(shell->cmds), perror("fork error"), 1);
+			return (free_args(shell->cmds), perror("fork error"), 127);
 		if (pid == 0)
 			pipe_commands_utils(shell, prev_fd, pipefd, i);
 		if (prev_fd != -1)
@@ -89,7 +89,7 @@ int	ft_command_pipe(t_shell *shell)
 	}
 	if (prev_fd != -1)
 		close(prev_fd);
-	return (1);
+	return (0);
 }
 
 int	is_valid_pipe(char *input)
@@ -122,7 +122,7 @@ int	ft_pipe(char *input, char **envp, t_shell *shell)
 		return (printf("invalid pipes\n"));
 	shell->cmds = ft_split(input, '|');
 	if (!shell->cmds)
-		return (1);
+		return (127);
 	shell->envp1 = envp;
 	ft_command_pipe(shell);
 	while (wait(NULL) > 0)
