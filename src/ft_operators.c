@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 15:34:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/06 15:36:00 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/07 10:21:00 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,19 +93,7 @@ int	open_files(t_shell *shell, int out_count, int append)
 	return (0);
 }
 
-int	parse_pipe(t_shell *shell)
-{
-	int		i;
-	pid_t	pid;
-
-	i = -1;
-	while (shell->ipt[++i])
-	{
-		
-	}
-}
-
-int	ft_redirection(t_shell *shell)
+int	ft_redirection(char *input, t_shell *shell)
 {
 	int		append;
 	int		out_count;
@@ -113,17 +101,11 @@ int	ft_redirection(t_shell *shell)
 	shell->in_file = NULL;
 	shell->fd_in = -1;
 	shell->fd_out = -1;
+	shell->ipt = ft_split_chevrons(input, -1, 0);
 	shell->out_file = malloc(sizeof(char *) * (ft_strlen_tab(shell->ipt) + 1));
 	if (!shell->out_file)
 		return (1);
 	out_count = 0;
-	int i = 0;
-	while (shell->ipt[i])
-	{
-		if (ft_strcmp(shell->ipt[i], "|") == 0)
-			parse_pipe(shell);
-		i++;
-	}
 	parse_redirection(shell, &out_count, &append, -1);
 	if (!shell->cmd)
 		return (1);

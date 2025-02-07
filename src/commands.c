@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/06 13:00:05 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/07 10:34:17 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,10 @@ int	ft_cd(t_shell *shell)
 
 int	which_commands(char *input, char **envp, t_shell *shell)
 {
-	if (ft_strchr(input, '<') || ft_strchr(input, '>'))
-		return (ft_redirection(shell));
 	if (ft_strchr(input, '|'))
 		return (ft_pipe(input, envp, shell));
-	/* if (ft_strchr(input, '<') || ft_strchr(input, '>'))
-		return (ft_redirection(shell)); */
+	if (ft_strchr(input, '<') || ft_strchr(input, '>'))
+		return (ft_redirection(input ,shell));
 	if (ft_strncmp(input, "exit", 4) == 0
 		&& (input[4] == ' ' || input[4] == '\0'))
 		return (ft_exit(input, shell));
@@ -119,9 +117,6 @@ int	commands(char *input, char **envp, t_shell *shell)
 		return (free(shell->input), printf("invalid '<' or '>'\n"), 1);
 	if (!is_valid_pipe(input))
 		return (free(shell->input), printf("invalid pipes\n"), 1);
-	shell->ipt = ft_split_chevrons(input, -1, 0);
-	for (int i = 0; shell->ipt[i]; i++)
-		printf("{%s}\n", shell->ipt[i]);
 	res = which_commands(input, envp, shell);
 	free(shell->input);
 	return (res);

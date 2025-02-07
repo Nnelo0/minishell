@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/06 14:23:51 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/07 09:54:59 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int			ft_pwd(void);
 int			ft_pipe(char *input, char **envp, t_shell *shell);
 int			which_commands(char *input, char **envp, t_shell *shell);
 char		*find_command_path(char *cmd, char **envp);
-int			ft_redirection(t_shell *shell);
+int			ft_redirection(char *input, t_shell *shell);
 int			is_valid_chevrons(char *input);
 char		**ft_split_chevrons(char *input, int i, int j);
 int			ft_strlen_tab(char **tab);
