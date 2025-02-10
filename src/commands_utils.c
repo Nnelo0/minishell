@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/16 12:28:45 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:24:19 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,25 @@ static void	ft_shell_utils(char *path, char **cmd, char **envp, t_shell *shell)
 	execve(path, cmd, envp);
 }
 
+void	verif_close(t_shell *shell)
+{
+	if (shell->fd_in != -1)
+		close(shell->fd_in);
+	if (shell->fd_out != -1)
+		close(shell->fd_out);
+}
+
 int	ft_shell(char *input, char **envp, t_shell *shell)
 {
 	pid_t	pid;
 	char	*path;
 	char	**cmd;
+	int		status;
 
 	shell->in = dup(STDIN_FILENO);
 	shell->out = dup(STDOUT_FILENO);
 	if (shell->in == -1 || shell->out == -1)
-		return (perror("dup failed"), 1);
+		return (perror("dup failed"), 127);
 	cmd = ft_split(input, ' ');
 	path = find_command_path(cmd[0], envp);
 	if (!path)
@@ -59,14 +68,15 @@ int	ft_shell(char *input, char **envp, t_shell *shell)
 			close(shell->out), free_args(cmd), 127);
 	pid = fork();
 	if (pid == -1)
-		return (0);
+		return (127);
 	if (pid == 0)
 		ft_shell_utils(path, cmd, envp, shell);
 	if (dup2(shell->in, STDIN_FILENO) == -1
 		|| dup2(shell->out, STDOUT_FILENO) == -1)
-		return (perror("dup2 failed"), close(shell->in), close(shell->out), 1);
-	return (close(shell->in), close(shell->out), free(path),
-		free_args(cmd), wait(NULL), 1);
+		return (perror("failed"), close(shell->in), close(shell->out), 127);
+	return (verif_close(shell), waitpid(pid, &status, 0), shell->fd_in = -1,
+		shell->fd_out = -1, close(shell->in),
+		close(shell->out), free(path), free_args(cmd), (status >> 8) & 0xFF);
 }
 
 void	free_args(char **args)

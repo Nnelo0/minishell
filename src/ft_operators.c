@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 15:34:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/17 12:49:14 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/07 12:18:55 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,10 @@ void	parse_commands(char **commands, char *tmp, char *args)
 	*commands = tmp_cmd;
 }
 
-int	parse_redirection(t_shell *shell, int *out_count, int *append)
+int	parse_redirection(t_shell *shell, int *out_count, int *append, int i)
 {
 	char	*tmp;
-	int		i;
 
-	i = -1;
 	*append = 0;
 	shell->in_file = NULL;
 	*out_count = 0;
@@ -53,12 +51,13 @@ int	parse_redirection(t_shell *shell, int *out_count, int *append)
 		tmp = shell->ipt[i];
 		shell->ipt[i] = ft_strtrim(shell->ipt[i], " ");
 		free(tmp);
-		if (parse_in(shell, i))
+		if (parse_heredoc(shell, i))
 			return (1);
-		else if (parse_out(shell, i, out_count, append))
+		else if (parse_in(shell, i) || parse_out(shell, i, out_count, append))
 			return (1);
 		else if (ft_strcmp(shell->ipt[i], "<") == 0 || ft_strcmp
-			(shell->ipt[i], ">") == 0 || ft_strcmp(shell->ipt[i], ">>") == 0)
+			(shell->ipt[i], ">") == 0 || ft_strcmp(shell->ipt[i], ">>") == 0
+			|| ft_strcmp(shell->ipt[i], "<<") == 0)
 			i++;
 		else if (!shell->cmd)
 			shell->cmd = ft_strdup(shell->ipt[i]);
@@ -94,7 +93,7 @@ int	open_files(t_shell *shell, int out_count, int append)
 	return (0);
 }
 
-int	ft_redirection(t_shell *shell)
+int	ft_redirection(char *input, t_shell *shell)
 {
 	int		append;
 	int		out_count;
@@ -102,11 +101,12 @@ int	ft_redirection(t_shell *shell)
 	shell->in_file = NULL;
 	shell->fd_in = -1;
 	shell->fd_out = -1;
+	shell->ipt = ft_split_chevrons(input, -1, 0);
 	shell->out_file = malloc(sizeof(char *) * (ft_strlen_tab(shell->ipt) + 1));
 	if (!shell->out_file)
 		return (1);
 	out_count = 0;
-	parse_redirection(shell, &out_count, &append);
+	parse_redirection(shell, &out_count, &append, -1);
 	if (!shell->cmd)
 		return (1);
 	if (open_files(shell, out_count, append))

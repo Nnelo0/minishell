@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 16:07:31 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/06 17:10:20 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/30 14:16:18 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_env	*create_env_node(const char *env_var)
 	new_node = (t_env *)malloc(sizeof(t_env));
 	if (!new_node)
 		return (NULL);
-	new_node->value = ft_strdup(env_var);
+	new_node->value = strdup(env_var);
 	if (!new_node->value)
 	{
 		free(new_node);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/10 11:50:16 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:44:46 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,37 @@
 
 int	ft_exit(char *input, t_shell *shell)
 {
-	ft_printf("exit\n");
-	free(input);
-	free_args(shell->args);
-	free(shell->input);
-	rl_clear_history();
-	return (0);
+	shell->exit = ft_split(input, ' ');
+	printf("exit\n");
+	if (shell->exit[1])
+	{
+		if (ft_isdigit_s(shell->exit[1]))
+		{
+			shell->status = ft_atoi(shell->exit[1]);
+			if (shell->exit[2])
+				return (shell->status = 1,
+					printf("exit: too many arguments\n"), shell->status);
+		}
+		if (!ft_isdigit_s(shell->exit[1]))
+		{
+			shell->status = 2;
+			printf("exit: %s: numeric argument required\n", shell->exit[1]);
+		}
+		else if (ft_strlen(shell->exit[1]) >= 20)
+		{
+			shell->status = 2;
+			printf("exit: %s: numeric argument required\n", shell->exit[1]);
+		}
+	}
+	return (free_all(shell, input), rl_clear_history(),
+		exit(shell->status), shell->status);
 }
 
-int	ft_exe(char *input, char **envp)
+int	ft_exe(char *input, char **envp, t_shell *shell)
 {
 	pid_t	pid;
 	char	**args;
+	int		status;
 
 	args = ft_split(input, ' ');
 	if (!args || !args[0])
@@ -38,14 +57,16 @@ int	ft_exe(char *input, char **envp)
 		if (execve(args[0], args, envp) == -1)
 		{
 			perror(args[0]);
+			free_args(shell->ipt);
+			free(shell->input);
 			free_args(args);
-			exit(1);
+			free_env_list(shell->env_list);
+			free_export_list(shell->export_list);
+			exit(127);
 		}
 	}
-	wait(NULL);
-	free_args(args);
-	args = NULL;
-	return (1);
+	waitpid(pid, &status, 0);
+	return (free_args(args), args = NULL, (status >> 8) & 0xFF);
 }
 
 int	ft_cd(char *input)
@@ -58,10 +79,10 @@ int	ft_cd(char *input)
 	{
 		target = getenv("HOME");
 		if (!target)
-			return (printf("cd: HOME not set\n"));
+			return (printf("cd: HOME not set\n"), 1);
 	}
 	else if (args[2])
-		return (printf("cd: too many arguments\n"));
+		return (printf("cd: too many arguments\n"), 1);
 	else
 		target = args[1];
 	if (chdir(target) == -1)
@@ -69,7 +90,7 @@ int	ft_cd(char *input)
 		perror("cd");
 		return (1);
 	}
-	return (1);
+	return (0);
 }
 
 int	which_commands(char *input, char **envp, t_shell *shell)
@@ -77,7 +98,7 @@ int	which_commands(char *input, char **envp, t_shell *shell)
 	if (ft_strchr(input, '|'))
 		return (ft_pipe(input, envp, shell));
 	if (ft_strchr(input, '<') || ft_strchr(input, '>'))
-		return (ft_redirection(shell));
+		return (ft_redirection(input, shell));
 	if (ft_strncmp(input, "exit", 4) == 0
 		&& (input[4] == ' ' || input[4] == '\0'))
 		return (ft_exit(input, shell));
@@ -88,7 +109,7 @@ int	which_commands(char *input, char **envp, t_shell *shell)
 		&& (input[2] == ' ' || input[2] == '\0'))
 		return (ft_cd(input));
 	if (ft_strncmp(input, "./", 2) == 0)
-		return (ft_exe(input, envp));
+		return (ft_exe(input, envp, shell));
 	if (ft_strncmp(input, "env", 3) == 0
 		&& (input[3] == ' ' || input[3] == '\0'))
 		return (ft_env(shell));
@@ -110,16 +131,16 @@ int	commands(char *input, char **envp, t_shell *shell)
 	while (*input && (*input == ' ' || *input == '\t'))
 		input++;
 	if (*input == '\0')
-		return (1);
+		return (0);
 	shell->input = ft_strdup(input);
 	shell->cmd = NULL;
 	shell->ipt = NULL;
 	if (!ft_quotes(input))
-		return (free(shell->input), ft_printf("open quote\n"));
+		return (free(shell->input), ft_printf("open quote\n"), 127);
 	if (!is_valid_chevrons(input))
-		return (free(shell->input), ft_printf("invalid '<'\n"));
+		return (free(shell->input), ft_printf("invalid '<' or '>'\n"), 127);
 	if (!is_valid_pipe(input))
-		return (free(shell->input), ft_printf("invalid pipes\n"));
+		return (free(shell->input), ft_printf("invalid pipes\n"), 127);
 	shell->ipt = ft_split_chevrons(input, -1, 0);
 	res = which_commands(input, envp, shell);
 	free(shell->input);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/10 10:19:35 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:31:14 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ void	handle_sigint(int sig)
 		ft_printf("\n");
 		return ;
 	}
-	write(1, "\nminishell> ", 12);
+	ft_printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
 int	keypress(char *input, t_shell *shell)
@@ -30,20 +33,26 @@ int	keypress(char *input, t_shell *shell)
 		shell->signal_status = 0;
 		if (input)
 			free(input);
-		return (1);
+		return (0);
 	}
 	if (shell->signal_status == 2)
 	{
 		shell->signal_status = 0;
-		return (1);
+		return (0);
 	}
 	if (!input)
 	{
 		printf("exit\n");
 		rl_clear_history();
-		return (0);
+		free(input);
+		free_args(shell->args);
+		free_args(shell->ipt);
+		free_env_list(shell->env_list);
+		free_export_list(shell->export_list);
+		exit (shell->status);
+		return (shell->status);
 	}
-	return (1);
+	return (0);
 }
 
 void	handle_prompt(t_shell *shell, char **envp)
@@ -53,12 +62,10 @@ void	handle_prompt(t_shell *shell, char **envp)
 	while (1)
 	{
 		input = readline("minishell> ");
-		if (!keypress(input, shell))
-			break ;
+		keypress(input, shell);
 		if (*input)
 			add_history(input);
-		if (commands(input, envp, shell) == 0)
-			break ;
+		shell->status = commands(input, envp, shell);
 		if (shell->args)
 		{
 			free_args(shell->args);

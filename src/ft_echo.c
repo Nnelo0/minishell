@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/08 16:17:37 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/10 15:04:23 by cle-berr         ###   ########.fr       */
+/*   Created: 2025/02/10 15:20:44 by ebroudic          #+#    #+#             */
+/*   Updated: 2025/02/10 15:38:18 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ int	ft_dollar_alpha(char *args, t_shell *shell, int i)
 		{
 			tmp = ft_strdup(temp->value);
 			printf("%s", tmp);
-			return (free(tmp), free_args(check_list), free(check_args), 1);
+			return (free(tmp), free_args(check_list), free(check_args), 0);
 		}
 		free_args(check_list);
 		temp = temp->next;
 	}
-	return (free(check_args), 1);
+	return (free(check_args), 0);
 }
 
 void	ft_dollar(char *args, t_shell *shell)
@@ -119,6 +119,5 @@ int	ft_echo(char *input, t_shell *shell, int n, int i)
 			printf("\n");
 	}
 	free_args(args);
-	shell->status = 0;
-	return (1);
+	return (0);
 }

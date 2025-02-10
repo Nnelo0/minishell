@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:32:41 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/01/31 11:00:17 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/01/31 10:20:43 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,5 @@ int	ft_unset(t_shell *shell)
 		i++;
 	}
 	free_args(args);
-	return (1);
+	return (0);
 }
