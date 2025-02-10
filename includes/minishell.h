@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/01/31 10:19:52 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:31:55 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,9 @@ typedef struct s_shell
 	int				in;
 	int				out;
 	char			*input;
+	int				pipefd[2];
+	int				status;
+	char			**exit;
 	t_env			*env_list;
 	t_export		*export_list;
 }	t_shell;
@@ -63,14 +66,14 @@ int			commands(char *input, char **envp, t_shell *shell);
 int			ft_shell(char *input, char **envp, t_shell *shell);
 int			ft_quotes(char *input);
 void		ft_remove_quotes(char *input);
-int			ft_echo(char *input);
+int			ft_echo(char *input, t_shell *shell, int n, int i);
 void		free_args(char **args);
 int			ft_env(t_shell *shell);
 int			ft_pwd(void);
 int			ft_pipe(char *input, char **envp, t_shell *shell);
 int			which_commands(char *input, char **envp, t_shell *shell);
 char		*find_command_path(char *cmd, char **envp);
-int			ft_redirection(t_shell *shell);
+int			ft_redirection(char *input, t_shell *shell);
 int			is_valid_chevrons(char *input);
 char		**ft_split_chevrons(char *input, int i, int j);
 int			ft_strlen_tab(char **tab);
@@ -90,5 +93,10 @@ void		verif_env(t_env **head, const char *env_var, t_env *new_node);
 void		verif_exp(t_export **head, const char *var, t_export *new, int tpe);
 char		**ft_split_quote(char const *s, char c);
 int			ft_unset(t_shell *shell);
+void		read_heredoc(t_shell *shell, char *delimiter);
+int			parse_heredoc(t_shell *shell, int i);
+int			ft_isdigit_neg(int c);
+int			ft_isdigit_s(char *s);
+void		free_all(t_shell *shell, char *input);
 
 #endif
