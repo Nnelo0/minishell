@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/06 16:10:45 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/10 10:19:14 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ typedef struct s_shell
 	char			*input;
 	t_env			*env_list;
 	t_export		*export_list;
-	int				output;
+	int				status;
 }	t_shell;
 
 void		handle_prompt(t_shell *shell, char **envp);

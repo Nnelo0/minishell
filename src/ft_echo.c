@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 16:17:37 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/06 17:29:39 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:04:23 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,33 +34,6 @@ int	ft_quotes(char *input)
 	return (1);
 }
 
-void	ft_remove_quotes(char *input)
-{
-	int		i;
-	int		j;
-	char	quote_type;
-
-	i = 0;
-	j = 0;
-	quote_type = '\0';
-	while (input[i])
-	{
-		if ((input[i] == 39 || input[i] == 34) && quote_type == '\0')
-			quote_type = input[i];
-		else if (input[i] == quote_type)
-			quote_type = '\0';
-		else
-		{
-			input[j] = input[i];
-			j++;
-		}
-		i++;
-	}
-	if (quote_type != '\0')
-		input[++j] = quote_type;
-	input[j] = '\0';
-}
-
 void	print(char **args, int i)
 {
 	ft_remove_quotes(args[i]);
@@ -69,35 +42,34 @@ void	print(char **args, int i)
 		printf(" ");
 }
 
-void	ft_dollar_alpha(char *args, t_shell *shell, int i)
+int	ft_dollar_alpha(char *args, t_shell *shell, int i)
 {
 	t_env	*temp;
 	char	*tmp;
 	char	**check_list;
 	char	*check_args;
 
-	i = 0;
 	temp = shell->env_list;
-	check_args = malloc(sizeof(char) * ft_strlen(args));
-	while (args[++i])
-		check_args[i] = args[i];
+	check_args = malloc(sizeof(char) * ft_strlen(args) + 1);
+	if (!check_args)
+		return (perror("malloc"), 127);
+	while (args[++i + 1])
+		check_args[i] = args[i + 1];
+	check_args[i] = '\0';
 	while (temp)
 	{
 		check_list = ft_split(temp->value, '=');
-		tmp = malloc(sizeof(char) * ft_strlen(temp->value));
 		if (ft_strcmp(check_args, check_list[0]) == 0)
 		{
 			tmp = ft_strdup(temp->value);
 			printf("%s", tmp);
-			free(tmp);
-			free_args(check_list);
-			break ;
+			return (free(tmp), free_args(check_list), free(check_args), 1);
 		}
 		free_args(check_list);
 		temp = temp->next;
 	}
+	return (free(check_args), 1);
 }
-
 
 void	ft_dollar(char *args, t_shell *shell)
 {
@@ -110,18 +82,16 @@ void	ft_dollar(char *args, t_shell *shell)
 	if (args[1] == '0')
 		printf("./minishell");
 	if (ft_isdigit(args[1]))
-	{
 		while (args[++i])
 			printf("%c", args[i]);
-	}
 	else if (args[1] == '?')
 	{
-		printf("%d", shell->output);
+		printf("%d", shell->status);
 		while (args[++i])
 			printf("%c", args[i]);
 	}
 	else if (ft_isalpha(args[1]))
-		ft_dollar_alpha(args, shell, i);
+		ft_dollar_alpha(args, shell, -1);
 }
 
 int	ft_echo(char *input, t_shell *shell, int n, int i)
@@ -149,6 +119,6 @@ int	ft_echo(char *input, t_shell *shell, int n, int i)
 			printf("\n");
 	}
 	free_args(args);
-	shell->output = 0;
+	shell->status = 0;
 	return (1);
 }
