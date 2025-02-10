@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/07 14:49:01 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:08:39 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,10 @@ int	ft_shell(char *input, char **envp, t_shell *shell)
 		ft_shell_utils(path, cmd, envp, shell);
 	if (dup2(shell->in, STDIN_FILENO) == -1
 		|| dup2(shell->out, STDOUT_FILENO) == -1)
-		return (perror("dup2 failed"), close(shell->in), close(shell->out), 127);
-	verif_close(shell);
-	waitpid(pid, &status, 0);
-	return (shell->fd_in = -1, shell->fd_out = -1, close(shell->in)
-		, close(shell->out), free(path), free_args(cmd), (status >> 8) & 0xFF);
+		return (perror("failed"), close(shell->in), close(shell->out), 127);
+	return (verif_close(shell), waitpid(pid, &status, 0), shell->fd_in = -1,
+		shell->fd_out = -1, close(shell->in),
+		close(shell->out), free(path), free_args(cmd), (status >> 8) & 0xFF);
 }
 
 void	free_args(char **args)

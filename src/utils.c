@@ -1,25 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 13:25:15 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/10 10:16:51 by ebroudic         ###   ########.fr       */
+/*   Created: 2025/02/10 15:01:16 by ebroudic          #+#    #+#             */
+/*   Updated: 2025/02/10 15:01:56 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/minishell.h"
 
-int	ft_isdigit(int c)
+void	free_all(t_shell *shell, char *input)
 {
-	if ('0' <= c && '9' >= c)
+	free(input);
+	free(shell->input);
+	free_args(shell->args);
+	free_args(shell->ipt);
+	free_env_list(shell->env_list);
+	free_export_list(shell->export_list);
+}
+
+int	ft_isdigit_neg(int c)
+{
+	if (('0' <= c && '9' >= c) || c == '-')
 		return (1);
 	return (0);
 }
-/*int main()
+
+int	ft_isdigit_s(char *s)
 {
-	ft_isalpha(4);
-	return (0);
-}*/
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (!ft_isdigit_neg(s[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}

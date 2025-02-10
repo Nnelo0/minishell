@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/07 14:30:10 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:07:34 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_shell
 	char			*input;
 	int				pipefd[2];
 	int				status;
+	char			**exit;
 	t_env			*env_list;
 	t_export		*export_list;
 }	t_shell;
@@ -94,5 +95,8 @@ char		**ft_split_quote(char const *s, char c);
 int			ft_unset(t_shell *shell);
 void		read_heredoc(t_shell *shell, char *delimiter);
 int			parse_heredoc(t_shell *shell, int i);
+int			ft_isdigit_neg(int c);
+int			ft_isdigit_s(char *s);
+void		free_all(t_shell *shell, char *input);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/07 15:01:10 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:07:25 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,30 @@
 
 int	ft_exit(char *input, t_shell *shell)
 {
+	shell->exit = ft_split(input, ' ');
 	printf("exit\n");
-	free(input);
-	free(shell->input);
-	free_args(shell->args);
-	free_args(shell->ipt);
-	free_env_list(shell->env_list);
-	free_export_list(shell->export_list);
-	rl_clear_history();
-	exit(shell->status);
-	return (shell->status);
+	if (shell->exit[1])
+	{
+		if (ft_isdigit_s(shell->exit[1]))
+		{
+			shell->status = ft_atoi(shell->exit[1]);
+			if (shell->exit[2])
+				return (shell->status = 1,
+					printf("exit: too many arguments\n"));
+		}
+		if (!ft_isdigit_s(shell->exit[1]))
+		{
+			shell->status = 2;
+			printf("exit: %s: numeric argument required\n", shell->exit[1]);
+		}
+		else if (ft_strlen(shell->exit[1]) >= 20)
+		{
+			shell->status = 2;
+			printf("exit: %s: numeric argument required\n", shell->exit[1]);
+		}
+	}
+	return (free_all(shell, input), rl_clear_history(),
+		exit(shell->status), shell->status);
 }
 
 int	ft_exe(t_shell *shell, char **envp)
@@ -110,7 +124,7 @@ int	commands(char *input, char **envp, t_shell *shell)
 	while (*input && (*input == ' ' || *input == '\t'))
 		input++;
 	if (*input == '\0')
-		return (1);
+		return (0);
 	shell->input = ft_strdup(input);
 	shell->args = ft_split(input, ' ');
 	shell->cmd = NULL;
