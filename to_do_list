@@ -1,4 +1,2 @@
-exit avec les exit codes (echo $?)
 heredoc avec les pipe
 variable d'environnement
-peut etre cd qui marche pas bien

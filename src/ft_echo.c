@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:20:44 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/10 15:38:18 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/10 16:40:15 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,18 @@ int	ft_dollar_alpha(char *args, t_shell *shell, int i)
 	return (free(check_args), 0);
 }
 
-void	ft_dollar(char *args, t_shell *shell)
+void	ft_dollar(char *args, t_shell *shell, int i)
 {
-	int		i;
-
-	i = 1;
-	ft_remove_quotes(args);
 	if (!args[1])
 		printf("$");
+	if (args[1] == 34 || args[1] == 39)
+	{
+		ft_remove_quotes(args);
+		while (args[i])
+			printf("%c", args[i++]);
+		return ;
+	}
+	ft_remove_quotes(args);
 	if (args[1] == '0')
 		printf("./minishell");
 	if (ft_isdigit(args[1]))
@@ -110,7 +114,7 @@ int	ft_echo(char *input, t_shell *shell, int n, int i)
 		if (args[i][0] == '"')
 			j += 1;
 		if (args[i][j] == '$')
-			ft_dollar(args[i], shell);
+			ft_dollar(args[i], shell, 1);
 		else if ((i == 1 && n != 1) || i != 1)
 			print(args, i);
 		if (args[i + 1])
