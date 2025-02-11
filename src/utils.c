@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:01:16 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/10 15:01:56 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/11 10:52:15 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ void	free_all(t_shell *shell, char *input)
 {
 	free(input);
 	free(shell->input);
+	free(shell->verif);
 	free_args(shell->args);
 	free_args(shell->ipt);
+	free_args(shell->exit);
 	free_env_list(shell->env_list);
 	free_export_list(shell->export_list);
 }

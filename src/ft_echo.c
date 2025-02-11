@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:20:44 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/10 16:40:15 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:40:09 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,6 @@ int	ft_quotes(char *input)
 	if (single_open || double_open)
 		return (0);
 	return (1);
-}
-
-void	print(char **args, int i)
-{
-	ft_remove_quotes(args[i]);
-	printf("%s", args[i]);
-	if (args[i + 1])
-		printf(" ");
 }
 
 int	ft_dollar_alpha(char *args, t_shell *shell, int i)
@@ -98,30 +90,41 @@ void	ft_dollar(char *args, t_shell *shell, int i)
 		ft_dollar_alpha(args, shell, -1);
 }
 
-int	ft_echo(char *input, t_shell *shell, int n, int i)
+void	echo_utils(char **args, int i, t_shell *shell, int n)
 {
-	char	**args;
 	int		j;
 
 	j = 0;
+	if (ft_strcmp(args[1], "-n") == 0)
+		n = 1;
+	if (args[i][0] == '"')
+		j += 1;
+	if (args[i][j] == '$')
+		ft_dollar(args[i], shell, 1);
+	else if ((i == 1 && n != 1) || i != 1)
+	{
+		ft_remove_quotes(args[i]);
+		printf("%s", args[i]);
+	}
+	if (args[i + 1])
+	{
+		printf(" ");
+		echo_utils(args, i + 1, shell, n);
+	}
+	if (n != 1 && i == 1)
+		printf("\n");
+	ft_remove_quotes(args[i]);
+}
+
+int	ft_echo(char *input, t_shell *shell, int n, int i)
+{
+	char	**args;
+
 	args = ft_split_quote(input, ' ');
 	if (!args[1])
 		printf("\n");
 	else
-	{
-		if (ft_strcmp(args[1], "-n") == 0)
-			n = 1;
-		if (args[i][0] == '"')
-			j += 1;
-		if (args[i][j] == '$')
-			ft_dollar(args[i], shell, 1);
-		else if ((i == 1 && n != 1) || i != 1)
-			print(args, i);
-		if (args[i + 1])
-			ft_echo(input, shell, n, i + 1);
-		if (n != 1 && i == 1)
-			printf("\n");
-	}
+		echo_utils(args, i, shell, n);
 	free_args(args);
 	return (0);
 }
