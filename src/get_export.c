@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_export.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:04:05 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/04 14:43:53 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:22:28 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	ft_sort_export_list(t_export *export_list)
 		next = current->next;
 		while (next)
 		{
-			if (ft_strcmp(current->value, next->value) > 0)
+			if (strcmp(current->value, next->value) > 0)
 			{
 				temp = current->value;
 				current->value = next->value;

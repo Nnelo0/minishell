@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/10 15:07:34 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:31:55 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int			commands(char *input, char **envp, t_shell *shell);
 int			ft_shell(char *input, char **envp, t_shell *shell);
 int			ft_quotes(char *input);
 void		ft_remove_quotes(char *input);
-int			ft_echo(char *input);
+int			ft_echo(char *input, t_shell *shell, int n, int i);
 void		free_args(char **args);
 int			ft_env(t_shell *shell);
 int			ft_pwd(void);

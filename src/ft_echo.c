@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/31 13:37:06 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/07 14:49:37 by ebroudic         ###   ########.fr       */
+/*   Created: 2025/02/10 15:20:44 by ebroudic          #+#    #+#             */
+/*   Updated: 2025/02/10 15:38:18 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,53 +34,90 @@ int	ft_quotes(char *input)
 	return (1);
 }
 
-void	ft_remove_quotes(char *input)
+void	print(char **args, int i)
 {
-	int		i;
-	int		j;
-	char	quote_type;
-
-	i = 0;
-	j = 0;
-	quote_type = '\0';
-	while (input[i])
-	{
-		if ((input[i] == 39 || input[i] == 34) && quote_type == '\0')
-			quote_type = input[i];
-		else if (input[i] == quote_type)
-			quote_type = '\0';
-		else
-		{
-			input[j] = input[i];
-			j++;
-		}
-		i++;
-	}
-	if (quote_type != '\0')
-		input[++j] = quote_type;
-	input[j] = '\0';
+	ft_remove_quotes(args[i]);
+	printf("%s", args[i]);
+	if (args[i + 1])
+		printf(" ");
 }
 
-int	ft_echo(char *input)
+int	ft_dollar_alpha(char *args, t_shell *shell, int i)
 {
-	int	i;
+	t_env	*temp;
+	char	*tmp;
+	char	**check_list;
+	char	*check_args;
 
-	if (ft_strlen(input) >= 5 && input[4] == ' ')
+	temp = shell->env_list;
+	check_args = malloc(sizeof(char) * ft_strlen(args) + 1);
+	if (!check_args)
+		return (perror("malloc"), 127);
+	while (args[++i + 1])
+		check_args[i] = args[i + 1];
+	check_args[i] = '\0';
+	while (temp)
 	{
-		if (input[5] == '-' && input[6] == 'n'
-			&& (input[7] == ' ' || input[7] == '\0'))
+		check_list = ft_split(temp->value, '=');
+		if (ft_strcmp(check_args, check_list[0]) == 0)
 		{
-			i = 7;
-			while (input[i] == ' ')
-				i++;
-			if (input[i] == '\0')
-				return (0);
-			printf("%s", input + i);
-			return (0);
+			tmp = ft_strdup(temp->value);
+			printf("%s", tmp);
+			return (free(tmp), free_args(check_list), free(check_args), 0);
 		}
-		i = 5;
-		printf("%s", input + i);
+		free_args(check_list);
+		temp = temp->next;
 	}
-	printf("\n");
+	return (free(check_args), 0);
+}
+
+void	ft_dollar(char *args, t_shell *shell)
+{
+	int		i;
+
+	i = 1;
+	ft_remove_quotes(args);
+	if (!args[1])
+		printf("$");
+	if (args[1] == '0')
+		printf("./minishell");
+	if (ft_isdigit(args[1]))
+		while (args[++i])
+			printf("%c", args[i]);
+	else if (args[1] == '?')
+	{
+		printf("%d", shell->status);
+		while (args[++i])
+			printf("%c", args[i]);
+	}
+	else if (ft_isalpha(args[1]))
+		ft_dollar_alpha(args, shell, -1);
+}
+
+int	ft_echo(char *input, t_shell *shell, int n, int i)
+{
+	char	**args;
+	int		j;
+
+	j = 0;
+	args = ft_split_quote(input, ' ');
+	if (!args[1])
+		printf("\n");
+	else
+	{
+		if (ft_strcmp(args[1], "-n") == 0)
+			n = 1;
+		if (args[i][0] == '"')
+			j += 1;
+		if (args[i][j] == '$')
+			ft_dollar(args[i], shell);
+		else if ((i == 1 && n != 1) || i != 1)
+			print(args, i);
+		if (args[i + 1])
+			ft_echo(input, shell, n, i + 1);
+		if (n != 1 && i == 1)
+			printf("\n");
+	}
+	free_args(args);
 	return (0);
 }
