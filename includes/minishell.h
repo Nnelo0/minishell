@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/10 15:31:55 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/11 09:44:29 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <unistd.h>
 # include <signal.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
+# include <errno.h>
 
 typedef struct s_env
 {
@@ -98,5 +100,6 @@ int			parse_heredoc(t_shell *shell, int i);
 int			ft_isdigit_neg(int c);
 int			ft_isdigit_s(char *s);
 void		free_all(t_shell *shell, char *input);
+void		ft_execute(char **args, char **envp, t_shell *shell);
 
 #endif

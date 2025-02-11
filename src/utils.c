@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:01:16 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/11 08:47:24 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/11 09:44:02 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,18 @@ int	ft_isdigit_s(char *s)
 		i++;
 	}
 	return (1);
+}
+
+void	ft_execute(char **args, char **envp, t_shell *shell)
+{
+	if (execve(args[0], args, envp) == -1)
+	{
+		perror(args[0]);
+		free_args(shell->ipt);
+		free(shell->input);
+		free_args(args);
+		free_env_list(shell->env_list);
+		free_export_list(shell->export_list);
+		exit(127);
+	}
 }

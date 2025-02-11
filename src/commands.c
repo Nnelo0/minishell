@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/10 15:44:46 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/11 09:41:36 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,31 +42,29 @@ int	ft_exit(char *input, t_shell *shell)
 
 int	ft_exe(char *input, char **envp, t_shell *shell)
 {
-	pid_t	pid;
-	char	**args;
-	int		status;
+	pid_t		pid;
+	char		**args;
+	int			status;
+	struct stat	path_stat;
 
 	args = ft_split(input, ' ');
 	if (!args || !args[0])
 		return (printf("minishell: command not found\n"));
+	if (stat(args[0], &path_stat) == 0)
+	{
+		if (S_ISDIR(path_stat.st_mode))
+			return (printf("minishell: %s: Is a directory\n", args[0]),
+				free_args(args), 126);
+		if (S_ISREG(path_stat.st_mode) && access(args[0], X_OK) == -1)
+			return (printf("minishell: %s: Permission denied\n", args[0]),
+				free_args(args), 126);
+	}
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork"), 1);
 	if (pid == 0)
-	{
-		if (execve(args[0], args, envp) == -1)
-		{
-			perror(args[0]);
-			free_args(shell->ipt);
-			free(shell->input);
-			free_args(args);
-			free_env_list(shell->env_list);
-			free_export_list(shell->export_list);
-			exit(127);
-		}
-	}
-	waitpid(pid, &status, 0);
-	return (free_args(args), args = NULL, (status >> 8) & 0xFF);
+		ft_execute(args, envp, shell);
+	return (waitpid(pid, &status, 0), free_args(args), (status >> 8) & 0xFF);
 }
 
 int	ft_cd(char *input)
