@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 15:34:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/11 11:01:22 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/11 12:57:07 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,14 +109,14 @@ int	ft_redirection(char *input, t_shell *shell)
 	out_count = 0;
 	parse_redirection(shell, &out_count, &append, -1);
 	if (!shell->cmd)
-		return (1);
+		return (127);
 	if (open_files(shell, out_count, append))
-		return (1);
+		return (127);
 	which_commands(shell->cmd, shell->envp1, shell);
 	if (shell->fd_in != -1)
 		close(shell->fd_in);
 	if (shell->fd_out != -1)
 		close(shell->fd_out);
 	return (wait(NULL), free(shell->in_file), free(shell->cmd),
-		free_args(shell->out_file), 1);
+		free_args(shell->out_file), 0);
 }

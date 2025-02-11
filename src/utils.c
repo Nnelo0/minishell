@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:01:16 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/11 09:44:02 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/11 15:23:20 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,19 @@ void	ft_execute(char **args, char **envp, t_shell *shell)
 		free_export_list(shell->export_list);
 		exit(127);
 	}
+}
+
+int	verif_shell(char *input, t_shell *shell)
+{
+	if ((input[0] == '\'' && input[1] == '\'' )
+		|| (input[0] == '"' && input[1] == '"'))
+		return (ft_printf("Command '' not found\n"), close(shell->in),
+			close(shell->out), 127);
+	if (input[0] == '.' && !input[1])
+		return (ft_printf(".: filename argument required\n\
+.: usage: . filename [arguments]\n"), close(shell->in), close(shell->out), 2);
+	if (input[0] == '/' && !input[1])
+		return (ft_printf("/: Is a directory\n"), close(shell->in),
+			close(shell->out), 126);
+	return (0);
 }

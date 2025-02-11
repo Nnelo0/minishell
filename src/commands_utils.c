@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/11 11:04:21 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/11 15:23:14 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,9 @@ int	ft_shell(char *input, char **envp, t_shell *shell, int status)
 	shell->out = dup(STDOUT_FILENO);
 	if (shell->in == -1 || shell->out == -1)
 		return (perror("dup failed"), 127);
+	shell->status = verif_shell(input, shell);
+	if (shell->status != 0)
+		return (shell->status);
 	ft_remove_quotes(input);
 	cmd = ft_split(input, ' ');
 	path = find_command_path(cmd[0], envp);
@@ -71,9 +74,6 @@ int	ft_shell(char *input, char **envp, t_shell *shell, int status)
 		return (127);
 	if (pid == 0)
 		ft_shell_utils(path, cmd, envp, shell);
-	if (dup2(shell->in, STDIN_FILENO) == -1
-		|| dup2(shell->out, STDOUT_FILENO) == -1)
-		return (perror("failed"), close(shell->in), close(shell->out), 127);
 	return (verif_close(shell), waitpid(pid, &status, 0), shell->fd_in = -1,
 		shell->fd_out = -1, close(shell->in),
 		close(shell->out), free(path), free_args(cmd), (status >> 8) & 0xFF);
