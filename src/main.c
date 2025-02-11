@@ -6,13 +6,13 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/11 10:48:20 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:08:51 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int		status = 0;
+int		g_status = 0;
 
 void	handle_sigint(int sig)
 {
@@ -26,7 +26,7 @@ void	handle_sigint(int sig)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	status = 130;
+	g_status = 130;
 }
 
 int	keypress(char *input, t_shell *shell)
@@ -68,7 +68,7 @@ void	handle_prompt(t_shell *shell, char **envp)
 		keypress(input, shell);
 		if (*input)
 			add_history(input);
-		shell->status = commands(input, envp, shell, &status);
+		shell->status = commands(input, envp, shell, &g_status);
 		if (shell->args)
 		{
 			free_args(shell->args);
@@ -90,7 +90,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	shell.status = status;
+	shell.status = g_status;
 	shell.signal_status = 0;
 	shell.args = NULL;
 	shell.envp1 = envp;

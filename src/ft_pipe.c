@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/07 14:50:45 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:01:12 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,7 @@ int	is_valid_pipe(char *input)
 
 int	ft_pipe(char *input, char **envp, t_shell *shell)
 {
-	if (!is_valid_pipe(input))
-		return (printf("invalid pipes\n"));
+	ft_remove_quotes(input);
 	shell->cmds = ft_split(input, '|');
 	if (!shell->cmds)
 		return (127);

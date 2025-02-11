@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/10 15:24:19 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:04:21 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,17 @@ void	verif_close(t_shell *shell)
 		close(shell->fd_out);
 }
 
-int	ft_shell(char *input, char **envp, t_shell *shell)
+int	ft_shell(char *input, char **envp, t_shell *shell, int status)
 {
 	pid_t	pid;
 	char	*path;
 	char	**cmd;
-	int		status;
 
 	shell->in = dup(STDIN_FILENO);
 	shell->out = dup(STDOUT_FILENO);
 	if (shell->in == -1 || shell->out == -1)
 		return (perror("dup failed"), 127);
+	ft_remove_quotes(input);
 	cmd = ft_split(input, ' ');
 	path = find_command_path(cmd[0], envp);
 	if (!path)

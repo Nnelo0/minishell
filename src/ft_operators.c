@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 15:34:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/07 12:18:55 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:01:22 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int	ft_redirection(char *input, t_shell *shell)
 	shell->in_file = NULL;
 	shell->fd_in = -1;
 	shell->fd_out = -1;
+	ft_remove_quotes(input);
 	shell->ipt = ft_split_chevrons(input, -1, 0);
 	shell->out_file = malloc(sizeof(char *) * (ft_strlen_tab(shell->ipt) + 1));
 	if (!shell->out_file)

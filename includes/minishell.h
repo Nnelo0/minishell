@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/11 10:48:13 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:03:48 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int			keypress(char *input, t_shell *shell);
 void		handle_sigint(int sig);
 int			ft_exit(char *input, t_shell *shell);
 int			commands(char *input, char **envp, t_shell *shell, int *status);
-int			ft_shell(char *input, char **envp, t_shell *shell);
+int			ft_shell(char *input, char **envp, t_shell *shell, int status);
 int			ft_quotes(char *input);
 void		ft_remove_quotes(char *input);
 int			ft_echo(char *input, t_shell *shell, int n, int i);

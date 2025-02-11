@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/11 10:55:24 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:10:39 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	ft_exit(char *input, t_shell *shell)
 {
+	ft_remove_quotes(input);
 	shell->exit = ft_split(input, ' ');
 	printf("exit\n");
 	if (shell->exit[1])
@@ -47,6 +48,7 @@ int	ft_exe(char *input, char **envp, t_shell *shell)
 	int			status;
 	struct stat	path_stat;
 
+	ft_remove_quotes(input);
 	args = ft_split(input, ' ');
 	if (!args || !args[0])
 		return (printf("minishell: command not found\n"));
@@ -72,6 +74,7 @@ int	ft_cd(char *input)
 	char	*target;
 	char	**args;
 
+	ft_remove_quotes(input);
 	args = ft_split(input, ' ');
 	if (!args[1])
 	{
@@ -119,7 +122,7 @@ int	which_commands(char *input, char **envp, t_shell *shell)
 	if (ft_strncmp(input, "unset", 5) == 0
 		&& (input[5] == ' ' || input[5] == '\0'))
 		return (ft_unset(shell));
-	return (ft_shell(input, envp, shell));
+	return (ft_shell(input, envp, shell, 0));
 }
 
 int	commands(char *input, char **envp, t_shell *shell, int *status)
