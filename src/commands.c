@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/11 09:41:36 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/11 10:55:24 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_exit(char *input, t_shell *shell)
 		{
 			shell->status = ft_atoi(shell->exit[1]);
 			if (shell->exit[2])
-				return (shell->status = 1,
+				return (shell->status = 1, free_args(shell->exit),
 					printf("exit: too many arguments\n"), shell->status);
 		}
 		if (!ft_isdigit_s(shell->exit[1]))
@@ -122,25 +122,28 @@ int	which_commands(char *input, char **envp, t_shell *shell)
 	return (ft_shell(input, envp, shell));
 }
 
-int	commands(char *input, char **envp, t_shell *shell)
+int	commands(char *input, char **envp, t_shell *shell, int *status)
 {
-	int	res;
-
 	while (*input && (*input == ' ' || *input == '\t'))
 		input++;
 	if (*input == '\0')
 		return (0);
+	if (*status == 130)
+	{
+		shell->status = 130;
+		*status = 0;
+	}
+	if (!ft_quotes(input))
+		return (ft_printf("open quote\n"), 127);
+	if (!is_valid_chevrons(input))
+		return (ft_printf("invalid '<' or '>'\n"), 127);
+	if (!is_valid_pipe(input))
+		return (ft_printf("invalid pipes\n"), 127);
 	shell->input = ft_strdup(input);
 	shell->cmd = NULL;
 	shell->ipt = NULL;
-	if (!ft_quotes(input))
-		return (free(shell->input), ft_printf("open quote\n"), 127);
-	if (!is_valid_chevrons(input))
-		return (free(shell->input), ft_printf("invalid '<' or '>'\n"), 127);
-	if (!is_valid_pipe(input))
-		return (free(shell->input), ft_printf("invalid pipes\n"), 127);
 	shell->ipt = ft_split_chevrons(input, -1, 0);
-	res = which_commands(input, envp, shell);
+	shell->status = which_commands(input, envp, shell);
 	free(shell->input);
-	return (res);
+	return (shell->status);
 }
