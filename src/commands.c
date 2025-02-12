@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/11 16:26:33 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:53:41 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,10 @@ int	ft_cd(char *input)
 	{
 		target = getenv("HOME");
 		if (!target)
-			return (printf("cd: HOME not set\n"), 1);
+			return (printf("HOME not set\n"), 1);
 	}
 	else if (args[2])
-		return (printf("cd: too many arguments\n"), 1);
+		return (printf("too many arguments\n"), 1);
 	else
 		target = args[1];
 	if (chdir(target) == -1)
@@ -124,72 +124,6 @@ int	which_commands(char *input, char **envp, t_shell *shell)
 	return (ft_shell(input, envp, shell));
 }
 
-int is_executable(const char *path)
-{
-	return (access(path, X_OK) == 0);
-}
-
-char *extract_command_name(const char *path)
-{
-	char *command_name = strrchr(path, '/');
-	if (command_name)
-	{
-		return (strdup(command_name + 1));
-	}
-	return (strdup(path));
-}
-
-char *find_command_in_path(const char *command, char **envp)
-{
-	(void)envp;
-	char *path = getenv("PATH");
-	if (!path)
-	{
-		return (NULL);
-	}
-
-	char *path_copy = strdup(path);
-	char *dir = strtok(path_copy, ":");
-
-	while (dir)
-	{
-		char	*full_path = malloc(strlen(dir) + strlen(command) + 2);
-		sprintf(full_path, "%s/%s", dir, command);
-		if (is_executable(full_path))
-		{
-			free(path_copy);
-			return (full_path);
-		}
-		free(full_path);
-		dir = strtok(NULL, ":");
-	}
-
-	free(path_copy);
-	return (NULL);
-}
-
-char *get_command_name(char *input, char **envp)
-{
-	if (input[0] == '/')
-	{
-		if (is_executable(input))
-		{
-			return (extract_command_name(input));
-		}
-	}
-	else
-	{
-		char	*full_path = find_command_in_path(input, envp);
-		if (full_path)
-		{
-			char	*command_name = extract_command_name(full_path);
-			free(full_path);
-			return (command_name);
-		}
-	}
-	return (NULL);
-}
-
 int	commands(char *input, char **envp, t_shell *shell)
 {
 	int		res;
@@ -205,14 +139,8 @@ int	commands(char *input, char **envp, t_shell *shell)
 		return (ft_printf("invalid '<' or '>'\n"), 127);
 	if (!is_valid_pipe(input))
 		return (ft_printf("invalid pipes\n"), 127);
-	shell->verif = ft_strdup(input);
-	ft_remove_quotes(shell->verif);
-	if (ft_strncmp(shell->verif, "/", 1) == 0)
-		in = get_command_name(input, envp);
-	else
-		in = ft_strdup(input);
-	free(shell->verif);
-	shell->verif = ft_strdup(input);
+	in = get_command_from_path(input);
+	shell->verif = ft_strdup(in);
 	ft_remove_quotes(shell->verif);
 	shell->input = ft_strdup(in);
 	shell->cmd = NULL;

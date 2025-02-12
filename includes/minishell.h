@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/11 10:32:10 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:12:50 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,7 @@ int			parse_heredoc(t_shell *shell, int i);
 int			ft_isdigit_neg(int c);
 int			ft_isdigit_s(char *s);
 void		free_all(t_shell *shell, char *input);
+char		*find_command_path(char *cmd, char **envp);
+char		*get_command_from_path(char *input);
 
 #endif
