@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/11 15:23:14 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/12 14:52:29 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,25 +50,22 @@ void	verif_close(t_shell *shell)
 		close(shell->fd_out);
 }
 
-int	ft_shell(char *input, char **envp, t_shell *shell, int status)
+int	ft_shell(char **cmd, char **envp, t_shell *shell, int status)
 {
 	pid_t	pid;
 	char	*path;
-	char	**cmd;
 
 	shell->in = dup(STDIN_FILENO);
 	shell->out = dup(STDOUT_FILENO);
 	if (shell->in == -1 || shell->out == -1)
 		return (perror("dup failed"), 127);
-	shell->status = verif_shell(input, shell);
+	shell->status = verif_shell(cmd[0], shell);
 	if (shell->status != 0)
 		return (shell->status);
-	ft_remove_quotes(input);
-	cmd = ft_split(input, ' ');
 	path = find_command_path(cmd[0], envp);
 	if (!path)
-		return (printf("%s: command not found\n", input), close(shell->in),
-			close(shell->out), free_args(cmd), 127);
+		return (ft_printf("%s:", cmd[0]), ft_putstr_fd(" command not found\n", 2
+			), close(shell->in), close(shell->out), free_args(cmd), 127);
 	pid = fork();
 	if (pid == -1)
 		return (127);

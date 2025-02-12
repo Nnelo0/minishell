@@ -6,26 +6,25 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:01:16 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/11 15:23:20 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/12 14:47:03 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_all(t_shell *shell, char *input)
+void	free_all(t_shell *shell, char **input)
 {
-	free(input);
+	free_args(input);
 	free(shell->input);
 	free_args(shell->args);
 	free_args(shell->ipt);
-	free_args(shell->exit);
 	free_env_list(shell->env_list);
 	free_export_list(shell->export_list);
 }
 
 int	ft_isdigit_neg(int c)
 {
-	if (('0' <= c && '9' >= c) || c == '-')
+	if (('0' <= c && '9' >= c) || c == '-' || c == '+')
 		return (1);
 	return (0);
 }

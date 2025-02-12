@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:20:44 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/10 15:38:18 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:08:55 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,6 @@ int	ft_quotes(char *input)
 	if (single_open || double_open)
 		return (0);
 	return (1);
-}
-
-void	print(char **args, int i)
-{
-	ft_remove_quotes(args[i]);
-	printf("%s", args[i]);
-	if (args[i + 1])
-		printf(" ");
 }
 
 int	ft_dollar_alpha(char *args, t_shell *shell, int i)
@@ -71,14 +63,18 @@ int	ft_dollar_alpha(char *args, t_shell *shell, int i)
 	return (free(check_args), 0);
 }
 
-void	ft_dollar(char *args, t_shell *shell)
+void	ft_dollar(char *args, t_shell *shell, int i)
 {
-	int		i;
-
-	i = 1;
-	ft_remove_quotes(args);
 	if (!args[1])
 		printf("$");
+	if (args[1] == 34 || args[1] == 39)
+	{
+		ft_remove_quotes(args);
+		while (args[i])
+			printf("%c", args[i++]);
+		return ;
+	}
+	ft_remove_quotes(args);
 	if (args[1] == '0')
 		printf("./minishell");
 	if (ft_isdigit(args[1]))
@@ -94,30 +90,38 @@ void	ft_dollar(char *args, t_shell *shell)
 		ft_dollar_alpha(args, shell, -1);
 }
 
-int	ft_echo(char *input, t_shell *shell, int n, int i)
+void	echo_utils(char **args, int i, t_shell *shell, int n)
 {
-	char	**args;
 	int		j;
 
 	j = 0;
-	args = ft_split_quote(input, ' ');
+	if (ft_strcmp(args[1], "-n") == 0)
+		n = 1;
+	if (args[i][0] == '"')
+		j += 1;
+	if (args[i][j] == '$')
+		ft_dollar(args[i], shell, 1);
+	else if ((i == 1 && n != 1) || i != 1)
+	{
+		ft_remove_quotes(args[i]);
+		printf("%s", args[i]);
+	}
+	if (args[i + 1])
+	{
+		printf(" ");
+		echo_utils(args, i + 1, shell, n);
+	}
+	if (n != 1 && i == 1)
+		printf("\n");
+	ft_remove_quotes(args[i]);
+}
+
+int	ft_echo(char **args, t_shell *shell, int n, int i)
+{
 	if (!args[1])
 		printf("\n");
 	else
-	{
-		if (ft_strcmp(args[1], "-n") == 0)
-			n = 1;
-		if (args[i][0] == '"')
-			j += 1;
-		if (args[i][j] == '$')
-			ft_dollar(args[i], shell);
-		else if ((i == 1 && n != 1) || i != 1)
-			print(args, i);
-		if (args[i + 1])
-			ft_echo(input, shell, n, i + 1);
-		if (n != 1 && i == 1)
-			printf("\n");
-	}
+		echo_utils(args, i, shell, n);
 	free_args(args);
 	return (0);
 }
