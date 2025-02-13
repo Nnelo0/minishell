@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:01:16 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/12 14:47:03 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/13 08:45:19 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	free_all(t_shell *shell, char **input)
 {
 	free_args(input);
-	free(shell->input);
+	free(shell->tmp);
 	free_args(shell->args);
 	free_args(shell->ipt);
 	free_env_list(shell->env_list);
@@ -49,7 +49,7 @@ void	ft_execute(char **args, char **envp, t_shell *shell)
 	{
 		perror(args[0]);
 		free_args(shell->ipt);
-		free(shell->input);
+		free(shell->tmp);
 		free_args(args);
 		free_env_list(shell->env_list);
 		free_export_list(shell->export_list);

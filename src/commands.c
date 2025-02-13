@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/12 15:54:58 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:59:24 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	ft_exit(char **input, t_shell *shell)
 {
 	printf("exit\n");
+	ft_remove_quotes(input[1]);
 	if (input[1])
 	{
 		if (ft_isdigit_s(input[1]))
@@ -22,17 +23,13 @@ int	ft_exit(char **input, t_shell *shell)
 			shell->status = ft_atoi(input[1]);
 			if (input[2])
 				return (shell->status = 1, free_args(input),
-					printf("too many arguments\n"), shell->status);
+					ft_putstr_fd("too many arguments\n", 2), shell->status);
 		}
-		if (!ft_isdigit_s(input[1]))
+		if (!ft_isdigit_s(input[1]) || ft_strlen(input[1]) >= 20)
 		{
 			shell->status = 2;
-			printf("%s: numeric argument required\n", input[1]);
-		}
-		else if (ft_strlen(input[1]) >= 20)
-		{
-			shell->status = 2;
-			printf("%s: numeric argument required\n", input[1]);
+			ft_printf("%s:", input[1]);
+			ft_putstr_fd(" numeric argument required\n", 2);
 		}
 	}
 	return (free_all(shell, input), rl_clear_history(),
@@ -92,6 +89,8 @@ int	which_commands(char **input, char **envp, t_shell *shell)
 	// 	return (ft_pipe(input, envp, shell));
 	// if (ft_strchr(input, '<') || ft_strchr(input, '>'))
 	// 	return (ft_redirection(input, shell));
+	for (int j = 0; input[j]; j++)
+		printf("[%s]\n", input[j]);
 	if (ft_strncmp(input[0], "exit", 4) == 0
 		&& (input[0][4] == ' ' || input[0][4] == '\0'))
 		return (ft_exit(input, shell));
@@ -101,8 +100,6 @@ int	which_commands(char **input, char **envp, t_shell *shell)
 	if (ft_strncmp(input[0], "cd", 2) == 0
 		&& (input[0][2] == ' ' || input[0][2] == '\0'))
 		return (ft_cd(input));
-	printf("[%d]\n", ft_strncmp(input[0], "./", 2));
-	printf("{%s}\n", input[0]);
 	if (ft_strncmp(input[0], "./", 2) == 0)
 		return (ft_exe(input, envp, shell));
 	if (ft_strncmp(input[0], "env", 3) == 0
@@ -119,20 +116,49 @@ int	which_commands(char **input, char **envp, t_shell *shell)
 	return (ft_shell(input, envp, shell, 0));
 }
 
-int	verif_input(t_shell *shell)
+/* int	verif_input(t_shell *shell)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while (shell->test[i])
+	while (shell->input[i])
 	{
-		if (!is_valid_pipe(shell->test[i]))
+		if (!is_valid_pipe(shell->input[i]))
 			return (ft_printf("invalid pipes\n"), 127);
-		if (!is_valid_chevrons(shell->test[i]))
+		if (!is_valid_chevrons(shell->input[i]))
 			return (ft_printf("invalid '<' or '>'\n"), 127);
 		i++;
 	}
 	return (0);
+} */
+
+char	*ft_add_space(const char *input, char c)
+{
+	int		i;
+	int		len;
+	char	*result;
+	int		in_quotes;
+
+	if (!input)
+		return (NULL);
+	result = malloc(ft_strlen(input) * 2 + 1);
+	if (!result)
+		return (NULL);
+	i = 0;
+	len = 0;
+	in_quotes = 0;
+	while (input[i])
+	{
+		if (input[i] == '"' || input[i] == '\'')
+			in_quotes = !in_quotes;
+		if (!in_quotes && i > 0 && input[i] == c && input[i - 1] != ' ' && input[i - 1] != c)
+			result[len++] = ' ';
+		result[len++] = input[i];
+		if (!in_quotes && input[i] == c && input[i + 1] != ' ' && input[i + 1] != c)
+			result[len++] = ' ';
+		i++;
+	}
+	return (result[len] = '\0', result);
 }
 
 int	commands(char *input, char **envp, t_shell *shell, int *status)
@@ -148,14 +174,20 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 	}
 	if (!ft_quotes(input))
 		return (ft_printf("open quote\n"), 127);
-	shell->test = ft_split_quote(input, ' ');
-	shell->test[0] = get_command_from_path(shell->test[0]);
-	ft_remove_quotes(shell->test[0]);
-	shell->status = verif_input(shell);
-	shell->input = ft_strdup(input);
+	input = ft_add_space(input, '|');
+	input = ft_add_space(input, '>');
+	input = ft_add_space(input, '<');
+	shell->input = ft_split_quote(input, ' ');
+	shell->input[0] = get_command_from_path(shell->input[0]);
+	ft_remove_quotes(shell->input[0]);
+	/* shell->status = verif_input(shell);
+	if (shell->status == 127)
+		return (shell->status); */
+	shell->tmp = ft_strdup(input);
 	shell->cmd = NULL;
 	shell->ipt = NULL;
-	shell->status = which_commands(shell->test, envp, shell);
-	free(shell->input);
+	shell-> status = ft_pipe(envp, shell); // pas ouf de faire ca ici a changer surement
+	shell->status = which_commands(shell->input, envp, shell);
+	free(shell->tmp);
 	return (shell->status);
 }

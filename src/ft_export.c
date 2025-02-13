@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 11:25:25 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/12 08:45:53 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/13 08:44:44 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	ft_export(t_shell *shell)
 {
 	char	**args;
 
-	args = ft_split_quote(shell->input, ' ');
+	args = ft_split_quote(shell->tmp, ' ');
 	if (!args[1])
 		ft_export_no_arg(shell);
 	else

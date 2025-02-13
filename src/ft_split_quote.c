@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_quote.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:29:58 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/01/30 16:01:58 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/13 10:55:05 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,24 +39,6 @@ static int	count_word(char const *s, char c)
 		}
 	}
 	return (count);
-}
-
-static char	*ft_strndup(const char *s, size_t n)
-{
-	char	*dest;
-	size_t	i;
-
-	i = 0;
-	dest = malloc(sizeof(char) * (n + 1));
-	if (dest == NULL)
-		return (NULL);
-	while (i < n)
-	{
-		dest[i] = s[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
 }
 
 static int	dup_word(char **dsa, const char *s, char c, int *i)

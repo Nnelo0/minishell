@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/12 13:57:47 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:40:30 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,12 @@ typedef struct s_shell
 	char			**out_file;
 	int				in;
 	int				out;
-	char			*input;
+	char			**input;
 	int				pipefd[2];
 	int				status;
 	char			**exit;
-	char			**test;
+	char			*tmp;
+	char			**pipe;
 	t_env			*env_list;
 	t_export		*export_list;
 }	t_shell;
@@ -73,7 +74,7 @@ int			ft_echo(char **args, t_shell *shell, int n, int i);
 void		free_args(char **args);
 int			ft_env(t_shell *shell);
 int			ft_pwd(void);
-int			ft_pipe(char *input, char **envp, t_shell *shell);
+int			ft_pipe(char **envp, t_shell *shell);
 int			which_commands(char **input, char **envp, t_shell *shell);
 int			ft_redirection(char *input, t_shell *shell);
 int			is_valid_chevrons(char *input);
