@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/10 16:44:14 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/12 14:52:29 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,30 +50,27 @@ void	verif_close(t_shell *shell)
 		close(shell->fd_out);
 }
 
-int	ft_shell(char *input, char **envp, t_shell *shell)
+int	ft_shell(char **cmd, char **envp, t_shell *shell, int status)
 {
 	pid_t	pid;
 	char	*path;
-	char	**cmd;
-	int		status;
 
 	shell->in = dup(STDIN_FILENO);
 	shell->out = dup(STDOUT_FILENO);
 	if (shell->in == -1 || shell->out == -1)
 		return (perror("dup failed"), 127);
-	cmd = ft_split(input, ' ');
+	shell->status = verif_shell(cmd[0], shell);
+	if (shell->status != 0)
+		return (shell->status);
 	path = find_command_path(cmd[0], envp);
 	if (!path)
-		return (printf("%s: command not found\n", input), close(shell->in),
-			close(shell->out), free_args(cmd), 127);
+		return (ft_printf("%s:", cmd[0]), ft_putstr_fd(" command not found\n", 2
+			), close(shell->in), close(shell->out), free_args(cmd), 127);
 	pid = fork();
 	if (pid == -1)
 		return (127);
 	if (pid == 0)
 		ft_shell_utils(path, cmd, envp, shell);
-	if (dup2(shell->in, STDIN_FILENO) == -1
-		|| dup2(shell->out, STDOUT_FILENO) == -1)
-		return (perror("failed"), close(shell->in), close(shell->out), 127);
 	return (verif_close(shell), waitpid(pid, &status, 0), shell->fd_in = -1,
 		shell->fd_out = -1, close(shell->in),
 		close(shell->out), free(path), free_args(cmd), (status >> 8) & 0xFF);

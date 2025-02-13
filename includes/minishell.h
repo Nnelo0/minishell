@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/12 13:12:50 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/13 16:23:00 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <unistd.h>
 # include <signal.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
+# include <errno.h>
 
 typedef struct s_env
 {
@@ -54,7 +56,7 @@ typedef struct s_shell
 	int				pipefd[2];
 	int				status;
 	char			**exit;
-	char			*verif;
+	char			**test;
 	t_env			*env_list;
 	t_export		*export_list;
 }	t_shell;
@@ -62,18 +64,17 @@ typedef struct s_shell
 void		handle_prompt(t_shell *shell, char **envp);
 int			keypress(char *input, t_shell *shell);
 void		handle_sigint(int sig);
-int			ft_exit(char *input, t_shell *shell);
-int			commands(char *input, char **envp, t_shell *shell);
-int			ft_shell(char *input, char **envp, t_shell *shell);
+int			ft_exit(char **input, t_shell *shell);
+int			commands(char *input, char **envp, t_shell *shell, int *status);
+int			ft_shell(char **cmd, char **envp, t_shell *shell, int status);
 int			ft_quotes(char *input);
 void		ft_remove_quotes(char *input);
-int			ft_echo(char *input, t_shell *shell, int n, int i);
+int			ft_echo(char **args, t_shell *shell, int n, int i);
 void		free_args(char **args);
 int			ft_env(t_shell *shell);
 int			ft_pwd(void);
 int			ft_pipe(char *input, char **envp, t_shell *shell);
-int			which_commands(char *input, char **envp, t_shell *shell);
-char		*find_command_path(char *cmd, char **envp);
+int			which_commands(char **input, char **envp, t_shell *shell);
 int			ft_redirection(char *input, t_shell *shell);
 int			is_valid_chevrons(char *input);
 char		**ft_split_chevrons(char *input, int i, int j);
@@ -98,8 +99,11 @@ void		read_heredoc(t_shell *shell, char *delimiter);
 int			parse_heredoc(t_shell *shell, int i);
 int			ft_isdigit_neg(int c);
 int			ft_isdigit_s(char *s);
-void		free_all(t_shell *shell, char *input);
+void		free_all(t_shell *shell, char **input);
+void		ft_execute(char **args, char **envp, t_shell *shell);
+int			verif_shell(char *input, t_shell *shell);
 char		*find_command_path(char *cmd, char **envp);
 char		*get_command_from_path(char *input);
+int			ft_export_verif(char **args, int i, int status);
 
 #endif

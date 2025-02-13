@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:20:44 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/10 15:20:52 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/13 16:35:37 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ void	ft_remove_quotes(char *input)
 			quote_type = '\0';
 		else
 		{
+			ft_printf("(%d)\n", quote_type);
+			ft_printf("[%s]\n", input);
 			input[j] = input[i];
+			ft_printf("{%s}\n", input);
 			j++;
 		}
 		i++;
@@ -37,4 +40,5 @@ void	ft_remove_quotes(char *input)
 	if (quote_type != '\0')
 		input[++j] = quote_type;
 	input[j] = '\0';
+	ft_printf("---%s---\n\n", input);
 }

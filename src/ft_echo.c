@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:20:44 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/12 13:07:22 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/13 16:40:47 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,9 @@ void	echo_utils(char **args, int i, t_shell *shell, int n)
 	{
 		ft_remove_quotes(args[i]);
 		printf("%s", args[i]);
+		if (n != 1 && i == 1)
+			printf("\n");
+		return ;
 	}
 	if (args[i + 1])
 	{
@@ -116,11 +119,8 @@ void	echo_utils(char **args, int i, t_shell *shell, int n)
 	ft_remove_quotes(args[i]);
 }
 
-int	ft_echo(char *input, t_shell *shell, int n, int i)
+int	ft_echo(char **args, t_shell *shell, int n, int i)
 {
-	char	**args;
-
-	args = ft_split_quote(input, ' ');
 	if (!args[1])
 		printf("\n");
 	else

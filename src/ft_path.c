@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_path.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:11:29 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/12 13:11:59 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:56:27 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,21 @@ char	*find_command_path(char *cmd, char **envp)
 char	*get_command_from_path(char *input)
 {
 	char	*command;
+	char	*tmp;
 
-	if (ft_strchr(input, '/'))
+	tmp = ft_strdup(input);
+	free(input);
+	if (ft_strncmp(tmp, "/", 1) == 0)
 	{
-		if (access(input, X_OK) == 0)
+		if (access(tmp, X_OK) == 0)
 		{
-			command = ft_strrchr(input, '/') + 1;
-			return (ft_strdup(command));
+			command = ft_strrchr(tmp, '/') + 1;
+			input = ft_strdup(command);
+			free(tmp);
+			return (input);
 		}
 		else
-			return (input);
+			return (tmp);
 	}
-	return (ft_strdup(input));
+	return (tmp);
 }
