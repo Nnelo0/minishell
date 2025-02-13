@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/13 15:59:24 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/14 00:50:36 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,8 @@ int	ft_cd(char **args)
 
 int	which_commands(char **input, char **envp, t_shell *shell)
 {
-	// if (ft_strchr(input, '|'))
-	// 	return (ft_pipe(input, envp, shell));
-	// if (ft_strchr(input, '<') || ft_strchr(input, '>'))
-	// 	return (ft_redirection(input, shell));
 	for (int j = 0; input[j]; j++)
-		printf("[%s]\n", input[j]);
+		fprintf(stderr, CYAN "[%s]\n" RESET, input[j]);
 	if (ft_strncmp(input[0], "exit", 4) == 0
 		&& (input[0][4] == ' ' || input[0][4] == '\0'))
 		return (ft_exit(input, shell));
@@ -151,10 +147,12 @@ char	*ft_add_space(const char *input, char c)
 	{
 		if (input[i] == '"' || input[i] == '\'')
 			in_quotes = !in_quotes;
-		if (!in_quotes && i > 0 && input[i] == c && input[i - 1] != ' ' && input[i - 1] != c)
+		if (!in_quotes && i > 0 && input[i] == c
+			&& input[i - 1] != ' ' && input[i - 1] != c)
 			result[len++] = ' ';
 		result[len++] = input[i];
-		if (!in_quotes && input[i] == c && input[i + 1] != ' ' && input[i + 1] != c)
+		if (!in_quotes && input[i] == c
+			&& input[i + 1] != ' ' && input[i + 1] != c)
 			result[len++] = ' ';
 		i++;
 	}
@@ -180,14 +178,16 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 	shell->input = ft_split_quote(input, ' ');
 	shell->input[0] = get_command_from_path(shell->input[0]);
 	ft_remove_quotes(shell->input[0]);
-	/* shell->status = verif_input(shell);
-	if (shell->status == 127)
-		return (shell->status); */
 	shell->tmp = ft_strdup(input);
 	shell->cmd = NULL;
 	shell->ipt = NULL;
-	shell-> status = ft_pipe(envp, shell); // pas ouf de faire ca ici a changer surement
-	shell->status = which_commands(shell->input, envp, shell);
+	printf(PINK "debut de ft_pipe avec comme input:\n");
+	for (int j = 0; shell->input[j]; j++)
+		printf("[%s]\n", shell->input[j]);
+	shell->status = ft_pipe(envp, shell);
+	printf(HOT_PINK "fin de ft_pipe\n" RESET);
+	if (shell->input)
+		shell->status = which_commands(shell->input, envp, shell);
 	free(shell->tmp);
 	return (shell->status);
 }

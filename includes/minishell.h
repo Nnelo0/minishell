@@ -3,15 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/13 15:40:30 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/14 00:52:14 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# define RED     "\033[31m"
+# define GREEN   "\033[32m"
+# define YELLOW  "\033[33m"
+# define BLUE    "\033[34m"
+# define MAGENTA "\033[35m"
+# define CYAN    "\033[36m"
+# define RESET   "\033[0m"
+# define PINK "\033[38;5;206m"
+# define HOT_PINK "\033[38;5;198m"
+# define LIGHT_PINK "\033[38;5;217m"
+# define BG_PINK "\033[48;5;206m"
 
 # include "libft/libft/libft.h"
 # include "libft/printf/ft_printf.h"
