@@ -6,7 +6,7 @@
 /*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:29:58 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/14 19:50:57 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/14 23:47:53 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,5 @@ char	**ft_split_quote(char *s, char c)
 		return (NULL);
 	if (!copy_word(dsa, s, c))
 		return (NULL);
-	free(s);
 	return (dsa);
 }

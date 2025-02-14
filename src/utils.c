@@ -6,15 +6,15 @@
 /*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:01:16 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/14 20:01:44 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/15 00:52:57 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_all(t_shell *shell, char **input)
+void	free_all(t_shell *shell)
 {
-	free_args(input);
+	free_args(shell->input);
 	free(shell->tmp);
 	free_args(shell->args);
 	free_args(shell->ipt);
@@ -83,5 +83,6 @@ char	**merge_args(char **input, char *c, int i, int j)
 		if (input[i + 1] && ft_strcmp(input[i + 1], c) == 0)
 			new_input[j++] = ft_strdup(input[++i]);
 	}
+	free_args(input);
 	return (new_input[j] = NULL, new_input);
 }

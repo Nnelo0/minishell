@@ -6,7 +6,7 @@
 /*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/14 19:54:12 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/14 23:31:17 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,11 +113,14 @@ void		read_heredoc(t_shell *shell, char *delimiter);
 int			parse_heredoc(t_shell *shell, int i);
 int			ft_isdigit_neg(int c);
 int			ft_isdigit_s(char *s);
-void		free_all(t_shell *shell, char **input);
+void		free_all(t_shell *shell);
 void		ft_execute(char **args, char **envp, t_shell *shell);
 int			verif_shell(char *input, t_shell *shell);
 char		*find_command_path(char *cmd, char **envp);
 char		*get_command_from_path(char *input);
 char		**merge_args(char **input, char *c, int i, int j);
+int			ft_cd(char **args);
+int			ft_exe(char **args, char **envp, t_shell *shell);
+int			ft_exit(char **input, t_shell *shell);
 
 #endif

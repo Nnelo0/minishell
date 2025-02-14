@@ -6,7 +6,7 @@
 /*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/14 19:43:31 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/15 00:47:38 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ int	execute_pipe(t_shell *shell, char **envp, int i)
 	}
 	close(shell->pipefd[0]);
 	shell->status = which_commands(shell->pipe, envp, shell);
+	free(shell->tmp);
+	free_args(shell->input);
+	free_env_list(shell->env_list);
+	free_export_list(shell->export_list);
 	exit(shell->status);
 }
 
@@ -73,11 +77,13 @@ int	ft_pipe(char **envp, t_shell *shell)
 	int	i;
 
 	i = 0;
-	shell->input = merge_args(shell->input, "|", -1, 0);
 	while (shell->input[i])
 	{
 		if (ft_strchr(shell->input[i], '|'))
+		{
+			shell->input = merge_args(shell->input, "|", -1, 0);
 			return (parse_commands_pipe(shell, envp, -1));
+		}
 		else
 			shell->status = 0;
 		i++;
