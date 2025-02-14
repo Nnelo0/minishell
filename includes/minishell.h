@@ -6,7 +6,7 @@
 /*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/14 00:52:14 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/14 19:54:12 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_shell
 	int				status;
 	char			**exit;
 	char			*tmp;
+	int				prev_fd;
 	char			**pipe;
 	t_env			*env_list;
 	t_export		*export_list;
@@ -106,7 +107,7 @@ void		append_exp_node(t_export **head, const char *export_var, int tpe);
 void		ft_sort_export_list(t_export *export_list);
 void		verif_env(t_env **head, const char *env_var, t_env *new_node);
 void		verif_exp(t_export **head, const char *var, t_export *new, int tpe);
-char		**ft_split_quote(char const *s, char c);
+char		**ft_split_quote(char *s, char c);
 int			ft_unset(t_shell *shell);
 void		read_heredoc(t_shell *shell, char *delimiter);
 int			parse_heredoc(t_shell *shell, int i);
@@ -117,5 +118,6 @@ void		ft_execute(char **args, char **envp, t_shell *shell);
 int			verif_shell(char *input, t_shell *shell);
 char		*find_command_path(char *cmd, char **envp);
 char		*get_command_from_path(char *input);
+char		**merge_args(char **input, char *c, int i, int j);
 
 #endif

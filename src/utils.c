@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:01:16 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/13 08:45:19 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/14 20:01:44 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,17 +57,31 @@ void	ft_execute(char **args, char **envp, t_shell *shell)
 	}
 }
 
-int	verif_shell(char *input, t_shell *shell)
+char	**merge_args(char **input, char *c, int i, int j)
 {
-	if ((input[0] == '\'' && input[1] == '\'' )
-		|| (input[0] == '"' && input[1] == '"'))
-		return (ft_printf("Command '' not found\n"), close(shell->in),
-			close(shell->out), 127);
-	if (input[0] == '.' && !input[1])
-		return (ft_printf(".: filename argument required\n\
-.: usage: . filename [arguments]\n"), close(shell->in), close(shell->out), 2);
-	if (input[0] == '/' && !input[1])
-		return (ft_printf("/: Is a directory\n"), close(shell->in),
-			close(shell->out), 126);
-	return (0);
+	char	**new_input;
+	char	*tmp;
+	char	*cmd;
+	char	*new_cmd;
+
+	new_input = malloc(sizeof(char *) * (ft_strlen_tab(input) + 1));
+	if (!new_input)
+		return (perror("malloc"), NULL);
+	while (input[++i])
+	{
+		cmd = ft_strdup(input[i]);
+		while (input[i + 1] && !(ft_strcmp(input[i + 1], c) == 0))
+		{
+			tmp = ft_strjoin(cmd, " ");
+			new_cmd = ft_strjoin(tmp, input[i + 1]);
+			free(tmp);
+			free(cmd);
+			cmd = new_cmd;
+			i++;
+		}
+		new_input[j++] = cmd;
+		if (input[i + 1] && ft_strcmp(input[i + 1], c) == 0)
+			new_input[j++] = ft_strdup(input[++i]);
+	}
+	return (new_input[j] = NULL, new_input);
 }

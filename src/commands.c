@@ -6,7 +6,7 @@
 /*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/14 00:50:36 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/14 20:10:22 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 int	ft_exit(char **input, t_shell *shell)
 {
 	printf("exit\n");
-	ft_remove_quotes(input[1]);
+	if (input[1])
+		ft_remove_quotes(input[1]);
 	if (input[1])
 	{
 		if (ft_isdigit_s(input[1]))
@@ -85,8 +86,6 @@ int	ft_cd(char **args)
 
 int	which_commands(char **input, char **envp, t_shell *shell)
 {
-	for (int j = 0; input[j]; j++)
-		fprintf(stderr, CYAN "[%s]\n" RESET, input[j]);
 	if (ft_strncmp(input[0], "exit", 4) == 0
 		&& (input[0][4] == ' ' || input[0][4] == '\0'))
 		return (ft_exit(input, shell));
@@ -128,7 +127,7 @@ int	which_commands(char **input, char **envp, t_shell *shell)
 	return (0);
 } */
 
-char	*ft_add_space(const char *input, char c)
+char	*ft_add_space(char *input, char c)
 {
 	int		i;
 	int		len;
@@ -139,7 +138,7 @@ char	*ft_add_space(const char *input, char c)
 		return (NULL);
 	result = malloc(ft_strlen(input) * 2 + 1);
 	if (!result)
-		return (NULL);
+		return (free(input), NULL);
 	i = 0;
 	len = 0;
 	in_quotes = 0;
@@ -172,20 +171,16 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 	}
 	if (!ft_quotes(input))
 		return (ft_printf("open quote\n"), 127);
+	shell->tmp = ft_strdup(input);
 	input = ft_add_space(input, '|');
 	input = ft_add_space(input, '>');
 	input = ft_add_space(input, '<');
 	shell->input = ft_split_quote(input, ' ');
 	shell->input[0] = get_command_from_path(shell->input[0]);
 	ft_remove_quotes(shell->input[0]);
-	shell->tmp = ft_strdup(input);
 	shell->cmd = NULL;
 	shell->ipt = NULL;
-	printf(PINK "debut de ft_pipe avec comme input:\n");
-	for (int j = 0; shell->input[j]; j++)
-		printf("[%s]\n", shell->input[j]);
 	shell->status = ft_pipe(envp, shell);
-	printf(HOT_PINK "fin de ft_pipe\n" RESET);
 	if (shell->input)
 		shell->status = which_commands(shell->input, envp, shell);
 	free(shell->tmp);
