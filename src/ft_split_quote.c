@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:29:58 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/01/30 16:01:58 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/17 10:38:32 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	count_word(char const *s, char c)
 
 	count = 0;
 	i = 0;
-	quote = 1;
+	quote = '\0';
 	while (s[i] != '\0')
 	{
 		if (s[i] == c)
@@ -30,9 +30,11 @@ static int	count_word(char const *s, char c)
 			count++;
 			while (s[i] != '\0')
 			{
-				if (s[i] == 39 || s[i] == 34)
-					quote = !quote;
-				if (s[i] == c && quote == 1)
+				if ((s[i] == 39 || s[i] == 34) && quote == '\0')
+					quote = s[i];
+				else if (s[i] == quote)
+					quote = '\0';
+				if (s[i] == c && quote == '\0')
 					break ;
 				i++;
 			}
@@ -65,12 +67,14 @@ static int	dup_word(char **dsa, const char *s, char c, int *i)
 	int	j;
 
 	j = 0;
-	quote = 1;
+	quote = '\0';
 	while (s[j] != '\0')
 	{
-		if (s[j] == 39 || s[j] == 34)
-			quote = -quote;
-		if (s[j] == c && quote == 1)
+		if ((s[j] == 39 || s[j] == 34) && quote == '\0')
+			quote = s[j];
+		else if (s[j] == quote)
+			quote = '\0';
+		if (s[j] == c && quote == '\0')
 			break ;
 		j++;
 	}
@@ -92,7 +96,7 @@ static int	copy_word(char **dsa, const char *s, char c)
 	int		quote;
 
 	i = 0;
-	quote = 1;
+	quote = '\0';
 	while (*s != '\0')
 	{
 		if (*s != c)
@@ -101,9 +105,11 @@ static int	copy_word(char **dsa, const char *s, char c)
 				return (0);
 			while (*s != '\0')
 			{
-				if (*s == 39 || *s == 34)
-					quote = -quote;
-				if (*s == c && quote == 1)
+				if ((*s == 39 || *s == 34) && quote == '\0')
+					quote = *s;
+				else if (*s == quote)
+					quote = '\0';
+				if (*s == c && quote == '\0')
 					break ;
 				s++;
 			}
