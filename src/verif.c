@@ -6,43 +6,35 @@
 /*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 08:36:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/14 19:43:11 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/17 16:53:47 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	is_valid_pipe(char *input)
+int	valid_pipe(t_shell *shell)
 {
 	int	i;
-	int	valid_command;
-	int	quote;
+	int	valid_cmd;
 
 	i = 0;
-	valid_command = 0;
-	while (input[i])
+	valid_cmd = 0;
+	while (shell->input[i])
 	{
-		while (input[i] != '\0')
+		if (ft_strchr(shell->input[i], '\"'))
+			return (2);
+		if (ft_strchr(shell->input[i], '|'))
 		{
-			if (input[i] == 39 || input[i] == 34)
-				quote = !quote;
-			if (quote == 1)
-				break ;
-			i++;
+			if (ft_strlen(shell->input[i]) != 1)
+				valid_cmd = 1;
+			if (!shell->input[i + 1])
+				valid_cmd = 1;
+			if (!shell->input[i - 1])
+				valid_cmd = 1;
 		}
-		if (input[i] == '|')
-		{
-			if (i == 0 || input[i + 1] == '|' || input[i + 1] == '\0')
-				return (0);
-			if (!valid_command)
-				return (0);
-			valid_command = 0;
-		}
-		else if (input[i] != ' ')
-			valid_command = 1;
 		i++;
 	}
-	return (valid_command);
+	return (valid_cmd);
 }
 
 int	verif_shell(char *input, t_shell *shell)

@@ -6,7 +6,7 @@
 /*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/14 23:31:17 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/17 15:37:03 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ int			is_valid_chevrons(char *input);
 char		**ft_split_chevrons(char *input, int i, int j);
 int			ft_strlen_tab(char **tab);
 void		parse_commands(char **commands, char *tmp, char *args);
-int			is_valid_pipe(char *input);
 int			parse_out(t_shell *shell, int i, int *out_count, int *append);
 int			parse_in(t_shell *shell, int i);
 int			ft_export(t_shell *shell);
@@ -122,5 +121,6 @@ char		**merge_args(char **input, char *c, int i, int j);
 int			ft_cd(char **args);
 int			ft_exe(char **args, char **envp, t_shell *shell);
 int			ft_exit(char **input, t_shell *shell);
+int			valid_pipe(t_shell *shell);
 
 #endif

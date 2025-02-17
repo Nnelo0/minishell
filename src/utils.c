@@ -6,7 +6,7 @@
 /*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:01:16 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/15 00:52:57 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/17 15:11:43 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,5 @@ char	**merge_args(char **input, char *c, int i, int j)
 		if (input[i + 1] && ft_strcmp(input[i + 1], c) == 0)
 			new_input[j++] = ft_strdup(input[++i]);
 	}
-	free_args(input);
-	return (new_input[j] = NULL, new_input);
+	return (free_args(input), new_input[j] = NULL, new_input);
 }

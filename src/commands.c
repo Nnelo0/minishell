@@ -6,7 +6,7 @@
 /*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/15 00:25:26 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/17 16:55:14 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,22 +38,6 @@ int	which_commands(char **input, char **envp, t_shell *shell)
 		return (ft_unset(shell));
 	return (ft_shell(input, envp, shell, 0));
 }
-
-/* int	verif_input(t_shell *shell)
-{
-	int	i;
-
-	i = 0;
-	while (shell->input[i])
-	{
-		if (!is_valid_pipe(shell->input[i]))
-			return (ft_printf("invalid pipes\n"), 127);
-		if (!is_valid_chevrons(shell->input[i]))
-			return (ft_printf("invalid '<' or '>'\n"), 127);
-		i++;
-	}
-	return (0);
-} */
 
 int	is_separator(char c)
 {
@@ -108,12 +92,13 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 	shell->input = ft_split_quote(input, ' ');
 	free(input);
 	shell->input[0] = get_command_from_path(shell->input[0]);
-	ft_remove_quotes(shell->input[0]);
 	shell->cmd = NULL;
 	shell->ipt = NULL;
 	shell->status = ft_pipe(envp, shell);
 	if (shell->input)
+	{
+		ft_remove_quotes(shell->input[0]);
 		shell->status = which_commands(shell->input, envp, shell);
-	free(shell->tmp);
-	return (shell->status);
+	}
+	return (free(shell->tmp), shell->status);
 }
