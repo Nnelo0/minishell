@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/13 16:23:00 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/17 13:34:26 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct s_shell
 void		handle_prompt(t_shell *shell, char **envp);
 int			keypress(char *input, t_shell *shell);
 void		handle_sigint(int sig);
-int			ft_exit(char **input, t_shell *shell);
+int			ft_exit(char **input, t_shell *shell, char **envp);
 int			commands(char *input, char **envp, t_shell *shell, int *status);
 int			ft_shell(char **cmd, char **envp, t_shell *shell, int status);
 int			ft_quotes(char *input);
@@ -99,7 +99,7 @@ void		read_heredoc(t_shell *shell, char *delimiter);
 int			parse_heredoc(t_shell *shell, int i);
 int			ft_isdigit_neg(int c);
 int			ft_isdigit_s(char *s);
-void		free_all(t_shell *shell, char **input);
+void		free_all(t_shell *shell, char **input, char **envp);
 void		ft_execute(char **args, char **envp, t_shell *shell);
 int			verif_shell(char *input, t_shell *shell);
 char		*find_command_path(char *cmd, char **envp);

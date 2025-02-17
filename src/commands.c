@@ -6,13 +6,13 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/17 10:38:54 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/17 13:33:03 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_exit(char **input, t_shell *shell)
+int	ft_exit(char **input, t_shell *shell, char **envp)
 {
 	printf("exit\n");
 	if (input[1])
@@ -35,7 +35,7 @@ int	ft_exit(char **input, t_shell *shell)
 			printf("%s: numeric argument required\n", input[1]);
 		}
 	}
-	return (free_all(shell, input), rl_clear_history(),
+	return (free_all(shell, input, envp), rl_clear_history(),
 		exit(shell->status), shell->status);
 }
 
@@ -94,7 +94,7 @@ int	which_commands(char **input, char **envp, t_shell *shell)
 	// 	return (ft_redirection(input, shell));
 	if (ft_strncmp(input[0], "exit", 4) == 0
 		&& (input[0][4] == ' ' || input[0][4] == '\0'))
-		return (ft_exit(input, shell));
+		return (ft_exit(input, shell, envp));
 	if (ft_strncmp(input[0], "echo", 4) == 0
 		&& (input[0][4] == ' ' || input[0][4] == '\0'))
 		return (ft_echo(input, shell, 0, 1));
@@ -133,8 +133,51 @@ int	verif_input(t_shell *shell)
 	return (0);
 }
 
+int	ft_sizeenv(t_env *lst)
+{
+	int	len;
+
+	len = 0;
+	while (lst != NULL)
+	{
+		len++;
+		lst = lst->next;
+	}
+	return (len);
+}
+
+char	**env_in_stars(t_shell *shell)
+{
+	t_env	*env;
+	char	**env_stars;
+	int		i;
+
+	env = shell->env_list;
+	env_stars = malloc(sizeof(char *) * (ft_sizeenv(env) + 1));
+	if (!env_stars)
+		return (NULL);
+	i = 0;
+	while (env)
+	{
+		env_stars[i] = ft_strdup(env->value);
+		if (!env_stars[i])
+		{
+			while (i > 0)
+				free(env_stars[--i]);
+			free(env_stars);
+			return (NULL);
+		}
+		env = env->next;
+		i++;
+	}
+	env_stars[i] = NULL;
+	return (env_stars);
+}
 int	commands(char *input, char **envp, t_shell *shell, int *status)
 {
+	char	**env;
+
+	(void)envp;
 	while (*input && (*input == ' ' || *input == '\t'))
 		input++;
 	if (*input == '\0')
@@ -153,7 +196,9 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 	shell->input = ft_strdup(input);
 	shell->cmd = NULL;
 	shell->ipt = NULL;
-	shell->status = which_commands(shell->test, envp, shell);
+	env = env_in_stars(shell);
+	shell->status = which_commands(shell->test, env, shell);
 	free(shell->input);
+	free_args(env);
 	return (shell->status);
 }
