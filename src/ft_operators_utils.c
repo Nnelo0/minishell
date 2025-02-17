@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_operators_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:39:51 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/12 15:45:20 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/17 18:23:43 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ char	**ft_split_chevrons(char *input, int i, int j)
 		res[j++] = ft_substr(start, 0, input + i - start);
 	return (res[j] = NULL, res);
 }
+
 
 int	is_valid_chevrons(char *input)
 {
@@ -76,15 +77,15 @@ int	is_valid_chevrons(char *input)
 
 int	parse_in(t_shell *shell, int i)
 {
-	if (ft_strcmp(shell->ipt[i], "<") == 0)
+	if (ft_strcmp(shell->input[i], "<") == 0)
 	{
-		if (shell->ipt[i + 1])
+		if (shell->input[i + 1])
 		{
 			free(shell->in_file);
-			shell->in_file = ft_strdup(shell->ipt[++i]);
+			shell->in_file = ft_strdup(shell->input[++i]);
 		}
 		else
-			return (free(shell->in_file), free_args(shell->ipt),
+			return (free(shell->in_file), free_args(shell->input),
 				free(shell->cmd), 1);
 	}
 	return (0);
@@ -92,18 +93,18 @@ int	parse_in(t_shell *shell, int i)
 
 int	parse_out(t_shell *shell, int i, int *out_count, int *append)
 {
-	if (ft_strcmp(shell->ipt[i], ">") == 0
-		|| ft_strcmp(shell->ipt[i], ">>") == 0)
+	if (ft_strcmp(shell->input[i], ">") == 0
+		|| ft_strcmp(shell->input[i], ">>") == 0)
 	{
-		if (ft_strcmp(shell->ipt[i], ">>") == 0)
+		if (ft_strcmp(shell->input[i], ">>") == 0)
 			*append = 1;
 		else
 			*append = 0;
-		if (shell->ipt[i + 1])
-			shell->out_file[(*out_count)++] = ft_strdup(shell->ipt[++i]);
+		if (shell->input[i + 1])
+			shell->out_file[(*out_count)++] = ft_strdup(shell->input[++i]);
 		else
 			return (shell->out_file[(*out_count)] = NULL,
-				free(shell->in_file), free_args(shell->ipt),
+				free(shell->in_file), free_args(shell->input),
 				free(shell->cmd), 1);
 	}
 	return (0);

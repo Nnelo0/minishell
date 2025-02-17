@@ -6,7 +6,7 @@
 /*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:01:16 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/17 15:11:43 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/17 18:06:44 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	free_all(t_shell *shell)
 	free_args(shell->input);
 	free(shell->tmp);
 	free_args(shell->args);
-	free_args(shell->ipt);
 	free_env_list(shell->env_list);
 	free_export_list(shell->export_list);
 }
@@ -48,7 +47,6 @@ void	ft_execute(char **args, char **envp, t_shell *shell)
 	if (execve(args[0], args, envp) == -1)
 	{
 		perror(args[0]);
-		free_args(shell->ipt);
 		free(shell->tmp);
 		free_args(args);
 		free_env_list(shell->env_list);

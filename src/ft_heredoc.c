@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 13:31:41 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/06 14:05:18 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/17 18:23:56 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ void	read_heredoc(t_shell *shell, char *delimiter)
 
 int	parse_heredoc(t_shell *shell, int i)
 {
-	if (ft_strcmp(shell->ipt[i], "<<") == 0)
+	if (ft_strcmp(shell->input[i], "<<") == 0)
 	{
-		if (!shell->ipt[i + 1])
+		if (!shell->input[i + 1])
 			return (1);
-		read_heredoc(shell, shell->ipt[++i]);
+		read_heredoc(shell, shell->input[++i]);
 	}
 	return (0);
 }

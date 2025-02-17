@@ -6,7 +6,7 @@
 /*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/17 15:37:03 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/17 18:24:26 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ typedef struct s_shell
 	char			**envp1;
 	char			*cmd;
 	char			**cmds;
-	char			**ipt;
 	int				fd_in;
 	int				fd_out;
 	char			*in_file;
@@ -75,52 +74,88 @@ typedef struct s_shell
 	t_export		*export_list;
 }	t_shell;
 
-void		handle_prompt(t_shell *shell, char **envp);
-int			keypress(char *input, t_shell *shell);
-void		handle_sigint(int sig);
+/*---------------builtins---------------*/
+
+int			ft_echo(char **args, t_shell *shell, int n, int i);
+int			ft_cd(char **args);
+int			ft_pwd(void);
+int			ft_export(t_shell *shell);
+int			ft_unset(t_shell *shell);
+int			ft_env(t_shell *shell);
 int			ft_exit(char **input, t_shell *shell);
-int			commands(char *input, char **envp, t_shell *shell, int *status);
+
+/*---------------env_utils---------------*/
+
+t_env		*init_env_list(char **env);
+void		free_env_list(t_env *env_list);
+void		append_env_node(t_env **head, const char *env_var);
+void		verif_env(t_env **head, const char *env_var, t_env *new_node);
+
+/*---------------export_utils---------------*/
+
+t_export	*init_export_list(char **env);
+void		free_export_list(t_export *export_list);
+void		append_exp_node(t_export **head, const char *export_var, int tpe);
+void		ft_sort_export_list(t_export *export_list);
+void		verif_exp(t_export **head, const char *var, t_export *new, int tpe);
+
+/*---------------ft_shell---------------*/
+
 int			ft_shell(char **cmd, char **envp, t_shell *shell, int status);
+int			verif_shell(char *input, t_shell *shell);
+
+/*---------------execute---------------*/
+
+void		ft_execute(char **args, char **envp, t_shell *shell);
+int			ft_exe(char **args, char **envp, t_shell *shell);
+
+/*---------------pipe---------------*/
+
+int			ft_pipe(char **envp, t_shell *shell);
+int			valid_pipe(t_shell *shell);
+
+/*---------------quotes---------------*/
+
 int			ft_quotes(char *input);
 void		ft_remove_quotes(char *input);
-int			ft_echo(char **args, t_shell *shell, int n, int i);
-void		free_args(char **args);
-int			ft_env(t_shell *shell);
-int			ft_pwd(void);
-int			ft_pipe(char **envp, t_shell *shell);
-int			which_commands(char **input, char **envp, t_shell *shell);
-int			ft_redirection(char *input, t_shell *shell);
+
+/*---------------path---------------*/
+
+char		*find_command_path(char *cmd, char **envp);
+char		*get_command_from_path(char *input);
+char		**ft_split_quote(char *s, char c);
+
+/*---------------redirection---------------*/
+
+int			ft_redirection(t_shell *shell);
 int			is_valid_chevrons(char *input);
-char		**ft_split_chevrons(char *input, int i, int j);
-int			ft_strlen_tab(char **tab);
 void		parse_commands(char **commands, char *tmp, char *args);
 int			parse_out(t_shell *shell, int i, int *out_count, int *append);
 int			parse_in(t_shell *shell, int i);
-int			ft_export(t_shell *shell);
-t_env		*init_env_list(char **env);
-void		free_env_list(t_env *env_list);
-t_export	*init_export_list(char **env);
-void		free_export_list(t_export *export_list);
-void		append_env_node(t_env **head, const char *env_var);
-void		append_exp_node(t_export **head, const char *export_var, int tpe);
-void		ft_sort_export_list(t_export *export_list);
-void		verif_env(t_env **head, const char *env_var, t_env *new_node);
-void		verif_exp(t_export **head, const char *var, t_export *new, int tpe);
-char		**ft_split_quote(char *s, char c);
-int			ft_unset(t_shell *shell);
 void		read_heredoc(t_shell *shell, char *delimiter);
 int			parse_heredoc(t_shell *shell, int i);
+
+/*---------------commands---------------*/
+
+int			commands(char *input, char **envp, t_shell *shell, int *status);
+int			which_commands(char **input, char **envp, t_shell *shell);
+
+/*---------------free---------------*/
+
+void		free_args(char **args);
+void		free_all(t_shell *shell);
+
+/*---------------signals_prompt---------------*/
+
+void		handle_prompt(t_shell *shell, char **envp);
+int			keypress(char *input, t_shell *shell);
+void		handle_sigint(int sig);
+
+/*---------------utils---------------*/
+
+int			ft_strlen_tab(char **tab);
 int			ft_isdigit_neg(int c);
 int			ft_isdigit_s(char *s);
-void		free_all(t_shell *shell);
-void		ft_execute(char **args, char **envp, t_shell *shell);
-int			verif_shell(char *input, t_shell *shell);
-char		*find_command_path(char *cmd, char **envp);
-char		*get_command_from_path(char *input);
 char		**merge_args(char **input, char *c, int i, int j);
-int			ft_cd(char **args);
-int			ft_exe(char **args, char **envp, t_shell *shell);
-int			ft_exit(char **input, t_shell *shell);
-int			valid_pipe(t_shell *shell);
 
 #endif
