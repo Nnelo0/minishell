@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_quote.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:29:58 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/18 11:00:14 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/18 10:45:31 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,24 +39,6 @@ static int	count_word(char const *s, char c, int i)
 		}
 	}
 	return (count);
-}
-
-static char	*ft_strndup(const char *s, size_t n)
-{
-	char	*dest;
-	size_t	i;
-
-	i = 0;
-	dest = malloc(sizeof(char) * (n + 1));
-	if (dest == NULL)
-		return (NULL);
-	while (i < n)
-	{
-		dest[i] = s[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
 }
 
 static int	dup_word(char **dsa, const char *s, char c, int *i)
@@ -113,20 +95,19 @@ static int	copy_word(char **dsa, const char *s, char c, int i)
 		else
 			s++;
 	}
-	dsa[i] = NULL;
-	return (1);
+	return (dsa[i] = NULL, 1);
 }
 
-char	**ft_split_quote(char const *s, char c)
+char	**ft_split_quote(char *s, char c)
 {
 	char	**dsa;
 
 	if (s == NULL)
 		return (NULL);
-	dsa = malloc(sizeof(char *) * (count_word(s, c, 1) + 1));
+	dsa = malloc(sizeof(char *) * (count_word(s, c, 0) + 1));
 	if (dsa == NULL)
 		return (NULL);
-	if (!copy_word(dsa, s, c, 1))
+	if (!copy_word(dsa, s, c, 0))
 		return (NULL);
 	return (dsa);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/12 08:41:44 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/17 18:24:13 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int	keypress(char *input, t_shell *shell)
 		rl_clear_history();
 		free(input);
 		free_args(shell->args);
-		free_args(shell->ipt);
 		free_env_list(shell->env_list);
 		free_export_list(shell->export_list);
 		exit (shell->status);
@@ -74,11 +73,6 @@ void	handle_prompt(t_shell *shell, char **envp)
 			free_args(shell->args);
 			shell->args = NULL;
 		}
-		if (shell->ipt)
-		{
-			free_args(shell->ipt);
-			shell->ipt = NULL;
-		}
 		if (input)
 			free(input);
 	}
@@ -94,9 +88,9 @@ int	main(int argc, char **argv, char **envp)
 	shell.signal_status = 0;
 	shell.args = NULL;
 	shell.envp1 = envp;
-	shell.ipt = NULL;
 	shell.fd_out = -1;
 	shell.fd_in = -1;
+	shell.prev_fd = -1;
 	shell.env_list = init_env_list(envp);
 	shell.export_list = init_export_list(envp);
 	signal(SIGINT, handle_sigint);

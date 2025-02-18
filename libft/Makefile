@@ -42,6 +42,7 @@ SRCS = \
 	libft/ft_tolower.c \
 	libft/ft_toupper.c \
 	libft/ft_strcpy.c \
+	libft/ft_strndup.c \
 	printf/ft_printf.c \
 	printf/printf_char.c \
 	printf/printf_digit.c \

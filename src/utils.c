@@ -3,22 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:01:16 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/18 10:53:36 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/18 13:09:20 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_all(t_shell *shell, char **input)
+void	free_all(t_shell *shell)
 {
-	free_args(shell->test);
-	free_args(input);
-	free(shell->input);
+	free_args(shell->input);
+	free(shell->tmp);
 	free_args(shell->args);
-	free_args(shell->ipt);
 	free_args(shell->env);
 	free_env_list(shell->env_list);
 	free_export_list(shell->export_list);
@@ -50,8 +48,7 @@ void	ft_execute(char **args, char **envp, t_shell *shell)
 	if (execve(args[0], args, envp) == -1)
 	{
 		perror(args[0]);
-		free_args(shell->ipt);
-		free(shell->input);
+		free(shell->tmp);
 		free_args(args);
 		free_env_list(shell->env_list);
 		free_export_list(shell->export_list);
@@ -59,17 +56,31 @@ void	ft_execute(char **args, char **envp, t_shell *shell)
 	}
 }
 
-int	verif_shell(char *input, t_shell *shell)
+char	**merge_args(char **input, char *c, int i, int j)
 {
-	if ((input[0] == '\'' && input[1] == '\'' )
-		|| (input[0] == '"' && input[1] == '"'))
-		return (ft_printf("Command '' not found\n"), close(shell->in),
-			close(shell->out), 127);
-	if (input[0] == '.' && !input[1])
-		return (ft_printf(".: filename argument required\n\
-.: usage: . filename [arguments]\n"), close(shell->in), close(shell->out), 2);
-	if (input[0] == '/' && !input[1])
-		return (ft_printf("/: Is a directory\n"), close(shell->in),
-			close(shell->out), 126);
-	return (0);
+	char	**new_input;
+	char	*tmp;
+	char	*cmd;
+	char	*new_cmd;
+
+	new_input = malloc(sizeof(char *) * (ft_strlen_tab(input) + 1));
+	if (!new_input)
+		return (perror("malloc"), NULL);
+	while (input[++i])
+	{
+		cmd = ft_strdup(input[i]);
+		while (input[i + 1] && !(ft_strcmp(input[i + 1], c) == 0))
+		{
+			tmp = ft_strjoin(cmd, " ");
+			new_cmd = ft_strjoin(tmp, input[i + 1]);
+			free(tmp);
+			free(cmd);
+			cmd = new_cmd;
+			i++;
+		}
+		new_input[j++] = cmd;
+		if (input[i + 1] && ft_strcmp(input[i + 1], c) == 0)
+			new_input[j++] = ft_strdup(input[++i]);
+	}
+	return (free_args(input), new_input[j] = NULL, new_input);
 }

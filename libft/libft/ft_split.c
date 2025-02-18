@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:26:07 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/01/13 13:59:33 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/13 10:56:17 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,24 +31,6 @@ static int	count_word(char const *s, char c)
 		}
 	}
 	return (count);
-}
-
-static char	*ft_strndup(const char *s, size_t n)
-{
-	char	*dest;
-	size_t	i;
-
-	i = 0;
-	dest = malloc(sizeof(char) * (n + 1));
-	if (dest == NULL)
-		return (NULL);
-	while (i < n)
-	{
-		dest[i] = s[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
 }
 
 static int	dup_word(char **dsa, const char *s, char c, int *i)

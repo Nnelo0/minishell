@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:32:41 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/01/31 10:20:43 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/18 13:25:46 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	ft_unset(t_shell *shell)
 	char		**args;
 	int			i;
 
-	args = ft_split_quote(shell->input, ' ');
+	args = ft_split_quote(shell->tmp, ' ');
 	i = 1;
 	while (args[i])
 	{
@@ -82,5 +82,6 @@ int	ft_unset(t_shell *shell)
 		i++;
 	}
 	free_args(args);
+	free_args(shell->input);
 	return (0);
 }
