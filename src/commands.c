@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/18 13:23:38 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:13:29 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 	if (shell->input)
 	{
 		ft_remove_quotes(shell->input[0]);
-		shell->input[0] = get_command_from_path(shell->input[0]);
+		get_command(shell);
 		shell->status = which_commands(shell->input, envp, shell);
 	}
 	return (free_args(shell->env), free(shell->tmp), shell->status);

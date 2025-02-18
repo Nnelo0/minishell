@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:20:44 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/18 13:07:09 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/18 15:23:31 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,6 @@ void	echo_utils(char **args, int i, t_shell *shell, int n)
 	{
 		ft_remove_quotes(args[i]);
 		printf("%s", args[i]);
-		if (n != 1 && i == 1)
-			printf("\n");
-		return ;
 	}
 	if (args[i + 1])
 	{

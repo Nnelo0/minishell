@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_path.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:11:29 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/15 00:20:03 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/18 16:53:29 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,18 @@ char	*find_command_path(char *cmd, char **envp)
 	}
 	free_args(paths);
 	return (0);
+}
+
+void	get_command(t_shell *shell)
+{
+	int	i;
+
+	i = -1;
+	while (shell->input[++i])
+	{
+		if (shell->input[i])
+		shell->input[i] = get_command_from_path(shell->input[i]);
+	}
 }
 
 char	*get_command_from_path(char *input)
