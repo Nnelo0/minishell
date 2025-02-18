@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/18 10:57:54 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/18 12:53:15 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,26 +89,27 @@ int	ft_cd(char **args)
 int	which_commands(char **input, char **envp, t_shell *shell)
 {
 	if (ft_strncmp(input[0], "exit", 4) == 0
-		&& (input[0][4] == ' ' || input[0][4] == '\0'))
+		&& input[0][4] == '\0')
 		return (ft_exit(input, shell));
 	if (ft_strncmp(input[0], "echo", 4) == 0
-		&& (input[0][4] == ' ' || input[0][4] == '\0'))
+		&& input[0][4] == '\0')
 		return (ft_echo(input, shell, 0, 1));
 	if (ft_strncmp(input[0], "cd", 2) == 0
-		&& (input[0][2] == ' ' || input[0][2] == '\0'))
+		&& input[0][2] == '\0')
 		return (ft_cd(input));
 	if (ft_strncmp(input[0], "./", 2) == 0)
 		return (ft_exe(input, envp, shell));
 	if (ft_strncmp(input[0], "env", 3) == 0
-		&& (input[0][3] == ' ' || input[0][3] == '\0'))
+		&& input[0][3] == '\0')
 		return (ft_env(shell));
-	if (ft_strncmp(input[0], "pwd", 3) == 0 && input[0][3] == '\0')
+	if (ft_strncmp(input[0], "pwd", 3) == 0
+		&& input[0][3] == '\0')
 		return (ft_pwd());
 	if (ft_strncmp(input[0], "export", 6) == 0
-		&& (input[0][6] == ' ' || input[0][6] == '\0'))
+		&& input[0][6] == '\0')
 		return (ft_export(shell));
 	if (ft_strncmp(input[0], "unset", 5) == 0
-		&& (input[0][5] == ' ' || input[0][5] == '\0'))
+		&& input[0][5] == '\0')
 		return (ft_unset(shell));
 	return (ft_shell(input, envp, shell, 0));
 }
@@ -116,6 +117,7 @@ int	which_commands(char **input, char **envp, t_shell *shell)
 int	commands(char *input, char **envp, t_shell *shell, int *status)
 {
 	(void)envp;
+	shell->env = env_in_stars(shell);
 	while (*input && (*input == ' ' || *input == '\t'))
 		input++;
 	if (*input == '\0')
@@ -130,10 +132,11 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 	shell->test = ft_split_quote(input, ' ');
 	shell->test[0] = get_command_from_path(shell->test[0]);
 	ft_remove_quotes(shell->test[0]);
+	if (ft_strncmp(input[0], "$", 1) == 0)
+		ft_var_env(shell->test, envp, shell);
 	shell->input = ft_strdup(input);
 	shell->cmd = NULL;
 	shell->ipt = NULL;
-	shell->env = env_in_stars(shell);
 	shell->status = which_commands(shell->test, shell->env, shell);
 	free(shell->input);
 	free_args(shell->env);
