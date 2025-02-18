@@ -19,7 +19,7 @@ clean:
 	$(MAKE) -C $(LIBFTDIR) clean
 
 fclean: clean
-	rm -f $(NAME) $(NAME_BONUS)
+	rm -f $(NAME)
 	$(MAKE) -C $(LIBFTDIR) fclean
 
 re: fclean all

@@ -6,127 +6,90 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/07 14:50:45 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/18 12:53:34 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*find_command_path(char *cmd, char **envp)
+int	is_pipe(t_shell *shell, int i)
 {
-	char	**paths;
-	char	*path;
-	int		i;
-	char	*part_path;
-
-	i = 0;
-	while (envp[i] && ft_strnstr(envp[i], "PATH=", 5) == 0)
-		i++;
-	if (!envp[i])
-		return (NULL);
-	paths = ft_split(envp[i] + 5, ':');
-	i = 0;
-	while (paths[i])
-	{
-		part_path = ft_strjoin(paths[i], "/");
-		path = ft_strjoin(part_path, cmd);
-		free(part_path);
-		if (access(path, F_OK) == 0)
-			return (free_args(paths), path);
-		free(path);
-		i++;
-	}
-	free_args(paths);
+	if (shell->input[i] && shell->input[i + 1]
+		&& ft_strcmp(shell->input[i + 1], "|") == 0)
+		return (1);
 	return (0);
 }
 
-void	pipe_commands_utils(t_shell *shell, int prev_fd, int pipefd[2], int i)
+int	execute_pipe(t_shell *shell, char **envp, int i)
 {
-	if (prev_fd != -1)
+	shell->pipe = ft_split(shell->input[i], ' ');
+	if (shell->prev_fd != -1)
 	{
-		dup2(prev_fd, STDIN_FILENO);
-		close(prev_fd);
+		dup2(shell->prev_fd, STDIN_FILENO);
+		close(shell->prev_fd);
 	}
-	if (shell->cmds[i + 1])
+	if (is_pipe(shell, i))
 	{
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
+		dup2(shell->pipefd[1], STDOUT_FILENO);
+		close(shell->pipefd[1]);
+		close(shell->pipefd[0]);
 	}
-	close(pipefd[0]);
-	which_commands(shell->cmds[i], shell->envp1, shell);
-	free_args(shell->ipt);
-	free(shell->input);
-	free_args(shell->args);
+	close(shell->pipefd[0]);
+	shell->status = which_commands(shell->pipe, envp, shell);
+	free(shell->tmp);
+	free_args(shell->input);
 	free_env_list(shell->env_list);
 	free_export_list(shell->export_list);
-	free_args(shell->cmds);
-	exit(127);
+	exit(shell->status);
 }
 
-int	ft_command_pipe(t_shell *shell)
+int	parse_commands_pipe(t_shell *shell, char **envp, int i)
 {
-	int		pipefd[2];
 	pid_t	pid;
-	int		i;
-	int		prev_fd;
 
-	i = 0;
-	prev_fd = -1;
-	while (shell->cmds[i])
+	shell->prev_fd = -1;
+	while (shell->input[++i])
 	{
-		if (shell->cmds[i + 1] && pipe(pipefd) == -1)
-			return (free_args(shell->cmds), perror("pipe error"), 127);
+		if (ft_strcmp(shell->input[i], "|") == 0)
+			i++;
+		if (is_pipe(shell, i) && pipe(shell->pipefd) == -1)
+			return (perror("pipe: "), 127);
 		pid = fork();
 		if (pid == -1)
-			return (free_args(shell->cmds), perror("fork error"), 127);
+			return (perror("fork: "), 127);
 		if (pid == 0)
-			pipe_commands_utils(shell, prev_fd, pipefd, i);
-		if (prev_fd != -1)
-			close(prev_fd);
-		close(pipefd[1]);
-		prev_fd = pipefd[0];
-		i++;
-	}
-	if (prev_fd != -1)
-		close(prev_fd);
-	return (0);
-}
-
-int	is_valid_pipe(char *input)
-{
-	int	i;
-	int	valid_command;
-
-	i = 0;
-	valid_command = 0;
-	while (input[i])
-	{
-		if (input[i] == '|')
+			execute_pipe(shell, envp, i);
+		if (shell->prev_fd != -1)
+			close(shell->prev_fd);
+		if (is_pipe(shell, i))
 		{
-			if (i == 0 || input[i + 1] == '|' || input[i + 1] == '\0')
-				return (0);
-			if (!valid_command)
-				return (0);
-			valid_command = 0;
+			close(shell->pipefd[1]);
+			shell->prev_fd = shell->pipefd[0];
 		}
-		else if (input[i] != ' ')
-			valid_command = 1;
-		i++;
 	}
-	return (valid_command);
-}
-
-int	ft_pipe(char *input, char **envp, t_shell *shell)
-{
-	if (!is_valid_pipe(input))
-		return (printf("invalid pipes\n"));
-	shell->cmds = ft_split(input, '|');
-	if (!shell->cmds)
-		return (127);
-	shell->envp1 = envp;
-	ft_command_pipe(shell);
 	while (wait(NULL) > 0)
 		;
-	free_args(shell->cmds);
-	return (1);
+	return (free_args(shell->input), shell->input = NULL, shell->status);
+}
+
+int	ft_pipe(char **envp, t_shell *shell)
+{
+	int	i;
+
+	i = 0;
+	while (shell->input[i])
+	{
+		if (ft_strchr(shell->input[i], '|'))
+		{
+			if (valid_pipe(shell) == 2)
+				return (shell->status);
+			if (valid_pipe(shell) == 1)
+				return (free_args(shell->input), shell->input = NULL,
+					ft_putstr_fd("Invalid Pipes\n", 2), shell->status);
+			shell->input = merge_args(shell->input, "|", -1, 0);
+			return (parse_commands_pipe(shell, envp, -1));
+		}
+		i++;
+	}
+	return (shell->status);
 }

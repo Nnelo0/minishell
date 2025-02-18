@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/10 15:31:14 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/17 18:24:13 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int		g_status = 0;
 
 void	handle_sigint(int sig)
 {
@@ -24,6 +26,7 @@ void	handle_sigint(int sig)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
+	g_status = 130;
 }
 
 int	keypress(char *input, t_shell *shell)
@@ -46,7 +49,6 @@ int	keypress(char *input, t_shell *shell)
 		rl_clear_history();
 		free(input);
 		free_args(shell->args);
-		free_args(shell->ipt);
 		free_env_list(shell->env_list);
 		free_export_list(shell->export_list);
 		exit (shell->status);
@@ -65,16 +67,11 @@ void	handle_prompt(t_shell *shell, char **envp)
 		keypress(input, shell);
 		if (*input)
 			add_history(input);
-		shell->status = commands(input, envp, shell);
+		shell->status = commands(input, envp, shell, &g_status);
 		if (shell->args)
 		{
 			free_args(shell->args);
 			shell->args = NULL;
-		}
-		if (shell->ipt)
-		{
-			free_args(shell->ipt);
-			shell->ipt = NULL;
 		}
 		if (input)
 			free(input);
@@ -87,13 +84,13 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	shell.status = 0;
+	shell.status = g_status;
 	shell.signal_status = 0;
 	shell.args = NULL;
 	shell.envp1 = envp;
-	shell.ipt = NULL;
 	shell.fd_out = -1;
 	shell.fd_in = -1;
+	shell.prev_fd = -1;
 	shell.env_list = init_env_list(envp);
 	shell.export_list = init_export_list(envp);
 	signal(SIGINT, handle_sigint);
