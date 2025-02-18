@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/17 19:56:20 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/18 12:53:57 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ char	*ft_add_space(char *input, int i)
 
 int	commands(char *input, char **envp, t_shell *shell, int *status)
 {
-	(void)envp;
 	while (*input && (*input == ' ' || *input == '\t'))
 		input++;
 	if (*input == '\0')
@@ -92,14 +91,14 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 	input = ft_add_space(input, -1);
 	shell->input = ft_split_quote(input, ' ');
 	free(input);
-	shell->input[0] = get_command_from_path(shell->input[0]);
 	shell->cmd = NULL;
 	ft_redirection(shell);
-	//shell->status = ft_pipe(envp, shell);
-	//if (shell->input)
-	//{
-	//	ft_remove_quotes(shell->input[0]);
-	//	shell->status = which_commands(shell->input, envp, shell);
-	//}
+	shell->status = ft_pipe(envp, shell);
+	if (shell->input)
+	{
+		ft_remove_quotes(shell->input[0]);
+		shell->input[0] = get_command_from_path(shell->input[0]);
+		shell->status = which_commands(shell->input, envp, shell);
+	}
 	return (free(shell->tmp), shell->status);
 }
