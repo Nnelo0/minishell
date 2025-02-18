@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:20:44 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/17 10:18:49 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/18 10:58:29 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	ft_dollar_alpha(char *args, t_shell *shell, int i)
 		if (ft_strcmp(check_args, check_list[0]) == 0)
 		{
 			tmp = ft_strdup(temp->value);
-			printf("%s", tmp);
+			print_env(tmp);
 			return (free(tmp), free_args(check_list), free(check_args), 0);
 		}
 		free_args(check_list);

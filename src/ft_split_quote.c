@@ -6,20 +6,18 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:29:58 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/17 10:38:32 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/18 11:00:14 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	count_word(char const *s, char c)
+static int	count_word(char const *s, char c, int i)
 {
-	int		i;
 	int		count;
 	int		quote;
 
 	count = 0;
-	i = 0;
 	quote = '\0';
 	while (s[i] != '\0')
 	{
@@ -90,12 +88,10 @@ static int	dup_word(char **dsa, const char *s, char c, int *i)
 	return (1);
 }
 
-static int	copy_word(char **dsa, const char *s, char c)
+static int	copy_word(char **dsa, const char *s, char c, int i)
 {
-	int		i;
 	int		quote;
 
-	i = 0;
 	quote = '\0';
 	while (*s != '\0')
 	{
@@ -127,10 +123,10 @@ char	**ft_split_quote(char const *s, char c)
 
 	if (s == NULL)
 		return (NULL);
-	dsa = malloc(sizeof(char *) * (count_word(s, c) + 1));
+	dsa = malloc(sizeof(char *) * (count_word(s, c, 1) + 1));
 	if (dsa == NULL)
 		return (NULL);
-	if (!copy_word(dsa, s, c))
+	if (!copy_word(dsa, s, c, 1))
 		return (NULL);
 	return (dsa);
 }

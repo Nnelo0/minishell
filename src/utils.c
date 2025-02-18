@@ -6,20 +6,20 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:01:16 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/17 13:36:26 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/18 10:53:36 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_all(t_shell *shell, char **input, char **envp)
+void	free_all(t_shell *shell, char **input)
 {
 	free_args(shell->test);
 	free_args(input);
 	free(shell->input);
 	free_args(shell->args);
 	free_args(shell->ipt);
-	free_args(envp);
+	free_args(shell->env);
 	free_env_list(shell->env_list);
 	free_export_list(shell->export_list);
 }

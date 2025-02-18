@@ -6,13 +6,13 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/17 13:33:03 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/18 10:57:54 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_exit(char **input, t_shell *shell, char **envp)
+int	ft_exit(char **input, t_shell *shell)
 {
 	printf("exit\n");
 	if (input[1])
@@ -35,7 +35,7 @@ int	ft_exit(char **input, t_shell *shell, char **envp)
 			printf("%s: numeric argument required\n", input[1]);
 		}
 	}
-	return (free_all(shell, input, envp), rl_clear_history(),
+	return (free_all(shell, input), rl_clear_history(),
 		exit(shell->status), shell->status);
 }
 
@@ -88,13 +88,9 @@ int	ft_cd(char **args)
 
 int	which_commands(char **input, char **envp, t_shell *shell)
 {
-	// if (ft_strchr(input, '|'))
-	// 	return (ft_pipe(input, envp, shell));
-	// if (ft_strchr(input, '<') || ft_strchr(input, '>'))
-	// 	return (ft_redirection(input, shell));
 	if (ft_strncmp(input[0], "exit", 4) == 0
 		&& (input[0][4] == ' ' || input[0][4] == '\0'))
-		return (ft_exit(input, shell, envp));
+		return (ft_exit(input, shell));
 	if (ft_strncmp(input[0], "echo", 4) == 0
 		&& (input[0][4] == ' ' || input[0][4] == '\0'))
 		return (ft_echo(input, shell, 0, 1));
@@ -117,66 +113,8 @@ int	which_commands(char **input, char **envp, t_shell *shell)
 	return (ft_shell(input, envp, shell, 0));
 }
 
-int	verif_input(t_shell *shell)
-{
-	int	i;
-
-	i = 0;
-	while (shell->test[i])
-	{
-		if (!is_valid_pipe(shell->test[i]))
-			return (ft_printf("invalid pipes\n"), 127);
-		if (!is_valid_chevrons(shell->test[i]))
-			return (ft_printf("invalid '<' or '>'\n"), 127);
-		i++;
-	}
-	return (0);
-}
-
-int	ft_sizeenv(t_env *lst)
-{
-	int	len;
-
-	len = 0;
-	while (lst != NULL)
-	{
-		len++;
-		lst = lst->next;
-	}
-	return (len);
-}
-
-char	**env_in_stars(t_shell *shell)
-{
-	t_env	*env;
-	char	**env_stars;
-	int		i;
-
-	env = shell->env_list;
-	env_stars = malloc(sizeof(char *) * (ft_sizeenv(env) + 1));
-	if (!env_stars)
-		return (NULL);
-	i = 0;
-	while (env)
-	{
-		env_stars[i] = ft_strdup(env->value);
-		if (!env_stars[i])
-		{
-			while (i > 0)
-				free(env_stars[--i]);
-			free(env_stars);
-			return (NULL);
-		}
-		env = env->next;
-		i++;
-	}
-	env_stars[i] = NULL;
-	return (env_stars);
-}
 int	commands(char *input, char **envp, t_shell *shell, int *status)
 {
-	char	**env;
-
 	(void)envp;
 	while (*input && (*input == ' ' || *input == '\t'))
 		input++;
@@ -192,13 +130,12 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 	shell->test = ft_split_quote(input, ' ');
 	shell->test[0] = get_command_from_path(shell->test[0]);
 	ft_remove_quotes(shell->test[0]);
-	//shell->status = verif_input(shell);
 	shell->input = ft_strdup(input);
 	shell->cmd = NULL;
 	shell->ipt = NULL;
-	env = env_in_stars(shell);
-	shell->status = which_commands(shell->test, env, shell);
+	shell->env = env_in_stars(shell);
+	shell->status = which_commands(shell->test, shell->env, shell);
 	free(shell->input);
-	free_args(env);
+	free_args(shell->env);
 	return (shell->status);
 }

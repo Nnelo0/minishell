@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:20:44 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/17 10:39:06 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/18 10:59:30 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,15 @@ void	ft_remove_quotes(char *input)
 	if (quote_type != '\0')
 		input[++j] = quote_type;
 	input[j] = '\0';
+}
+
+void	print_env(char *arg)
+{
+	int	i;
+
+	i = 0;
+	while (arg[i - 1] != '=')
+		i++;
+	while (arg[i])
+		printf("%c", arg[i++]);
 }
