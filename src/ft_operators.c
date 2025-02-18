@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_operators.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 20:50:58 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/18 16:34:38 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/18 19:32:05 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,43 +82,44 @@ int	open_files(t_shell *shell, int out_count, int append)
 	return (0);
 }
 
-int	ft_parse(char **input, t_shell *shell)
+char	**ft_parse(char **input, t_shell *shell)
 {
 	int		append;
 	int		out_count;
+	char	**new_input;
 
 	shell->in_file = NULL;
 	shell->fd_in = -1;
 	shell->fd_out = -1;
-	shell->out_file = malloc(sizeof(char *) * (ft_strlen_tab(input) + 1)
-			);
+	shell->out_file = malloc(sizeof(char *) * (ft_strlen_tab(input) + 1));
 	if (!shell->out_file)
-		return (127);
+		return (NULL);
 	out_count = 0;
 	parse_redirection(input, shell, &out_count, &append, -1);
 	if (!shell->cmd)
-		return (127);
+		return (NULL);
 	if (open_files(shell, out_count, append))
-		return (127);
-	free_args(input);
-	input = NULL;
-	input = ft_split(shell->cmd, ' ');
-	return (wait(NULL), free(shell->in_file), free(shell->cmd),
-		free_args(shell->out_file), shell->status);
+		return (NULL);
+	new_input = ft_split(shell->cmd, ' ');
+	return (free(shell->in_file), free(shell->cmd),
+		free_args(shell->out_file), new_input);
 }
 
-int	ft_redirection(char **input, t_shell *shell)
+char	**ft_redirection(char **input, t_shell *shell)
 {
-	int	i;
+	int		i;
+	char	**new_input;
 
 	i = 0;
 	while (input[i])
 	{
 		if (ft_strchr(input[i], '<') || ft_strchr(input[i], '>'))
-			return (ft_parse(input, shell));
+		{
+			new_input = ft_parse(input, shell);
+			free_args(input);
+			return (new_input);
+		}
 		i++;
 	}
-	return (shell->status);
+	return (input);
 }
-
-//changer shell->input par input bon ca marche pas ca segfault
