@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:39:51 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/18 12:56:32 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:31:15 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,36 +23,36 @@ void	parse_commands(char **commands, char *tmp, char *args)
 	*commands = tmp_cmd;
 }
 
-int	parse_in(t_shell *shell, int i)
+int	parse_in(char **input, t_shell *shell, int i)
 {
-	if (ft_strcmp(shell->input[i], "<") == 0)
+	if (ft_strcmp(input[i], "<") == 0)
 	{
-		if (shell->input[i + 1])
+		if (input[i + 1])
 		{
 			free(shell->in_file);
-			shell->in_file = ft_strdup(shell->input[++i]);
+			shell->in_file = ft_strdup(input[++i]);
 		}
 		else
-			return (free(shell->in_file), free_args(shell->input),
+			return (free(shell->in_file), free_args(input),
 				free(shell->cmd), 1);
 	}
 	return (0);
 }
 
-int	parse_out(t_shell *shell, int i, int *out_count, int *append)
+int	parse_out(char **input, t_shell *shell, int i, int *out_count, int *append)
 {
-	if (ft_strcmp(shell->input[i], ">") == 0
-		|| ft_strcmp(shell->input[i], ">>") == 0)
+	if (ft_strcmp(input[i], ">") == 0
+		|| ft_strcmp(input[i], ">>") == 0)
 	{
-		if (ft_strcmp(shell->input[i], ">>") == 0)
+		if (ft_strcmp(input[i], ">>") == 0)
 			*append = 1;
 		else
 			*append = 0;
-		if (shell->input[i + 1])
-			shell->out_file[(*out_count)++] = ft_strdup(shell->input[++i]);
+		if (input[i + 1])
+			shell->out_file[(*out_count)++] = ft_strdup(input[++i]);
 		else
 			return (shell->out_file[(*out_count)] = NULL,
-				free(shell->in_file), free_args(shell->input),
+				free(shell->in_file), free_args(input),
 				free(shell->cmd), 1);
 	}
 	return (0);

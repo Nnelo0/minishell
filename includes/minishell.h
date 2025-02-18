@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/18 13:03:39 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:32:53 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ int			ft_export_verif(char **args, int i, int status);
 
 int			ft_shell(char **cmd, char **envp, t_shell *shell, int status);
 int			verif_shell(char *input, t_shell *shell);
+void		verif_close(t_shell *shell);
 
 /*---------------execute---------------*/
 
@@ -132,13 +133,12 @@ char		**ft_split_quote(char *s, char c);
 
 /*---------------redirection---------------*/
 
-int			ft_redirection(t_shell *shell);
-int			is_valid_chevrons(char *input);
+int			ft_redirection(char **input, t_shell *shell);
 void		parse_commands(char **commands, char *tmp, char *args);
-int			parse_out(t_shell *shell, int i, int *out_count, int *append);
-int			parse_in(t_shell *shell, int i);
+int			parse_out(char **input, t_shell *shell, int i, int *out_count, int *append);
+int			parse_in(char **input, t_shell *shell, int i);
 void		read_heredoc(t_shell *shell, char *delimiter);
-int			parse_heredoc(t_shell *shell, int i);
+int			parse_heredoc(char **input, t_shell *shell, int i);
 
 /*---------------commands---------------*/
 
