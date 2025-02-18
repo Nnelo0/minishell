@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 21:37:00 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/14 23:31:23 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/18 13:25:38 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,6 @@ int	ft_env(t_shell *shell)
 		temp = temp->next;
 	}
 	free(temp);
+	free_args(shell->input);
 	return (0);
 }

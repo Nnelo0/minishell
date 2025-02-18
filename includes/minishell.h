@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/18 10:38:54 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/18 13:03:39 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ typedef struct s_shell
 	char			*tmp;
 	int				prev_fd;
 	char			**pipe;
+	char			**env;
 	t_env			*env_list;
 	t_export		*export_list;
 }	t_shell;
@@ -90,6 +91,9 @@ t_env		*init_env_list(char **env);
 void		free_env_list(t_env *env_list);
 void		append_env_node(t_env **head, const char *env_var);
 void		verif_env(t_env **head, const char *env_var, t_env *new_node);
+void		print_env(char *arg);
+int			ft_sizeenv(t_env *lst);
+char		**env_in_stars(t_shell *shell);
 
 /*---------------export_utils---------------*/
 
@@ -98,6 +102,7 @@ void		free_export_list(t_export *export_list);
 void		append_exp_node(t_export **head, const char *export_var, int tpe);
 void		ft_sort_export_list(t_export *export_list);
 void		verif_exp(t_export **head, const char *var, t_export *new, int tpe);
+int			ft_export_verif(char **args, int i, int status);
 
 /*---------------ft_shell---------------*/
 

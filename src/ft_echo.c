@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:20:44 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/12 13:08:55 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/18 13:07:09 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	ft_dollar_alpha(char *args, t_shell *shell, int i)
 		if (ft_strcmp(check_args, check_list[0]) == 0)
 		{
 			tmp = ft_strdup(temp->value);
-			printf("%s", tmp);
+			print_env(tmp);
 			return (free(tmp), free_args(check_list), free(check_args), 0);
 		}
 		free_args(check_list);
@@ -105,6 +105,9 @@ void	echo_utils(char **args, int i, t_shell *shell, int n)
 	{
 		ft_remove_quotes(args[i]);
 		printf("%s", args[i]);
+		if (n != 1 && i == 1)
+			printf("\n");
+		return ;
 	}
 	if (args[i + 1])
 	{
