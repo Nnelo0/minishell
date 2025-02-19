@@ -1,6 +1,4 @@
-> < >> << files marche pas
 heredoc pipe
 pipe executable (./minishell | wc -l)
 
-utiliser notre environnement 
 variable d'environnement
