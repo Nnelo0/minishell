@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 21:37:00 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/18 13:25:38 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/19 08:58:00 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ int	ft_exit(char **input, t_shell *shell)
 		if (!ft_isdigit_s(input[1]) || ft_strlen(input[1]) >= 20)
 		{
 			shell->status = 2;
-			ft_printf("%s:", input[1]);
-			ft_putstr_fd(" numeric argument required\n", 2);
+			ft_putstr_fd(input[1], 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
 		}
 	}
 	return (free_all(shell), rl_clear_history(),
@@ -44,15 +44,15 @@ int	ft_exe(char **args, char **envp, t_shell *shell)
 	struct stat	path_stat;
 
 	if (!args || !args[0])
-		return (printf("command not found\n"));
+		return (ft_putstr_fd("command not found\n", 2), 1);
 	if (stat(args[0], &path_stat) == 0)
 	{
 		if (S_ISDIR(path_stat.st_mode))
-			return (printf("%s: Is a directory\n", args[0]),
-				free_args(args), 126);
+			return (ft_putstr_fd(args[0], 2),
+				ft_putstr_fd(": Is a directory\n", 2), free_args(args), 126);
 		if (S_ISREG(path_stat.st_mode) && access(args[0], X_OK) == -1)
-			return (printf("%s: Permission denied\n", args[0]),
-				free_args(args), 126);
+			return (ft_putstr_fd(args[0], 2),
+				ft_putstr_fd(": Permission denied\n", 2), free_args(args), 126);
 	}
 	pid = fork();
 	if (pid == -1)
@@ -70,10 +70,10 @@ int	ft_cd(char **args)
 	{
 		target = getenv("HOME");
 		if (!target)
-			return (printf("HOME not set\n"), 1);
+			return (ft_putstr_fd("HOME not set\n", 2), 1);
 	}
 	else if (args[2])
-		return (printf("too many arguments\n"), 1);
+		return (ft_putstr_fd("too many arguments\n", 2), 1);
 	else
 		target = args[1];
 	if (chdir(target) == -1)

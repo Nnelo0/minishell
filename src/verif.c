@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 08:36:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/19 08:50:43 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/19 08:54:04 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	valid_pipe(t_shell *shell)
 int	valid_redirection(char **input)
 {
 	int	i;
-	int j;
+	int	j;
 	int	valid_cmd;
 
 	i = 0;
@@ -50,7 +50,8 @@ int	valid_redirection(char **input)
 		if (ft_strchr(input[i], '>') || ft_strchr(input[i], '<'))
 		{
 			j = 0;
-			if (input[i][j + 1] == input[i][j] && input[i][j + 2] == input[i][j])
+			if (input[i][j + 1] == input[i][j]
+				&& input[i][j + 2] == input[i][j])
 				valid_cmd = 1;
 			if (input[i][j + 1] != input[i][j])
 				valid_cmd = 1;
