@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   commands_utils.c                                   :+:      :+:    :+:   */
+/*   ft_shell.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/18 16:02:06 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/19 13:35:02 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ int	ft_shell(char **cmd, char **envp, t_shell *shell, int status)
 		return (shell->status);
 	path = find_command_path(cmd[0], envp);
 	if (!path)
-		return (ft_putstr_fd(cmd[0], 2), ft_putstr_fd(": command not found\n", 2
+		return (verif_close(shell), ft_putstr_fd(cmd[0], 2)
+			, ft_putstr_fd(": command not found\n", 2
 			), close(shell->in), close(shell->out), free_args(cmd), 127);
 	pid = fork();
 	if (pid == -1)

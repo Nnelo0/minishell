@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/19 10:46:31 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/19 15:25:49 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	is_pipe(t_shell *shell, int i)
 
 int	execute_pipe(t_shell *shell, char **envp, int i)
 {
+	ft_remove_quotes(shell->input[i]);
 	shell->pipe = ft_split(shell->input[i], ' ');
 	if (shell->prev_fd != -1)
 	{
@@ -36,6 +37,7 @@ int	execute_pipe(t_shell *shell, char **envp, int i)
 	}
 	close(shell->pipefd[0]);
 	shell->status = which_commands(shell->pipe, envp, shell);
+	verif_close(shell);
 	free(shell->tmp);
 	free_args(shell->input);
 	free_env_list(shell->env_list);
@@ -82,11 +84,13 @@ int	ft_pipe(char **envp, t_shell *shell)
 	{
 		if (ft_strchr(shell->input[i], '|'))
 		{
-			if (valid_pipe(shell) == 2)
-				return (shell->status);
-			if (valid_pipe(shell) == 1)
-				return (free_args(shell->input), shell->input = NULL,
-					ft_putstr_fd("Invalid Pipes\n", 2), shell->status);
+			//if (valid_pipe(shell) == 2)
+			//	return (shell->status);
+			//if (valid_pipe(shell) == 1)
+			//	return (free_args(shell->input), shell->input = NULL,
+			//		ft_putstr_fd("Invalid Pipes\n", 2), shell->status);
+			//for (int i = 0; shell->input[i]; i++)
+			//	printf("[%s]\n", shell->input[i]);
 			shell->input = merge_args(shell->input, "|", -1, 0);
 			return (parse_commands_pipe(shell, envp, -1));
 		}

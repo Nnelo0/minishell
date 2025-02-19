@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/19 13:19:21 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/19 15:25:45 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 		shell->status = 130;
 		*status = 0;
 	}
+	//printf("%s\n", input);
 	if (!ft_quotes(input))
 		return (ft_printf("open quote\n"), 127);
 	shell->tmp = ft_strdup(input);

@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/19 10:19:33 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/19 15:26:48 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,39 @@ int	keypress(char *input, t_shell *shell)
 	return (0);
 }
 
+char *remove_newline(char *str)
+{
+    if (!str)
+        return (NULL);
+    int len = ft_strlen(str);
+    if (len > 0 && str[len - 1] == '\n')
+        str[len - 1] = '\0';
+    return (str);
+}
+
 void	handle_prompt(t_shell *shell, char **envp)
 {
 	char	*input;
 
 	while (1)
 	{
-		input = readline("minishell> ");
+		
+		if (!isatty(STDIN_FILENO))
+        {
+            input = get_next_line(STDIN_FILENO);
+				input = remove_newline(input);
+        }
+        else
+        {
+            input = readline("minishell> ");
+        }
+        if (!input)
+        {
+            if (isatty(STDIN_FILENO))
+                printf("exit\n");
+            break;
+        }
+		//input = readline("minishell> ");
 		keypress(input, shell);
 		if (*input)
 			add_history(input);
