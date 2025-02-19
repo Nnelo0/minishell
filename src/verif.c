@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   verif.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 08:36:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/17 16:53:47 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/19 08:50:43 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,31 @@ int	valid_pipe(t_shell *shell)
 			if (!shell->input[i + 1])
 				valid_cmd = 1;
 			if (!shell->input[i - 1])
+				valid_cmd = 1;
+		}
+		i++;
+	}
+	return (valid_cmd);
+}
+
+int	valid_redirection(char **input)
+{
+	int	i;
+	int j;
+	int	valid_cmd;
+
+	i = 0;
+	valid_cmd = 0;
+	while (input[i])
+	{
+		if (ft_strchr(input[i], '>') || ft_strchr(input[i], '<'))
+		{
+			j = 0;
+			if (input[i][j + 1] == input[i][j] && input[i][j + 2] == input[i][j])
+				valid_cmd = 1;
+			if (input[i][j + 1] != input[i][j])
+				valid_cmd = 1;
+			if (!input[i + 1])
 				valid_cmd = 1;
 		}
 		i++;

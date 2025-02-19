@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/18 19:25:41 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/19 08:29:02 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ int			parse_out(char **input, t_shell *shell, int i, int *out_count, int *append
 int			parse_in(char **input, t_shell *shell, int i);
 void		read_heredoc(t_shell *shell, char *delimiter);
 int			parse_heredoc(char **input, t_shell *shell, int i);
+int			valid_redirection(char **input);
 
 /*---------------commands---------------*/
 

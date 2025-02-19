@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/18 19:26:00 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/19 08:47:22 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 int	which_commands(char **input, char **envp, t_shell *shell)
 {
 	input = ft_redirection(input, shell);
+	if (!input)
+		return (shell->status);
 	if (ft_strncmp(input[0], "exit", 4) == 0
 		&& input[0][4] == '\0')
 		return (ft_exit(input, shell));

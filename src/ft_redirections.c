@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_operators.c                                     :+:      :+:    :+:   */
+/*   ft_redirections.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 20:50:58 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/18 19:32:05 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/19 08:47:25 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,9 @@ char	**ft_redirection(char **input, t_shell *shell)
 	{
 		if (ft_strchr(input[i], '<') || ft_strchr(input[i], '>'))
 		{
+			if (valid_redirection(input) == 1)
+				return (ft_putstr_fd("Invalid < or >\n", 2),
+					free_args(input), input = NULL, input);
 			new_input = ft_parse(input, shell);
 			free_args(input);
 			return (new_input);
