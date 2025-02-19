@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/19 08:47:22 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/19 13:19:21 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,30 +50,30 @@ int	is_separator(char c)
 	return (0);
 }
 
-char	*ft_add_space(char *input, int i)
+char	*ft_add_space(char *input, int i, int len, int in_quotes)
 {
-	int		len;
 	char	*result;
-	int		in_quotes;
 
-	if (!input)
-		return (NULL);
-	result = malloc(ft_strlen(input) * 2 + 1);
+	result = malloc(sizeof(char) * (strlen(input) * 2 + 1));
 	if (!result)
-		return (free(input), NULL);
-	len = 0;
-	in_quotes = 0;
+		return (NULL);
 	while (input[++i])
 	{
 		if (input[i] == '"' || input[i] == '\'')
 			in_quotes = !in_quotes;
-		if (!in_quotes && i > 0 && is_separator(input[i])
-			&& input[i - 1] != ' ' && !is_separator(input[i - 1]))
-			result[len++] = ' ';
-		result[len++] = input[i];
-		if (!in_quotes && is_separator(input[i])
-			&& input[i + 1] != ' ' && !is_separator(input[i + 1]))
-			result[len++] = ' ';
+		if (!in_quotes)
+		{
+			if (i > 0 && is_separator(input[i]) && input[i - 1] != ' '
+				&& (!is_separator(input[i - 1]) || input[i - 1] != input[i]))
+				result[len++] = ' ';
+			result[len++] = input[i];
+			if (is_separator(input[i]) && input[i + 1] != ' '
+				&& input[i + 1] && (!is_separator(input[i + 1])
+					|| input[i + 1] != input[i]))
+				result[len++] = ' ';
+		}
+		else
+			result[len++] = input[i];
 	}
 	return (result[len] = '\0', result);
 }
@@ -93,7 +93,7 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 	if (!ft_quotes(input))
 		return (ft_printf("open quote\n"), 127);
 	shell->tmp = ft_strdup(input);
-	input = ft_add_space(input, -1);
+	input = ft_add_space(input, -1, 0, 0);
 	shell->input = ft_split_quote(input, ' ');
 	free(input);
 	shell->cmd = NULL;

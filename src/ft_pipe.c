@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/18 16:24:58 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/19 10:46:31 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	execute_pipe(t_shell *shell, char **envp, int i)
 	free(shell->tmp);
 	free_args(shell->input);
 	free_env_list(shell->env_list);
+	free_args(shell->env);
 	free_export_list(shell->export_list);
 	exit(shell->status);
 }

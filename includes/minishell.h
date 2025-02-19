@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/19 08:29:02 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/19 10:32:23 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct s_shell
 	int				prev_fd;
 	char			**pipe;
 	char			**env;
+	char			**copy;
 	t_env			*env_list;
 	t_export		*export_list;
 }	t_shell;
@@ -135,10 +136,10 @@ char		**ft_split_quote(char *s, char c);
 
 char		**ft_redirection(char **input, t_shell *shell);
 void		parse_commands(char **commands, char *tmp, char *args);
-int			parse_out(char **input, t_shell *shell, int i, int *out_count, int *append);
-int			parse_in(char **input, t_shell *shell, int i);
+int			parse_out(t_shell *shell, int i, int *out_count, int *append);
+int			parse_in(t_shell *shell, int i);
 void		read_heredoc(t_shell *shell, char *delimiter);
-int			parse_heredoc(char **input, t_shell *shell, int i);
+int			parse_heredoc(t_shell *shell, int i);
 int			valid_redirection(char **input);
 
 /*---------------commands---------------*/
@@ -163,5 +164,6 @@ int			ft_strlen_tab(char **tab);
 int			ft_isdigit_neg(int c);
 int			ft_isdigit_s(char *s);
 char		**merge_args(char **input, char *c, int i, int j);
+char		**copy_string(char **input);
 
 #endif

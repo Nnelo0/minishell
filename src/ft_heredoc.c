@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 13:31:41 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/18 16:31:31 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/19 10:31:59 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ void	read_heredoc(t_shell *shell, char *delimiter)
 	unlink(".tmp_heredoc");
 }
 
-int	parse_heredoc(char **input, t_shell *shell, int i)
+int	parse_heredoc(t_shell *shell, int i)
 {
-	if (ft_strcmp(input[i], "<<") == 0)
+	if (ft_strcmp(shell->copy[i], "<<") == 0)
 	{
-		if (!input[i + 1])
+		if (!shell->copy[i + 1])
 			return (1);
-		read_heredoc(shell, input[++i]);
+		read_heredoc(shell, shell->copy[++i]);
 	}
 	return (0);
 }
