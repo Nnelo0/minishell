@@ -6,7 +6,7 @@
 /*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/19 20:24:23 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/19 22:05:08 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,22 @@ void	handle_prompt(t_shell *shell, char **envp)
 			input = remove_newline(input);
 		}
 		else
-			input = readline("minishell> ");
+		{
+			if (!isatty(STDOUT_FILENO))
+			{
+				input = get_next_line(STDERR_FILENO);
+				if (!input)
+					break;
+				input = remove_newline(input);
+				
+			}
+			// ce if, sert pas pour command | ./minishell mais marche pour
+			// ./minishell | command, ca lance minishell mais leak + sigpipe quand on quitte
+			// changer peut etre dans pipe qui sauvegarde l'ancien stdout le dup2 et apres la commande 
+			// remet l'ancien stdout via dup car ca sigpipe car stdout est fermer  
+			else
+				input = readline("minishell> "); //SIGPIPE
+		}
 		keypress(input, shell);
 		if (*input)
 			add_history(input);
