@@ -3,39 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   verif.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 08:36:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/20 15:36:14 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:14:34 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+int	has_caracter_in_quotes(char *str, int limiter)
+{
+	char	quote;
+	char	*start;
+	char	*end;
+	int		echo_found;
+
+	echo_found = 0;
+	while (*str)
+	{
+		if (!ft_strncmp(str, "echo", 4) && (*(str + 4) == ' ' || *(str + 4) == '\t'))
+			echo_found = 1;
+		if (*str == '"' || *str == '\'')
+		{
+			quote = *str;
+			start = str + 1;
+			end = ft_strchr(start, quote);
+			if (!end)
+				return (0);
+			if (ft_strchr(start, limiter) && ft_strchr(start, limiter) < end)
+				return (echo_found ? 0 : 2);
+			str = end;
+		}
+		str++;
+	}
+	return (0);
+}
+
 int	valid_pipe(t_shell *shell)
 {
 	int	i;
-	int	valid_cmd;
-
 	i = 0;
-	valid_cmd = 0;
 	while (shell->input[i])
 	{
-		if (ft_strchr(shell->input[i], '\"'))
+		if (has_caracter_in_quotes(shell->input[i], '|'))
 			return (2);
 		if (ft_strchr(shell->input[i], '|'))
 		{
-			if (ft_strlen(shell->input[i]) != 1)
-				valid_cmd = 1;
-			if (!shell->input[i + 1])
-				valid_cmd = 1;
-			if (!shell->input[i - 1])
-				valid_cmd = 1;
+			if (ft_strlen(shell->input[i]) != 1 || !shell->input[i + 1] || i == 0)
+				return (1);
 		}
 		i++;
 	}
-	return (valid_cmd);
+	return (0);
 }
+
 
 int	valid_redirection(char **input)
 {
@@ -47,6 +69,8 @@ int	valid_redirection(char **input)
 	valid_cmd = 0;
 	while (input[i])
 	{
+		if (has_caracter_in_quotes(input[i], '>') || has_caracter_in_quotes(input[i], '<'))
+			return (2);
 		if (ft_strchr(input[i], '>') || ft_strchr(input[i], '<'))
 		{
 			j = 0;
@@ -66,14 +90,17 @@ int	valid_redirection(char **input)
 int	verif_shell(char *input, t_shell *shell, int type)
 {
 	if (input[0] == '$' && !input[1])
-		return (input = NULL,  ft_putstr_fd("$: command not found\n", 2), shell->status = 127, type = 1);
+		return (input = NULL, ft_putstr_fd("$: command not found\n", 2)
+			, shell->status = 127, type = 1);
 	if ((input[0] == '\'' && input[1] == '\'' )
 		|| (input[0] == '"' && input[1] == '"'))
-		return (input = NULL, ft_putstr_fd("Command '' not found\n", 2), shell->status = 127, type = 1);
+		return (input = NULL, ft_putstr_fd("Command '' not found\n", 2)
+			, shell->status = 127, type = 1);
 	if (input[0] == '.' && !input[1])
 		return (ft_putstr_fd(".: filename argument required\n\
 .: usage: . filename [arguments]\n", 2), 2);
 	if (input[0] == '/' && !input[1])
-		return (input = NULL, ft_putstr_fd("/: Is a directory\n", 2), shell->status = 126, type = 1);
+		return (input = NULL, ft_putstr_fd("/: Is a directory\n", 2)
+			, shell->status = 126, type = 1);
 	return (type = 0);
 }

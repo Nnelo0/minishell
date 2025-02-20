@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/20 14:58:07 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/20 18:38:10 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,24 @@ int		g_status = 0;
 void	handle_sigint(int sig)
 {
 	(void)sig;
-	if (g_status == 42)
-	{
-		write(STDOUT_FILENO, "\n", 1);
-		g_status = 43;
-		return ;
-	}
+	// if (g_status == 42)
+	// {
+	// 	write(STDOUT_FILENO, "\n", 1);
+	// 	g_status = 43;
+	// 	return ;
+	// }
 	if (waitpid(-1, NULL, WNOHANG) == 0)
 	{
 		ft_printf("\n");
 		return ;
 	}
-	else
-	{
+	
 		ft_printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 		g_status = 130;
-	}
+	
 }
 
 int	keypress(char *input, t_shell *shell)
@@ -103,9 +102,9 @@ void	handle_prompt(t_shell *shell, char **envp)
 			// ce if, sert pas pour command | ./minishell mais marche pour
 			// ./minishell | command, ca lance minishell mais leak + sigpipe quand on quitte
 			// changer peut etre dans pipe qui sauvegarde l'ancien stdout le dup2 et apres la commande 
-			// remet l'ancien stdout via dup car ca sigpipe car stdout est fermer  
+			// remet l'ancien stdout via dup car ca sigpipe car stdout est fermer 
 			else
-				input = readline("minishell> "); //SIGPIPE
+				input = readline("minishell> ");
 		}
 		keypress(input, shell);
 		if (*input)

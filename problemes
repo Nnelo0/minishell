@@ -2,3 +2,11 @@ heredoc pipe
 pipe executable (./minishell | wc -l)
 
 variable d'environnement
+
+command not found dans ft_shell marche pas si y'a pas un entrer apres
+l'impression que les command ce font dans un stdout inconnu ????????? mais par contre les builtins marche................
+
+bon je creez plus de probleme que j'en ressout c chiant.....
+
+
+a faire : verif pipe -> echo "ls | wc" | wc doit marcher pareil pour redirection

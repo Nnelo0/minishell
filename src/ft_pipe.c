@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/20 08:45:52 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:11:32 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,14 @@ int	ft_pipe(char **envp, t_shell *shell)
 	{
 		if (ft_strchr(shell->input[i], '|'))
 		{
-			//if (valid_pipe(shell) == 2)
-			//	return (shell->status);
-			//if (valid_pipe(shell) == 1)
-			//	return (free_args(shell->input), shell->input = NULL,
-			//		ft_putstr_fd("Invalid Pipes\n", 2), shell->status);
+			for (int i = 0; shell->input[i]; i++)
+				printf("[%s]\n", shell->input[i]);
+			//printf("[%d]\n", valid_pipe(shell));
+			if (valid_pipe(shell) == 2)
+				return (shell->status);
+			if (valid_pipe(shell) == 1)
+				return (free_args(shell->input), shell->input = NULL,
+					ft_putstr_fd("Invalid Pipes\n", 2), shell->status);
 			//for (int i = 0; shell->input[i]; i++)
 			//	printf("[%s]\n", shell->input[i]);
 			shell->input = merge_args(shell->input, "|", -1, 0);
