@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:11:29 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/19 17:13:27 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/20 14:53:58 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ char	*find_command_path(char *cmd, char **envp)
 	free_args(paths);
 	return (0);
 }
+
 char	*get_after_equal(char *arg)
 {
 	char	*res;
@@ -53,7 +54,8 @@ char	*get_after_equal(char *arg)
 	while (arg[i])
 		res[j++] = arg[i++];
 	free(arg);
-	return(res);
+	res[j] = '\0';
+	return (res);
 }
 
 char	*ft_dollar_env(char *args, t_shell *shell, int i)
@@ -85,130 +87,46 @@ char	*ft_dollar_env(char *args, t_shell *shell, int i)
 	return (free(check_args), "");
 }
 
-char	*ft_dollar(char *args, t_shell *shell, int i, int j)
+int	is_valid_var_char(char c)
 {
-	char	*after;
-	char	*before;
-	char	*var;
-	char	*res;
-	int		h;
-
-	if (!args)
-		return (NULL);
-	h = 0;
-	before = calloc(i + 1, sizeof(char));
-	if (!before)
-		return (NULL);
-	after = calloc(ft_strlen(args + i) + 1, sizeof(char));
-	var = calloc(ft_strlen(args + i) + 1, sizeof(char));
-	if (!after || !var)
-		return (free(before), free(after), free(var), NULL);
-	while (args[i] && args[i] != '$')
-		before[h++] = args[i++];
-	before[h] = '\0';
-	if (!args[i + 1])
-		return (free(after), res = ft_strjoin(before, "$"), free(before), res);
-	while (args[++i])
-	{
-		if (args[i] == 34 || args[i] == 39 || (ft_isdigit(args[i - 1]) && args[i - 2] == '$'))
-			break ;
-		var[j++] = args[i];
-	}
-	var[j] = '\0';
-	h = 0;
-	while (args[i])
-		after[h++] = args[i++];
-	after[h] = '\0';
-	ft_remove_quotes(after);
-	if (var[0] == '0')
-	{
-		free(var);
-		var = ft_strdup("./minishell");
-	}
-	else
-	{
-		char *temp = ft_dollar_env(var, shell, -1);
-		free(var);
-		var = temp;
-	}
-	char *temp = ft_strjoin(before, var);
-	free(before);
-	free(var);
-	res = ft_strjoin(temp, after);
-	free(temp);
-	free(after);
-	return (res);
+	return (c == '_' || (c >= 'A' && c <= 'Z')
+		|| (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'));
 }
 
-
-/* {
-	char	*after;
+char	*ft_dollar(char *input, t_shell *shell, int i, int j)
+{
 	char	*before;
 	char	*var;
+	char	*after;
+	char	*value;
 	char	*res;
-	int		h;
 
-	h = 0;
-	before = calloc(ft_strlen(args) + 1, sizeof(char));
-	after = calloc(ft_strlen(args) + 1, sizeof(char));
-	var = calloc(ft_strlen(args) + 1, sizeof(char));
-	if (!before || !after || !var)
-		return (free(before), free(after), free(var), NULL);
-	while (args[i] != '$')
-		before[h++] = args[i++];
-	before[h] = '\0';
-	if (!args[i + 1])
-		return (free(after), res = ft_strjoin(before, "$"), free(before), res);
-	while (args[++i])
+	printf("%c\n", input[i]);
+	while (input[i] && input[i] != '$')
+		i++;
+	if (!input[i])
+		return (ft_strdup(input));
+	before = ft_strndup(input, i);
+	j = i + 1;
+	if (input[j] == '?')
 	{
-		if (args[i] == 34 || args[i] == 39
-			|| (ft_isdigit(args[i - 1]) && args[i - 2] == '$'))
-			break ;
-		var[j++] = args[i];
+		value = ft_itoa(shell->status);
+		j++;
 	}
-	var[j] = '\0';
-	h = 0;
-	while (args[i])
-		after[h++] = args[i++];
-	after[h] = '\0';
-	ft_remove_quotes(after);
-	if (var[0] == '0')
-		var = ft_strdup("./minishell");
 	else
-		var = ft_dollar_env(var, shell, -1);
-	res = ft_strjoin(before, var);
-	res = ft_strjoin(res, after);
-	return (var);
-} */
-
-/* {
-	if (!args[1])
-		printf("$");
-	if (args[1] == 34 || args[1] == 39)
 	{
-		ft_remove_quotes(args);
-		while (args[i])
-			printf("%c", args[i++]);
-		return ;
+		while (input[j] && is_valid_var_char(input[j]))
+			j++;
+		var = ft_strndup(input + i + 1, j - i - 1);
+		value = ft_dollar_env(var, shell, -1);
+		free(var);
 	}
-	ft_remove_quotes(args);
-	if (args[1] == '0')
-	{
-		free(args);
-		return("./minishell");
-	}
-	if (ft_isdigit(args[1]))
-		while (args[++i])
-			printf("%c", args[i]);
-	else if (args[1] == '?')
-	{
-		printf("%d", shell->status);
-		while (args[++i])
-			printf("%c", args[i]);
-	}
-	else if (ft_isalpha(args[1]))
-		ft_dollar_alpha(args, shell, -1);
-} */
+	after = ft_strdup(input + j);
+	var = ft_strjoin(before, value);
+	res = ft_strjoin(var, after);
+	return (free(var), free(before), free(after),
+		free(input), ft_dollar(res, shell, 0, 0));
+}
 
 void	get_command(t_shell *shell)
 {
@@ -219,6 +137,8 @@ void	get_command(t_shell *shell)
 	{
 		if (ft_strchr(shell->input[i], '$') != NULL)
 			shell->input[i] = ft_dollar(shell->input[i], shell, 0, 0);
+		printf(RED "{%s}" RESET, shell->input[i]);
+		printf(RESET "\n" RESET);
 		ft_remove_quotes(shell->input[0]);
 		shell->input[i] = get_command_from_path(shell->input[i]);
 	}
