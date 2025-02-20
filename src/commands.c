@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/18 16:13:29 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/19 12:42:07 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 	shell->status = ft_pipe(envp, shell);
 	if (shell->input)
 	{
-		ft_remove_quotes(shell->input[0]);
 		get_command(shell);
 		shell->status = which_commands(shell->input, envp, shell);
 	}
