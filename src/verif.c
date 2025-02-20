@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 08:36:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/20 15:08:54 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/20 15:36:14 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,17 @@ int	valid_redirection(char **input)
 	return (valid_cmd);
 }
 
-int	verif_shell(char *input, t_shell *shell)
+int	verif_shell(char *input, t_shell *shell, int type)
 {
+	if (input[0] == '$' && !input[1])
+		return (input = NULL,  ft_putstr_fd("$: command not found\n", 2), shell->status = 127, type = 1);
 	if ((input[0] == '\'' && input[1] == '\'' )
 		|| (input[0] == '"' && input[1] == '"'))
-		return (ft_printf("Command '' not found\n"), 127);
+		return (input = NULL, ft_putstr_fd("Command '' not found\n", 2), shell->status = 127, type = 1);
 	if (input[0] == '.' && !input[1])
-		return (ft_printf(".: filename argument required\n\
-.: usage: . filename [arguments]\n"), 2);
+		return (ft_putstr_fd(".: filename argument required\n\
+.: usage: . filename [arguments]\n", 2), 2);
 	if (input[0] == '/' && !input[1])
-		return (ft_printf("/: Is a directory\n"), 126);
-	return (shell->status);
+		return (input = NULL, ft_putstr_fd("/: Is a directory\n", 2), shell->status = 126, type = 1);
+	return (type = 0);
 }

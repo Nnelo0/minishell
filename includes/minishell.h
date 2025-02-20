@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/20 14:21:41 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/20 15:35:59 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int			ft_export_verif(char **args, int i, int status);
 /*---------------ft_shell---------------*/
 
 int			ft_shell(char **cmd, char **envp, t_shell *shell, int status);
-int			verif_shell(char *input, t_shell *shell);
+int			verif_shell(char *input, t_shell *shell, int type);
 void		verif_close(t_shell *shell);
 
 /*---------------execute---------------*/
