@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/19 13:35:02 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:20:59 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ int	ft_shell(char **cmd, char **envp, t_shell *shell, int status)
 	shell->out = dup(STDOUT_FILENO);
 	if (shell->in == -1 || shell->out == -1)
 		return (perror("dup failed"), 127);
-	shell->status = verif_shell(cmd[0], shell);
 	if (shell->status != 0)
 		return (shell->status);
 	path = find_command_path(cmd[0], envp);

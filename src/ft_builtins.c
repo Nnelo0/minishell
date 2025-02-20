@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 21:37:00 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/19 08:58:00 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/20 11:08:39 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_exit(char **input, t_shell *shell)
 {
-	printf("exit\n");
+	ft_putstr_fd("exit\n", 2);
 	if (input[1])
 		ft_remove_quotes(input[1]);
 	if (input[1])
@@ -70,27 +70,29 @@ int	ft_cd(char **args)
 	{
 		target = getenv("HOME");
 		if (!target)
-			return (ft_putstr_fd("HOME not set\n", 2), 1);
+			return (ft_putstr_fd("HOME not set\n", 2), free_args(args), 1);
 	}
 	else if (args[2])
-		return (ft_putstr_fd("too many arguments\n", 2), 1);
+		return (ft_putstr_fd("too many arguments\n", 2), free_args(args), 1);
 	else
 		target = args[1];
 	if (chdir(target) == -1)
 	{
 		perror("cd");
-		return (1);
+		return (free_args(args), 1);
 	}
+	free_args(args);
 	return (0);
 }
 
-int	ft_pwd(void)
+int	ft_pwd(t_shell *shell)
 {
 	char	*pwd;
 
 	pwd = getcwd(NULL, 0);
 	ft_printf("%s\n", pwd);
 	free(pwd);
+	free_args(shell->input);
 	return (0);
 }
 

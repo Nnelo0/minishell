@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 13:31:41 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/19 19:02:20 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/20 14:51:02 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,30 +24,50 @@ static int	create_tmp_file(void)
 	return (fd);
 }
 
+int	write_heredoc(char *line, char *delimiter, int fd)
+{
+	if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0
+		&& line[ft_strlen(delimiter)] == '\n')
+	{
+		close(fd);
+		free(line);
+		return (1);
+	}
+	ft_putstr_fd(line, fd);
+	free(line);
+	return (0);
+}
+
 void	read_heredoc(t_shell *shell, char *delimiter)
 {
 	char	*line;
-	int		fd;
 
-	fd = create_tmp_file();
-	if (fd == -1)
+	shell->fd_in = create_tmp_file();
+	if (shell->fd_in == -1)
 		return ;
+	g_status = 42;
 	while (1)
 	{
-		line = readline("> ");
-		if (!line || ft_strcmp(line, delimiter) == 0)
+		ft_putstr_fd("> ", 1);
+		line = get_next_line(0);
+		if (!line || line[0] == '\0')
 		{
 			free(line);
+			ft_putstr_fd("\nHeredoc: warning: end-of-file \
+(CTRL+D) detected\n", 2);
 			break ;
 		}
-		ft_putstr_fd(line, fd);
-		ft_putstr_fd("\n", fd);
-		free(line);
+		if (g_status == 43)
+		{
+			get_next_line(-1);
+			free(line);
+			shell->status = 130;
+			break ;
+		}
+		if (write_heredoc(line, delimiter, shell->fd_in) == 1)
+			break ;
 	}
-	close(fd);
-	shell->fd_in = open(".tmp_heredoc", O_RDONLY);
-	if (shell->fd_in == -1)
-		perror("open failed");
+	close(shell->fd_in);
 	unlink(".tmp_heredoc");
 }
 

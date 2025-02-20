@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 20:50:58 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/19 13:28:48 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/20 12:24:16 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,8 @@ int	open_files(t_shell *shell, int out_count, int append)
 	return (0);
 }
 
-char	**ft_parse(char **input, t_shell *shell)
+char	**ft_parse(char **input, int append, t_shell *shell)
 {
-	int		append;
 	int		out_count;
 	char	**new_input;
 
@@ -100,11 +99,10 @@ char	**ft_parse(char **input, t_shell *shell)
 		return (NULL);
 	parse_redirection(shell, &out_count, &append, -1);
 	if (open_files(shell, out_count, append))
-		return (free(shell->in_file), free(shell->cmd),
-		free_args(shell->out_file), NULL);
+		return (NULL);
 	if (!shell->cmd)
 		return (free(shell->in_file), free(shell->cmd),
-		free_args(shell->out_file), NULL);
+			free_args(shell->out_file), NULL);
 	new_input = ft_split(shell->cmd, ' ');
 	if (!new_input)
 		return (NULL);
@@ -122,7 +120,7 @@ char	**ft_redirection(char **input, t_shell *shell)
 	{
 		if (ft_strchr(input[i], '<') || ft_strchr(input[i], '>'))
 		{
-			new_input = ft_parse(input, shell);
+			new_input = ft_parse(input, 0, shell);
 			free_args(shell->copy);
 			return (new_input);
 		}

@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/19 10:32:23 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/20 14:21:41 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <errno.h>
+
+extern int	g_status;
 
 typedef struct s_env
 {
@@ -80,7 +82,7 @@ typedef struct s_shell
 
 int			ft_echo(char **args, t_shell *shell, int n, int i);
 int			ft_cd(char **args);
-int			ft_pwd(void);
+int			ft_pwd(t_shell *shell);
 int			ft_export(t_shell *shell);
 int			ft_unset(t_shell *shell);
 int			ft_env(t_shell *shell);
@@ -165,5 +167,6 @@ int			ft_isdigit_neg(int c);
 int			ft_isdigit_s(char *s);
 char		**merge_args(char **input, char *c, int i, int j);
 char		**copy_string(char **input);
+char		*remove_newline(char *str);
 
 #endif

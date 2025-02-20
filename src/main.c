@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/19 22:05:08 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/20 14:58:07 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,25 @@ int		g_status = 0;
 void	handle_sigint(int sig)
 {
 	(void)sig;
+	if (g_status == 42)
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		g_status = 43;
+		return ;
+	}
 	if (waitpid(-1, NULL, WNOHANG) == 0)
 	{
 		ft_printf("\n");
 		return ;
 	}
-	ft_printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	g_status = 130;
+	else
+	{
+		ft_printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+		g_status = 130;
+	}
 }
 
 int	keypress(char *input, t_shell *shell)
@@ -45,7 +54,7 @@ int	keypress(char *input, t_shell *shell)
 	}
 	if (!input)
 	{
-		printf("exit\n");
+		ft_putstr_fd("exit\n", 2);
 		rl_clear_history();
 		free(input);
 		free_args(shell->args);
@@ -57,11 +66,13 @@ int	keypress(char *input, t_shell *shell)
 	return (0);
 }
 
-char *remove_newline(char *str)
+char	*remove_newline(char *str)
 {
+	int	len;
+
 	if (!str)
 		return (NULL);
-	int len = ft_strlen(str);
+	len = ft_strlen(str);
 	if (len > 0 && str[len - 1] == '\n')
 		str[len - 1] = '\0';
 	return (str);
@@ -77,7 +88,7 @@ void	handle_prompt(t_shell *shell, char **envp)
 		{
 			input = get_next_line(STDIN_FILENO);
 			if (!input)
-				break;
+				break ;
 			input = remove_newline(input);
 		}
 		else
@@ -86,9 +97,8 @@ void	handle_prompt(t_shell *shell, char **envp)
 			{
 				input = get_next_line(STDERR_FILENO);
 				if (!input)
-					break;
+					break ;
 				input = remove_newline(input);
-				
 			}
 			// ce if, sert pas pour command | ./minishell mais marche pour
 			// ./minishell | command, ca lance minishell mais leak + sigpipe quand on quitte
