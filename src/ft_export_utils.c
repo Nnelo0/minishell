@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 11:25:25 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/13 15:33:46 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/21 08:48:50 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 static int	print_error(char *args, int status)
 {
-	printf("export: `%s': not a valid identifier\n", args);
+	ft_putstr_fd("export: `", 2);
+	ft_putstr_fd(args, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
 	return (status = 1);
 }
 

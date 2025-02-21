@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/18 13:03:39 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/21 08:56:44 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <errno.h>
+
+extern int	g_status;
 
 typedef struct s_env
 {
@@ -71,6 +73,7 @@ typedef struct s_shell
 	int				prev_fd;
 	char			**pipe;
 	char			**env;
+	char			**copy;
 	t_env			*env_list;
 	t_export		*export_list;
 }	t_shell;
@@ -79,7 +82,7 @@ typedef struct s_shell
 
 int			ft_echo(char **args, t_shell *shell, int n, int i);
 int			ft_cd(char **args);
-int			ft_pwd(void);
+int			ft_pwd(t_shell *shell);
 int			ft_export(t_shell *shell);
 int			ft_unset(t_shell *shell);
 int			ft_env(t_shell *shell);
@@ -107,7 +110,8 @@ int			ft_export_verif(char **args, int i, int status);
 /*---------------ft_shell---------------*/
 
 int			ft_shell(char **cmd, char **envp, t_shell *shell, int status);
-int			verif_shell(char *input, t_shell *shell);
+int			verif_shell(char *input, t_shell *shell, int type);
+void		verif_close(t_shell *shell);
 
 /*---------------execute---------------*/
 
@@ -129,16 +133,17 @@ void		ft_remove_quotes(char *input);
 char		*find_command_path(char *cmd, char **envp);
 char		*get_command_from_path(char *input);
 char		**ft_split_quote(char *s, char c);
+void		get_command(t_shell *shell);
 
 /*---------------redirection---------------*/
 
-int			ft_redirection(t_shell *shell);
-int			is_valid_chevrons(char *input);
+char		**ft_redirection(char **input, t_shell *shell);
 void		parse_commands(char **commands, char *tmp, char *args);
 int			parse_out(t_shell *shell, int i, int *out_count, int *append);
 int			parse_in(t_shell *shell, int i);
 void		read_heredoc(t_shell *shell, char *delimiter);
 int			parse_heredoc(t_shell *shell, int i);
+int			valid_redirection(char **input);
 
 /*---------------commands---------------*/
 
@@ -162,5 +167,6 @@ int			ft_strlen_tab(char **tab);
 int			ft_isdigit_neg(int c);
 int			ft_isdigit_s(char *s);
 char		**merge_args(char **input, char *c, int i, int j);
+char		**copy_string(char **input);
 
 #endif

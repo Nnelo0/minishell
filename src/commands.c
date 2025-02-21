@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/18 13:23:38 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/21 08:56:54 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 int	which_commands(char **input, char **envp, t_shell *shell)
 {
+	input = ft_redirection(input, shell);
+	if (!input)
+		return (shell->status);
 	if (ft_strncmp(input[0], "exit", 4) == 0
 		&& input[0][4] == '\0')
 		return (ft_exit(input, shell));
@@ -30,7 +33,7 @@ int	which_commands(char **input, char **envp, t_shell *shell)
 		return (ft_env(shell));
 	if (ft_strncmp(input[0], "pwd", 3) == 0
 		&& input[0][3] == '\0')
-		return (ft_pwd());
+		return (ft_pwd(shell));
 	if (ft_strncmp(input[0], "export", 6) == 0
 		&& input[0][6] == '\0')
 		return (ft_export(shell));
@@ -89,18 +92,19 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 	}
 	if (!ft_quotes(input))
 		return (ft_printf("open quote\n"), 127);
+	if (verif_shell(input, shell, 0) == 1)
+		return (free_args(shell->env), shell->status);
 	shell->tmp = ft_strdup(input);
 	input = ft_add_space(input, -1);
 	shell->input = ft_split_quote(input, ' ');
 	free(input);
 	shell->cmd = NULL;
-	ft_redirection(shell);
 	shell->status = ft_pipe(envp, shell);
 	if (shell->input)
 	{
-		ft_remove_quotes(shell->input[0]);
-		shell->input[0] = get_command_from_path(shell->input[0]);
+		get_command(shell);
 		shell->status = which_commands(shell->input, envp, shell);
+		verif_close(shell);
 	}
 	return (free_args(shell->env), free(shell->tmp), shell->status);
 }

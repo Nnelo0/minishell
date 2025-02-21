@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/18 12:53:34 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/21 08:52:15 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,11 @@ int	execute_pipe(t_shell *shell, char **envp, int i)
 	}
 	close(shell->pipefd[0]);
 	shell->status = which_commands(shell->pipe, envp, shell);
+	verif_close(shell);
 	free(shell->tmp);
 	free_args(shell->input);
 	free_env_list(shell->env_list);
+	free_args(shell->env);
 	free_export_list(shell->export_list);
 	exit(shell->status);
 }
@@ -86,6 +88,7 @@ int	ft_pipe(char **envp, t_shell *shell)
 			if (valid_pipe(shell) == 1)
 				return (free_args(shell->input), shell->input = NULL,
 					ft_putstr_fd("Invalid Pipes\n", 2), shell->status);
+			get_command(shell);
 			shell->input = merge_args(shell->input, "|", -1, 0);
 			return (parse_commands_pipe(shell, envp, -1));
 		}
