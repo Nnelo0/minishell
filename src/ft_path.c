@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_path.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:11:29 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/21 08:55:43 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/21 11:05:01 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ void	get_command(t_shell *shell)
 	i = -1;
 	while (shell->input[++i])
 	{
-		if (ft_strchr(shell->input[i], '$') != NULL)
+		if (ft_strchr(shell->input[i], '$') != NULL && ft_strchr(shell->input[i], '\'') == NULL)
 			shell->input[i] = ft_dollar(shell->input[i], shell, 0, 0);
 		ft_remove_quotes(shell->input[0]);
 		shell->input[i] = get_command_from_path(shell->input[i]);
