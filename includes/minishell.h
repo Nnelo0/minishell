@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/21 10:13:01 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/21 10:43:37 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ int			parse_out(t_shell *shell, int i, int *out_count, int *append);
 int			parse_in(t_shell *shell, int i);
 void		read_heredoc(t_shell *shell, char *delimiter);
 int			parse_heredoc(t_shell *shell, int i);
-int			valid_redirection(char **input);
+int			valid_redirection(char *input);
 
 /*---------------commands---------------*/
 

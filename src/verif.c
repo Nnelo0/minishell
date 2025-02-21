@@ -6,37 +6,11 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 08:36:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/21 10:15:20 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/21 10:43:32 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	has_caracter_in_quotes(char *input, int limiter)
-{
-	char	quote;
-	char	*start;
-	char	*end;
-	int		i;
-
-	i = 0;
-	while (input[i])
-	{
-		if (input[i] == '\"' || input[i] == '\'')
-		{
-			quote = input[i];
-			start = input + 1;
-			end = ft_strchr(start, quote);
-			if (!end)
-				return (0);
-			if (ft_strchr(start, limiter) && ft_strchr(start, limiter) < end)
-				return (2);
-			input = end;
-		}
-		i++;
-	}
-	return (0);
-}
 
 int	valid_pipe(char *input, int i)
 {
@@ -50,33 +24,11 @@ int	valid_pipe(char *input, int i)
 	return (0);
 }
 
-int	valid_redirection(char **input)
+int	valid_redirection(char *input)
 {
-	int	i;
-	int	j;
-	int	valid_cmd;
-
-	i = 0;
-	valid_cmd = 0;
-	while (input[i])
-	{
-		if (has_caracter_in_quotes(input[i], '>')
-			|| has_caracter_in_quotes(input[i], '<'))
-			return (2);
-		if (ft_strchr(input[i], '>') || ft_strchr(input[i], '<'))
-		{
-			j = 0;
-			if (input[i][j + 1] == input[i][j]
-				&& input[i][j + 2] == input[i][j])
-				valid_cmd = 1;
-			if (input[i][j + 1] != input[i][j])
-				valid_cmd = 1;
-			if (!input[i + 1])
-				valid_cmd = 1;
-		}
-		i++;
-	}
-	return (valid_cmd);
+	if (ft_strchr(input, '\"') || (ft_strchr(input, '\'')))
+		return (2);
+	return (0);
 }
 
 int	verif_shell(char *input, t_shell *shell, int type)
