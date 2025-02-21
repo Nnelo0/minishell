@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 11:25:25 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/18 13:29:01 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/21 13:45:42 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	ft_export_with_arg(char **args, t_shell *shell)
 	{
 		status = 0;
 		ft_remove_quotes(args[i]);
-		status = ft_export_verif(args, i, status);
+		status = ft_export_verif(args, i, status, 0);
 		if (ft_strchr(args[i], '=') && status == 0)
 			equal_found(args[i], shell);
 		else if (status == 0)

@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:11:29 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/21 11:05:01 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/21 13:50:14 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,14 +104,13 @@ char	*ft_dollar(char *input, t_shell *shell, int i, int j)
 	while (input[i] && input[i] != '$')
 		i++;
 	if (!input[i])
-		return (ft_strdup(input));
+		return (res = ft_strdup(input), free(input), res);
+	if (input[0] == '$' && !input[1])
+		return (input);
 	before = ft_strndup(input, i);
 	j = i + 1;
-	if (input[j] == '?')
-	{
-		value = ft_itoa(shell->status);
-		j++;
-	}
+	if (input[j++] == '?')
+		value = ft_strdup(ft_itoa(shell->status));
 	else
 	{
 		while (input[j] && is_valid_var_char(input[j]))
@@ -122,7 +121,7 @@ char	*ft_dollar(char *input, t_shell *shell, int i, int j)
 	}
 	return (after = ft_strdup(input + j), var = ft_strjoin(before, value),
 		res = ft_strjoin(var, after), free(var), free(before), free(after),
-		free(input), ft_dollar(res, shell, 0, 0));
+		free(input), free(value), ft_dollar(res, shell, 0, 0));
 }
 
 void	get_command(t_shell *shell)
@@ -134,7 +133,7 @@ void	get_command(t_shell *shell)
 	{
 		if (ft_strchr(shell->input[i], '$') != NULL && ft_strchr(shell->input[i], '\'') == NULL)
 			shell->input[i] = ft_dollar(shell->input[i], shell, 0, 0);
-		ft_remove_quotes(shell->input[0]);
+		ft_remove_quotes(shell->input[i]);
 		shell->input[i] = get_command_from_path(shell->input[i]);
 	}
 }

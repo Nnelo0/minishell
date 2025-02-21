@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 11:25:25 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/21 10:01:08 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/21 13:45:29 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,12 @@ static int	print_error(char *args, int status)
 	return (status = 1);
 }
 
-int	ft_export_verif(char **args, int i, int status)
+int	ft_export_verif(char **args, int i, int status, int j)
 {
-	int		j;
-
-	j = 0;
 	if (!ft_isalpha(args[i][j]))
 	{
+		if (args[i][0] == '=')
+				return(status = print_error(args[i], status), status);
 		while (args[i][j])
 		{
 			if (args[i][j] == '=')

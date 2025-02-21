@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/21 10:43:37 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/21 13:49:03 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void		free_export_list(t_export *export_list);
 void		append_exp_node(t_export **head, const char *export_var, int tpe);
 void		ft_sort_export_list(t_export *export_list);
 void		verif_exp(t_export **head, const char *var, t_export *new, int tpe);
-int			ft_export_verif(char **args, int i, int status);
+int			ft_export_verif(char **args, int i, int status, int j);
 
 /*---------------ft_shell---------------*/
 
