@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/20 19:11:32 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/21 13:08:35 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ int	is_pipe(t_shell *shell, int i)
 
 int	execute_pipe(t_shell *shell, char **envp, int i)
 {
-	ft_remove_quotes(shell->input[i]);
-	shell->pipe = ft_split(shell->input[i], ' ');
+	shell->pipe = ft_split_quote(shell->input[i], ' ');
 	if (shell->prev_fd != -1)
 	{
 		dup2(shell->prev_fd, STDIN_FILENO);
@@ -82,18 +81,14 @@ int	ft_pipe(char **envp, t_shell *shell)
 	i = 0;
 	while (shell->input[i])
 	{
-		if (ft_strchr(shell->input[i], '|'))
+		if (ft_strcmp(shell->input[i], "|") == 0)
 		{
-			for (int i = 0; shell->input[i]; i++)
-				printf("[%s]\n", shell->input[i]);
-			//printf("[%d]\n", valid_pipe(shell));
-			if (valid_pipe(shell) == 2)
-				return (shell->status);
-			if (valid_pipe(shell) == 1)
+			if (valid_pipe(shell->input[i], i) == 2)
+				break;
+			if (valid_pipe(shell->input[i], i) == 1 || !shell->input[i + 1])
 				return (free_args(shell->input), shell->input = NULL,
 					ft_putstr_fd("Invalid Pipes\n", 2), shell->status);
-			//for (int i = 0; shell->input[i]; i++)
-			//	printf("[%s]\n", shell->input[i]);
+			get_command(shell);
 			shell->input = merge_args(shell->input, "|", -1, 0);
 			return (parse_commands_pipe(shell, envp, -1));
 		}

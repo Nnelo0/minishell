@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/20 18:37:25 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/21 12:47:58 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,30 +50,30 @@ int	is_separator(char c)
 	return (0);
 }
 
-char	*ft_add_space(char *input, int i, int len, int in_quotes)
+char	*ft_add_space(char *input, int i)
 {
+	int		len;
 	char	*result;
+	int		in_quotes;
 
-	result = malloc(sizeof(char) * (strlen(input) * 2 + 1));
-	if (!result)
+	if (!input)
 		return (NULL);
+	result = malloc(ft_strlen(input) * 2 + 1);
+	if (!result)
+		return (free(input), NULL);
+	len = 0;
+	in_quotes = 0;
 	while (input[++i])
 	{
 		if (input[i] == '"' || input[i] == '\'')
 			in_quotes = !in_quotes;
-		if (!in_quotes)
-		{
-			if (i > 0 && is_separator(input[i]) && input[i - 1] != ' '
-				&& (!is_separator(input[i - 1]) || input[i - 1] != input[i]))
-				result[len++] = ' ';
-			result[len++] = input[i];
-			if (is_separator(input[i]) && input[i + 1] != ' '
-				&& input[i + 1] && (!is_separator(input[i + 1])
-					|| input[i + 1] != input[i]))
-				result[len++] = ' ';
-		}
-		else
-			result[len++] = input[i];
+		if (!in_quotes && i > 0 && is_separator(input[i])
+			&& input[i - 1] != ' ' && !is_separator(input[i - 1]))
+			result[len++] = ' ';
+		result[len++] = input[i];
+		if (!in_quotes && is_separator(input[i])
+			&& input[i + 1] != ' ' && !is_separator(input[i + 1]))
+			result[len++] = ' ';
 	}
 	return (result[len] = '\0', result);
 }
@@ -91,19 +91,18 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 		*status = 0;
 	}
 	if (!ft_quotes(input))
-		return (ft_putstr_fd("open quote\n", 2), 127);
+		return (ft_printf("open quote\n"), 127);
 	if (verif_shell(input, shell, 0) == 1)
-		return(free_args(shell->env), shell->status);
+		return (free_args(shell->env), shell->status);
 	shell->tmp = ft_strdup(input);
-	input = ft_add_space(input, -1, 0, 0);
+	input = ft_add_space(input, -1);
 	shell->input = ft_split_quote(input, ' ');
 	free(input);
 	shell->cmd = NULL;
-	shell->status = ft_pipe(envp, shell);
+	shell->status = ft_pipe(envp, shell);	
 	if (shell->input)
 	{
-		ft_remove_quotes(shell->input[0]);
-		shell->input[0] = get_command_from_path(shell->input[0]);
+		get_command(shell);
 		shell->status = which_commands(shell->input, envp, shell);
 		verif_close(shell);
 	}

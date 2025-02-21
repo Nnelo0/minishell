@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_path.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:11:29 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/15 00:20:03 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/21 08:55:43 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,105 @@ char	*find_command_path(char *cmd, char **envp)
 	}
 	free_args(paths);
 	return (0);
+}
+
+char	*get_after_equal(char *arg)
+{
+	char	*res;
+	int		i;
+	int		j;
+
+	i = 1;
+	j = 0;
+	res = malloc(sizeof(char) * ft_strlen(arg) + 1);
+	while (arg[i - 1] != '=')
+		i++;
+	while (arg[i])
+		res[j++] = arg[i++];
+	free(arg);
+	res[j] = '\0';
+	return (res);
+}
+
+char	*ft_dollar_env(char *args, t_shell *shell, int i)
+{
+	t_env	*temp;
+	char	*tmp;
+	char	**check_list;
+	char	*check_args;
+
+	temp = shell->env_list;
+	check_args = malloc(sizeof(char) * ft_strlen(args) + 1);
+	if (!check_args)
+		return (NULL);
+	while (args[++i])
+		check_args[i] = args[i];
+	check_args[i] = '\0';
+	while (temp)
+	{
+		check_list = ft_split(temp->value, '=');
+		if (ft_strcmp(check_args, check_list[0]) == 0)
+		{
+			tmp = ft_strdup(temp->value);
+			tmp = get_after_equal(tmp);
+			return (free_args(check_list), free(check_args), tmp);
+		}
+		free_args(check_list);
+		temp = temp->next;
+	}
+	return (free(check_args), "");
+}
+
+int	is_valid_var_char(char c)
+{
+	return (c == '_' || (c >= 'A' && c <= 'Z')
+		|| (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'));
+}
+
+char	*ft_dollar(char *input, t_shell *shell, int i, int j)
+{
+	char	*before;
+	char	*var;
+	char	*after;
+	char	*value;
+	char	*res;
+
+	while (input[i] && input[i] != '$')
+		i++;
+	if (!input[i])
+		return (ft_strdup(input));
+	before = ft_strndup(input, i);
+	j = i + 1;
+	if (input[j] == '?')
+	{
+		value = ft_itoa(shell->status);
+		j++;
+	}
+	else
+	{
+		while (input[j] && is_valid_var_char(input[j]))
+			j++;
+		var = ft_strndup(input + i + 1, j - i - 1);
+		value = ft_dollar_env(var, shell, -1);
+		free(var);
+	}
+	return (after = ft_strdup(input + j), var = ft_strjoin(before, value),
+		res = ft_strjoin(var, after), free(var), free(before), free(after),
+		free(input), ft_dollar(res, shell, 0, 0));
+}
+
+void	get_command(t_shell *shell)
+{
+	int	i;
+
+	i = -1;
+	while (shell->input[++i])
+	{
+		if (ft_strchr(shell->input[i], '$') != NULL)
+			shell->input[i] = ft_dollar(shell->input[i], shell, 0, 0);
+		ft_remove_quotes(shell->input[0]);
+		shell->input[i] = get_command_from_path(shell->input[i]);
+	}
 }
 
 char	*get_command_from_path(char *input)

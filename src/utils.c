@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:01:16 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/19 10:47:56 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/21 12:45:42 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	free_all(t_shell *shell)
 {
 	free_args(shell->input);
 	free(shell->tmp);
-	free_args(shell->args);
 	free_args(shell->env);
 	free_env_list(shell->env_list);
 	free_export_list(shell->export_list);

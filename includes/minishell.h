@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/20 15:35:59 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/21 12:46:07 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef struct s_export
 typedef struct s_shell
 {
 	sig_atomic_t	signal_status;
-	char			**args;
 	char			**envp1;
 	char			*cmd;
 	char			**cmds;
@@ -121,7 +120,7 @@ int			ft_exe(char **args, char **envp, t_shell *shell);
 /*---------------pipe---------------*/
 
 int			ft_pipe(char **envp, t_shell *shell);
-int			valid_pipe(t_shell *shell);
+int			valid_pipe(char *input, int i);
 
 /*---------------quotes---------------*/
 
@@ -133,6 +132,7 @@ void		ft_remove_quotes(char *input);
 char		*find_command_path(char *cmd, char **envp);
 char		*get_command_from_path(char *input);
 char		**ft_split_quote(char *s, char c);
+void		get_command(t_shell *shell);
 
 /*---------------redirection---------------*/
 
@@ -142,7 +142,7 @@ int			parse_out(t_shell *shell, int i, int *out_count, int *append);
 int			parse_in(t_shell *shell, int i);
 void		read_heredoc(t_shell *shell, char *delimiter);
 int			parse_heredoc(t_shell *shell, int i);
-int			valid_redirection(char **input);
+int			valid_redirection(char *input);
 
 /*---------------commands---------------*/
 
@@ -167,6 +167,5 @@ int			ft_isdigit_neg(int c);
 int			ft_isdigit_s(char *s);
 char		**merge_args(char **input, char *c, int i, int j);
 char		**copy_string(char **input);
-char		*remove_newline(char *str);
 
 #endif
