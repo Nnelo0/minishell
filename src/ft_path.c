@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_path.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:11:29 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/21 13:50:14 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/21 14:32:53 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,13 @@ char	*ft_dollar(char *input, t_shell *shell, int i, int j)
 		value = ft_dollar_env(var, shell, -1);
 		free(var);
 	}
-	return (after = ft_strdup(input + j), var = ft_strjoin(before, value),
-		res = ft_strjoin(var, after), free(var), free(before), free(after),
-		free(input), free(value), ft_dollar(res, shell, 0, 0));
+	after = ft_strdup(input + j);
+	var = ft_strjoin(before, value);
+	res = ft_strjoin(var, after);
+	if (ft_strcmp(value, "") != 0)
+		free(value);
+	return (free(var), free(before), free(after),
+		free(input), ft_dollar(res, shell, 0, 0));
 }
 
 void	get_command(t_shell *shell)
