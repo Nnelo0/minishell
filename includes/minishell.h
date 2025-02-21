@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/21 08:56:44 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/21 10:13:01 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ int			ft_exe(char **args, char **envp, t_shell *shell);
 /*---------------pipe---------------*/
 
 int			ft_pipe(char **envp, t_shell *shell);
-int			valid_pipe(t_shell *shell);
+int			valid_pipe(char *input, int i);
 
 /*---------------quotes---------------*/
 

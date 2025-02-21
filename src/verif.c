@@ -6,52 +6,46 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 08:36:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/21 08:55:13 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/21 10:15:20 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	has_caracter_in_quotes(char *str, int limiter)
+int	has_caracter_in_quotes(char *input, int limiter)
 {
 	char	quote;
 	char	*start;
 	char	*end;
+	int		i;
 
-	while (*str)
+	i = 0;
+	while (input[i])
 	{
-		if (*str == '\"' || *str == '\'')
+		if (input[i] == '\"' || input[i] == '\'')
 		{
-			quote = *str;
-			start = str + 1;
+			quote = input[i];
+			start = input + 1;
 			end = ft_strchr(start, quote);
 			if (!end)
 				return (0);
 			if (ft_strchr(start, limiter) && ft_strchr(start, limiter) < end)
 				return (2);
-			str = end;
+			input = end;
 		}
-		str++;
+		i++;
 	}
 	return (0);
 }
 
-int	valid_pipe(t_shell *shell)
+int	valid_pipe(char *input, int i)
 {
-	int	i;
-
-	i = 0;
-	while (shell->input[i])
+	if (ft_strchr(input, '\"') || (ft_strchr(input, '\'')))
+		return (2);
+	if (ft_strchr(input, '|'))
 	{
-		if (has_caracter_in_quotes(shell->input[i], '|'))
-			return (2);
-		if (ft_strchr(shell->input[i], '|'))
-		{
-			if (ft_strlen(shell->input[i]) != 1
-				|| !shell->input[i + 1] || i == 0)
-				return (1);
-		}
-		i++;
+		if (ft_strlen(input) != 1 || i == 0)
+			return (1);
 	}
 	return (0);
 }
