@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/21 10:35:24 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/21 14:38:03 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	ft_pipe(char **envp, t_shell *shell)
 		if (ft_strcmp(shell->input[i], "|") == 0)
 		{
 			if (valid_pipe(shell->input[i], i) == 2)
-				break;
+				break ;
 			if (valid_pipe(shell->input[i], i) == 1 || !shell->input[i + 1])
 				return (free_args(shell->input), shell->input = NULL,
 					ft_putstr_fd("Invalid Pipes\n", 2), shell->status);

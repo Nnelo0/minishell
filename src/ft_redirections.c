@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 20:50:58 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/21 10:56:47 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/21 14:38:21 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ char	**ft_redirection(char **input, t_shell *shell)
 			|| (ft_strcmp(input[i], "<") == 0) || (ft_strcmp(input[i], "<<") == 0))
 		{
 			if (valid_redirection(shell->input[i]) == 2)
-				break;
+				break ;
 			if (i == 0 && !shell->input[i + 1])
 				return (free_args(shell->input), shell->input = NULL, ft_putstr_fd("Invalid redirection\n", 2), shell->input);
 			new_input = ft_parse(input, 0, shell);
@@ -132,7 +132,7 @@ char	**ft_redirection(char **input, t_shell *shell)
 		if (ft_strchr(input[i], '>') || ft_strchr(input[i], '<'))
 		{
 			if (ft_strlen(input[i]) >= 2)
-				return (ft_putstr_fd("Invalid Redirection\n", 2),  free_args(shell->input), shell->input = NULL);
+				return (ft_putstr_fd("Invalid Redirection\n", 2), free_args(shell->input), shell->input = NULL);
 		}
 		i++;
 	}
