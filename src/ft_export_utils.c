@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 11:25:25 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/21 08:48:50 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/21 10:01:08 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,20 @@ int	ft_export_verif(char **args, int i, int status)
 	{
 		while (args[i][j])
 		{
-			if (!ft_isalnum(args[i][j]) && status == 0)
+			if (args[i][j] == '=')
+				break ;
+			if ((!ft_isalnum(args[i][j++]) && status == 0) || (ft_isdigit(args[i][0]) && status == 0))
 				status = print_error(args[i], status);
-			if (ft_isdigit(args[i][0]) && status == 0)
-				status = print_error(args[i], status);
-			j++;
 		}
 	}
 	else
 	{
 		while (args[i][j])
 		{
-			if (args[i][j] == '-' && status == 0)
+			if (args[i][j] == '=')
+				break ;
+			if (args[i][j++] == '-' && status == 0)
 				status = print_error(args[i], status);
-			j++;
 		}
 	}
 	return (status);
