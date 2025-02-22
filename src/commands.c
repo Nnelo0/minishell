@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/21 12:47:58 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/22 15:02:28 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,30 @@ char	*ft_add_space(char *input, int i)
 	return (result[len] = '\0', result);
 }
 
+int	verif_input(char *input)
+{
+	int	i;
+
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == '\"' || input[i] == '\'')
+		{
+			i++;
+			while (input[i] && (input[i] != '\"' || input[i] != '\''))
+				i++;
+		}
+		if (input[i] == '|' && input[i + 1] == '|')
+			return (2);
+		if (input[i] == '>' && input[i + 1] == '>' && input[i + 2] == '>')
+			return (1);
+		if (input[i] == '<' && input[i + 1] == '<' && input[i + 2] == '<')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	commands(char *input, char **envp, t_shell *shell, int *status)
 {
 	shell->env = env_in_stars(shell);
@@ -96,10 +120,16 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 		return (free_args(shell->env), shell->status);
 	shell->tmp = ft_strdup(input);
 	input = ft_add_space(input, -1);
+	if (verif_input(input) == 2)
+		return (ft_putstr_fd("Invalid Pipes\n", 2), free(input)
+			, free(shell->tmp), free_args(shell->env), shell->status);
+	if (verif_input(input) == 1)
+		return (ft_putstr_fd("Invalid Redirections\n", 2), free(input)
+			, free(shell->tmp), free_args(shell->env), shell->status);
 	shell->input = ft_split_quote(input, ' ');
 	free(input);
 	shell->cmd = NULL;
-	shell->status = ft_pipe(envp, shell);	
+	shell->status = ft_pipe(envp, shell);
 	if (shell->input)
 	{
 		get_command(shell);

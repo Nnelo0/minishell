@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redirections.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 20:50:58 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/21 13:02:23 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/22 15:03:28 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,21 +119,18 @@ char	**ft_redirection(char **input, t_shell *shell)
 	while (input[i])
 	{
 		if ((ft_strcmp(input[i], ">>") == 0) || (ft_strcmp(input[i], ">") == 0)
-			|| (ft_strcmp(input[i], "<") == 0) || (ft_strcmp(input[i], "<<") == 0))
+			|| (ft_strcmp(input[i], "<") == 0)
+			|| (ft_strcmp(input[i], "<<") == 0))
 		{
 			if (valid_redirection(shell->input[i]) == 2)
-				break;
-			if (i == 0 && !shell->input[i + 1])
-				return (free_args(shell->input), shell->input = NULL, ft_putstr_fd("Invalid redirection\n", 2), shell->input);
+				break ;
+			if (!shell->input[i + 1] || ft_strlen(input[i]) >= 3)
+				return (free_args(shell->input), shell->input = NULL
+					, ft_putstr_fd("Invalid Redirections\n", 2), shell->input);
 			new_input = ft_parse(input, 0, shell);
 			free_args(shell->copy);
 			return (new_input);
 		}
-		// if (ft_strchr(input[i], '>') || ft_strchr(input[i], '<'))
-		// {
-		// 	if (ft_strlen(input[i]) >= 2)
-		// 		return (ft_putstr_fd("Invalid Redirectioncaca\n", 2),  free_args(shell->input), shell->input = NULL);
-		// }
 		i++;
 	}
 	return (input);

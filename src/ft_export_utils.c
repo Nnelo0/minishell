@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 11:25:25 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/21 10:01:08 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/22 15:02:51 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ int	ft_export_verif(char **args, int i, int status)
 		{
 			if (args[i][j] == '=')
 				break ;
-			if ((!ft_isalnum(args[i][j++]) && status == 0) || (ft_isdigit(args[i][0]) && status == 0))
+			if ((!ft_isalnum(args[i][j++]) && status == 0)
+				|| (ft_isdigit(args[i][0]) && status == 0))
 				status = print_error(args[i], status);
 		}
 	}
