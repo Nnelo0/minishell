@@ -6,7 +6,7 @@
 /*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/17 18:24:13 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/22 15:20:27 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ int	keypress(char *input, t_shell *shell)
 		printf("exit\n");
 		rl_clear_history();
 		free(input);
-		free_args(shell->args);
 		free_env_list(shell->env_list);
 		free_export_list(shell->export_list);
 		exit (shell->status);
@@ -68,11 +67,6 @@ void	handle_prompt(t_shell *shell, char **envp)
 		if (*input)
 			add_history(input);
 		shell->status = commands(input, envp, shell, &g_status);
-		if (shell->args)
-		{
-			free_args(shell->args);
-			shell->args = NULL;
-		}
 		if (input)
 			free(input);
 	}
@@ -86,7 +80,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	shell.status = g_status;
 	shell.signal_status = 0;
-	shell.args = NULL;
 	shell.envp1 = envp;
 	shell.fd_out = -1;
 	shell.fd_in = -1;
