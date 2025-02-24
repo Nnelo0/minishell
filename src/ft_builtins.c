@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 21:37:00 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/24 10:45:07 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/24 12:52:51 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,8 @@ int	ft_cd(char **args)
 	return (0);
 }
 
-int	ft_pwd(t_shell *shell)
+int	ft_pwd(void)
 {
-	(void)shell;
 	char	*pwd;
 
 	pwd = getcwd(NULL, 0);

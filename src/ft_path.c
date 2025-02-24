@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:11:29 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/21 14:32:53 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/24 14:17:45 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ char	*ft_dollar(char *input, t_shell *shell, int i, int j)
 	before = ft_strndup(input, i);
 	j = i + 1;
 	if (input[j++] == '?')
-		value = ft_strdup(ft_itoa(shell->status));
+		value = ft_itoa(shell->status);
 	else
 	{
 		while (input[j] && is_valid_var_char(input[j]))

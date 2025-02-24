@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 20:50:58 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/24 10:34:13 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/24 12:53:40 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	**ft_parse(char **input, int append, t_shell *shell)
 	free_args(shell->input);
 	shell->input = NULL;
 	shell->input = ft_split(shell->cmd, ' ');
-	if (!shell->input )
+	if (!shell->input)
 		return (NULL);
 	return (free(shell->in_file), free(shell->cmd),
 		free_args(shell->out_file), shell->input);

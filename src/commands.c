@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/24 10:36:58 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:01:06 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	which_commands(char **input, char **envp, t_shell *shell)
 		return (ft_env(shell));
 	if (ft_strncmp(input[0], "pwd", 3) == 0
 		&& input[0][3] == '\0')
-		return (ft_pwd(shell));
+		return (ft_pwd());
 	if (ft_strncmp(input[0], "export", 6) == 0
 		&& input[0][6] == '\0')
 		return (ft_export(shell));
@@ -104,6 +104,8 @@ int	verif_input(char *input)
 
 int	commands(char *input, char **envp, t_shell *shell, int *status)
 {
+	if (shell->env)
+		free_args(shell->env);
 	shell->env = env_in_stars(shell);
 	while (*input && (*input == ' ' || *input == '\t'))
 		input++;
@@ -137,5 +139,6 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 		verif_close(shell);
 		free_args(shell->input);
 	}
-	return (free_args(shell->env), free(shell->tmp), shell->status);
+	return (free(shell->tmp), shell->status);
 }
+

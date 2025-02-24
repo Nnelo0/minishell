@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/22 15:20:11 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/24 13:41:20 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ typedef struct s_export
 
 typedef struct s_shell
 {
-	sig_atomic_t	signal_status;
 	char			**envp1;
 	char			*cmd;
 	char			**cmds;
@@ -81,7 +80,7 @@ typedef struct s_shell
 
 int			ft_echo(char **args, t_shell *shell, int n, int i);
 int			ft_cd(char **args);
-int			ft_pwd(t_shell *shell);
+int			ft_pwd(void);
 int			ft_export(t_shell *shell);
 int			ft_unset(t_shell *shell);
 int			ft_env(t_shell *shell);

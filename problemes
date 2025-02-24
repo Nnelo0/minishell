@@ -5,4 +5,4 @@ pipe executable (./minishell | wc -l)
 utiliser notre environnement 
 variable d'environnement
 
-echo $? leak
+export 32321321 boucle 

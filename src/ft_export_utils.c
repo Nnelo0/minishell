@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 11:25:25 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/21 14:37:47 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:55:39 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ int	ft_export_verif(char **args, int i, int status, int j)
 		{
 			if (args[i][j] == '=')
 				break ;
-			if ((!ft_isalnum(args[i][j++]) && status == 0)
-				|| (ft_isdigit(args[i][0]) && status == 0))
+			if (((!ft_isalnum(args[i][j]) && status == 0)
+				|| (ft_isdigit(args[i][0]) && status == 0)) && args[i][j++] != '|')
 				status = print_error(args[i], status);
 		}
 	}
