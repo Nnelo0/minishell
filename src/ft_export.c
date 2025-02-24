@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 11:25:25 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/21 13:45:42 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/24 10:40:01 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,5 @@ int	ft_export(t_shell *shell)
 	else
 		status = ft_export_with_arg(args, shell);
 	free_args(args);
-	free_args(shell->input);
 	return (status);
 }

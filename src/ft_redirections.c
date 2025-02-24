@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redirections.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 20:50:58 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/22 15:19:25 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/24 10:34:13 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ int	open_files(t_shell *shell, int out_count, int append)
 char	**ft_parse(char **input, int append, t_shell *shell)
 {
 	int		out_count;
-	char	**new_input;
 
 	shell->in_file = NULL;
 	shell->fd_in = -1;
@@ -103,17 +102,18 @@ char	**ft_parse(char **input, int append, t_shell *shell)
 	if (!shell->cmd)
 		return (free(shell->in_file), free(shell->cmd),
 			free_args(shell->out_file), NULL);
-	new_input = ft_split(shell->cmd, ' ');
-	if (!new_input)
+	free_args(shell->input);
+	shell->input = NULL;
+	shell->input = ft_split(shell->cmd, ' ');
+	if (!shell->input )
 		return (NULL);
 	return (free(shell->in_file), free(shell->cmd),
-		free_args(shell->out_file), new_input);
+		free_args(shell->out_file), shell->input);
 }
 
 char	**ft_redirection(char **input, t_shell *shell)
 {
 	int		i;
-	char	**new_input;
 
 	i = 0;
 	while (input[i])
@@ -127,9 +127,9 @@ char	**ft_redirection(char **input, t_shell *shell)
 			if (!shell->input[i + 1] || ft_strlen(input[i]) >= 3)
 				return (free_args(shell->input), shell->input = NULL
 					, ft_putstr_fd("Invalid Redirections\n", 2), shell->input);
-			new_input = ft_parse(input, 0, shell);
+			shell->input = ft_parse(input, 0, shell);
 			free_args(shell->copy);
-			return (new_input);
+			return (shell->input);
 		}
 		i++;
 	}

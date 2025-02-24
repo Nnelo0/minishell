@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:39:51 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/19 11:00:27 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/24 10:32:52 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,5 @@ char	**copy_string(char **input)
 		i++;
 	}
 	copy[i] = NULL;
-	free_args(input);
 	return (copy);
 }

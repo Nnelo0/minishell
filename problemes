@@ -5,5 +5,4 @@ pipe executable (./minishell | wc -l)
 utiliser notre environnement 
 variable d'environnement
 
-des qu'un chemin est pas trouver avec $ ca lance un nouveau minishell 
-$jduiwaojdaw ls ceci ne marche pas, ca devrait faire ls
+echo $? leak

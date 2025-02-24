@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 21:37:00 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/22 15:17:57 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/24 10:45:07 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_exit(char **input, t_shell *shell)
 		{
 			shell->status = ft_atoi(input[1]);
 			if (input[2])
-				return (shell->status = 1, free_args(input),
+				return (shell->status = 1,
 					ft_putstr_fd("too many arguments\n", 2), shell->status);
 		}
 		if (!ft_isdigit_s(input[1]) || ft_strlen(input[1]) >= 20)
@@ -49,17 +49,17 @@ int	ft_exe(char **args, char **envp, t_shell *shell)
 	{
 		if (S_ISDIR(path_stat.st_mode))
 			return (ft_putstr_fd(args[0], 2),
-				ft_putstr_fd(": Is a directory\n", 2), free_args(args), 126);
+				ft_putstr_fd(": Is a directory\n", 2), 126);
 		if (S_ISREG(path_stat.st_mode) && access(args[0], X_OK) == -1)
 			return (ft_putstr_fd(args[0], 2),
-				ft_putstr_fd(": Permission denied\n", 2), free_args(args), 126);
+				ft_putstr_fd(": Permission denied\n", 2), 126);
 	}
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork"), 1);
 	if (pid == 0)
 		ft_execute(args, envp, shell);
-	return (waitpid(pid, &status, 0), free_args(args), (status >> 8) & 0xFF);
+	return (waitpid(pid, &status, 0), (status >> 8) & 0xFF);
 }
 
 int	ft_cd(char **args)
@@ -70,29 +70,28 @@ int	ft_cd(char **args)
 	{
 		target = getenv("HOME");
 		if (!target)
-			return (ft_putstr_fd("HOME not set\n", 2), free_args(args), 1);
+			return (ft_putstr_fd("HOME not set\n", 2), 1);
 	}
 	else if (args[2])
-		return (ft_putstr_fd("too many arguments\n", 2), free_args(args), 1);
+		return (ft_putstr_fd("too many arguments\n", 2), 1);
 	else
 		target = args[1];
 	if (chdir(target) == -1)
 	{
 		perror("cd");
-		return (free_args(args), 1);
+		return (1);
 	}
-	free_args(args);
 	return (0);
 }
 
 int	ft_pwd(t_shell *shell)
 {
+	(void)shell;
 	char	*pwd;
 
 	pwd = getcwd(NULL, 0);
 	ft_printf("%s\n", pwd);
 	free(pwd);
-	free_args(shell->input);
 	return (0);
 }
 
@@ -109,6 +108,5 @@ int	ft_env(t_shell *shell)
 		temp = temp->next;
 	}
 	free(temp);
-	free_args(shell->input);
 	return (0);
 }

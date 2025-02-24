@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/22 15:17:23 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/02/24 10:36:58 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 		get_command(shell);
 		shell->status = which_commands(shell->input, envp, shell);
 		verif_close(shell);
+		free_args(shell->input);
 	}
 	return (free_args(shell->env), free(shell->tmp), shell->status);
 }
