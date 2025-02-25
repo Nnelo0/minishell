@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/24 13:41:16 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/25 08:55:15 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	handle_prompt(t_shell *shell, char **envp)
 {
 	char	*input;
 
-	while(42)
+	while (WELOVESHELDON)
 	{
 		input = readline("minishell> ");
 		keypress(input, shell);

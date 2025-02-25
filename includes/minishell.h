@@ -6,13 +6,14 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/24 13:41:20 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/25 08:55:28 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# define WELOVESHELDON 42
 # define RED     "\033[31m"
 # define GREEN   "\033[32m"
 # define YELLOW  "\033[33m"
