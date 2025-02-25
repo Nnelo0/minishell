@@ -73,6 +73,8 @@ typedef struct s_shell
 	char			**pipe;
 	char			**env;
 	char			**copy;
+	int				save_in;
+	int				save_out;
 	t_env			*env_list;
 	t_export		*export_list;
 }	t_shell;

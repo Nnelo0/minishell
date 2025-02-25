@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/25 13:02:40 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:29:15 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	which_commands(char **input, char **envp, t_shell *shell)
 {
 	input = ft_redirection(input, shell);
-	if (!input || !input[0])
+	if (!input)
 		return (shell->status);
 	if (ft_strncmp(input[0], "exit", 4) == 0
 		&& input[0][4] == '\0')
@@ -136,7 +136,20 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 	{
 		shell->input = get_command(shell, -1);
 		shell->status = which_commands(shell->input, envp, shell);
-		verif_close(shell);
+		if (shell->save_in != -1)
+		{
+			if (dup2(shell->save_in, STDIN_FILENO) == -1)
+				perror("dup2 save IN");
+			close (shell->save_in);
+			shell->save_in = -1;
+		}
+		if (shell->save_out != -1)
+		{
+			if (dup2(shell->save_out, STDOUT_FILENO) == -1)
+				perror("dup2 save OUT");
+			close (shell->save_out);
+			shell->save_out = -1;
+		}
 		free_args(shell->input);
 	}
 	return (free(shell->tmp), shell->status);

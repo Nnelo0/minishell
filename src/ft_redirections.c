@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 20:50:58 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/24 12:53:40 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:56:22 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,30 @@ char	**ft_parse(char **input, int append, t_shell *shell)
 		free_args(shell->out_file), shell->input);
 }
 
+void	setup_redirection(t_shell *shell)
+{
+	shell->save_in = dup(STDIN_FILENO);
+	if (shell->save_in == -1)
+		perror("dup IN");
+	shell->save_out = dup(STDOUT_FILENO);
+	if (shell->save_out == -1)
+		perror("dup OUT");
+	if (shell->fd_in != -1)
+	{
+		if (dup2(shell->fd_in, STDIN_FILENO) == -1)
+			perror("dup2 IN");
+		close(shell->fd_in);
+		shell->fd_in = -1;
+	}
+	if (shell->fd_out != -1)
+	{
+		if (dup2(shell->fd_out, STDOUT_FILENO) == -1)
+			perror("dup2 OUT");
+		close(shell->fd_out);
+		shell->fd_out = -1;
+	}
+}
+
 char	**ft_redirection(char **input, t_shell *shell)
 {
 	int		i;
@@ -129,6 +153,7 @@ char	**ft_redirection(char **input, t_shell *shell)
 					, ft_putstr_fd("Invalid Redirections\n", 2), shell->input);
 			shell->input = ft_parse(input, 0, shell);
 			free_args(shell->copy);
+			setup_redirection(shell);
 			return (shell->input);
 		}
 		i++;
