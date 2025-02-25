@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_path.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:11:29 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/24 14:17:45 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:15:05 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,24 +40,6 @@ char	*find_command_path(char *cmd, char **envp)
 	return (0);
 }
 
-char	*get_after_equal(char *arg)
-{
-	char	*res;
-	int		i;
-	int		j;
-
-	i = 1;
-	j = 0;
-	res = malloc(sizeof(char) * ft_strlen(arg) + 1);
-	while (arg[i - 1] != '=')
-		i++;
-	while (arg[i])
-		res[j++] = arg[i++];
-	free(arg);
-	res[j] = '\0';
-	return (res);
-}
-
 char	*ft_dollar_env(char *args, t_shell *shell, int i)
 {
 	t_env	*temp;
@@ -85,12 +67,6 @@ char	*ft_dollar_env(char *args, t_shell *shell, int i)
 		temp = temp->next;
 	}
 	return (free(check_args), "");
-}
-
-int	is_valid_var_char(char c)
-{
-	return (c == '_' || (c >= 'A' && c <= 'Z')
-		|| (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'));
 }
 
 char	*ft_dollar(char *input, t_shell *shell, int i, int j)
@@ -128,38 +104,74 @@ char	*ft_dollar(char *input, t_shell *shell, int i, int j)
 		free(input), ft_dollar(res, shell, 0, 0));
 }
 
-void	get_command(t_shell *shell)
+char	**get_commande_utils(t_shell *shell, int i, char **res)
 {
-	int	i;
+	int	j;
+	char	*tmp;
 
-	i = -1;
+	j = 0;
 	while (shell->input[++i])
 	{
-		if (ft_strchr(shell->input[i], '$') != NULL && ft_strchr(shell->input[i], '\'') == NULL)
-			shell->input[i] = ft_dollar(shell->input[i], shell, 0, 0);
-		ft_remove_quotes(shell->input[i]);
-		shell->input[i] = get_command_from_path(shell->input[i]);
+		tmp = shell->input[i];
+		if (ft_strchr(tmp, '$') && !ft_strchr(tmp, '\''))
+		{
+			ft_remove_quotes(tmp);
+			tmp = ft_dollar(tmp, shell, 0, 0);
+			if (!tmp || tmp[0] == '\0')
+			{
+				free(tmp);
+				continue ;
+			}
+		}
+		res[j] = ft_strdup(tmp);
+		if (ft_strcmp(res[0], "echo") != 0)
+			res[j] = get_command_from_path(res[j]);
+		j++;
+		if (tmp != shell->input[i])
+			free(tmp);
 	}
+	return (res[j] = NULL, res);
+}
+
+char	**get_command(t_shell *shell, int i)
+{
+	int		count;
+	char	**res;
+
+	count = 0;
+	while (shell->input[count])
+		count++;
+	res = ft_calloc(count + 1, sizeof(char *));
+	if (!res)
+		return (shell->input);
+	res = get_commande_utils(shell, i, res);
+	if (shell->input && shell->input[0])
+		free_args(shell->input);
+	return (res);
 }
 
 char	*get_command_from_path(char *input)
 {
 	char	*command;
 	char	*tmp;
+	struct stat	path_stat;
 
+	if (ft_strcmp(input, "") == 0)
+		return (input);
 	tmp = ft_strdup(input);
 	free(input);
 	if (ft_strncmp(tmp, "/", 1) == 0)
 	{
 		if (access(tmp, X_OK) == 0)
 		{
-			command = ft_strrchr(tmp, '/') + 1;
-			input = ft_strdup(command);
-			free(tmp);
-			return (input);
+			if (stat(tmp, &path_stat) == 0 && S_ISREG(path_stat.st_mode))
+			{
+				command = ft_strrchr(tmp, '/') + 1;
+				input = ft_strdup(command);
+				free(tmp);
+				return (input);
+			}
 		}
-		else
-			return (tmp);
 	}
 	return (tmp);
 }

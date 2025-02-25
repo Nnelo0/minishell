@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/25 08:55:53 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:02:40 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	which_commands(char **input, char **envp, t_shell *shell)
 {
 	input = ft_redirection(input, shell);
-	if (!input)
+	if (!input || !input[0])
 		return (shell->status);
 	if (ft_strncmp(input[0], "exit", 4) == 0
 		&& input[0][4] == '\0')
@@ -134,7 +134,7 @@ int	commands(char *input, char **envp, t_shell *shell, int *status)
 	shell->status = ft_pipe(envp, shell);
 	if (shell->input)
 	{
-		get_command(shell);
+		shell->input = get_command(shell, -1);
 		shell->status = which_commands(shell->input, envp, shell);
 		verif_close(shell);
 		free_args(shell->input);

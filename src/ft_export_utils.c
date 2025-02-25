@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 11:25:25 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/25 08:54:36 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/25 12:21:30 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,30 +20,30 @@ static int	print_error(char *args, int status)
 	return (status = 1);
 }
 
-int	ft_export_verif(char **args, int i, int status, int j)
+int	ft_export_verif(char **arg, int i, int status, int j)
 {
-	if (!ft_isalpha(args[i][j]))
+	if (!ft_isalpha(arg[i][j]))
 	{
-		if (args[i][0] == '=')
-			return (status = print_error(args[i], status), status);
-		while (args[i][j])
+		if (arg[i][0] == '=')
+			return (status = print_error(arg[i], status), status);
+		while (arg[i][j])
 		{
-			if (args[i][j] == '=')
+			if (arg[i][j] == '=')
 				break ;
-			if (((!ft_isalnum(args[i][j]) && status == 0)
-				|| (ft_isdigit(args[i][0]) && status == 0)) && args[i][j] != '|')
-				status = print_error(args[i], status);
+			if (((!ft_isalnum(arg[i][j]) && status == 0)
+				|| (ft_isdigit(arg[i][0]) && status == 0)) && arg[i][j] != '|')
+				status = print_error(arg[i], status);
 			j++;
 		}
 	}
 	else
 	{
-		while (args[i][j])
+		while (arg[i][j])
 		{
-			if (args[i][j] == '=')
+			if (arg[i][j] == '=')
 				break ;
-			if (args[i][j++] == '-' && status == 0)
-				status = print_error(args[i], status);
+			if (arg[i][j++] == '-' && status == 0)
+				status = print_error(arg[i], status);
 		}
 	}
 	return (status);
