@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:22:03 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/26 15:29:11 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:58:15 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,24 @@ char	*get_command_from_path(char *input)
 		}
 	}
 	return (tmp);
+}
+
+int	quote_isgood(char *input)
+{
+	int	i;
+
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == '"')
+		{
+			i++;
+			while (input[i] != '"')
+				i++;
+		}
+		if (input[i] == '\'')
+			return (0);
+		i++;
+	}
+	return (1);
 }

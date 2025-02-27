@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/27 12:27:22 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:58:37 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ char		**ft_split_quote(char *s, char c);
 char		**get_command(char **input, t_shell *shell, int i);
 char		*get_after_equal(char *arg);
 int			is_valid_var_char(char c);
+int			quote_isgood(char *input);
 
 /*---------------redirection---------------*/
 

@@ -6,7 +6,7 @@
 /*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:11:29 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/27 13:55:52 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:58:21 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,26 +89,6 @@ char	*ft_dollar(char *in, t_shell *shell, int i, int j)
 		free(shell->value);
 	return (free(shell->var), free(shell->before), free(shell->after),
 		free(in), ft_dollar(shell->res, shell, 0, 0));
-}
-
-int	quote_isgood(char *input)
-{
-	int	i;
-
-	i = 0;
-	while (input[i])
-	{
-		if (input[i] == '"')
-		{
-			i++;
-			while (input[i] != '"')
-				i++;
-		}
-		if (input[i] == '\'')
-			return (0);
-		i++;
-	}
-	return (1);
 }
 
 char	**get_commande_utils(char **input, t_shell *shell, int i, char **res)
