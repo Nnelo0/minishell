@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/27 11:18:26 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:36:48 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	ft_shell(char **cmd, char **envp, t_shell *shell, int status)
 	char	*path;
 
 	if (ft_strcmp(cmd[0], "") == 0)
+		return (shell->status);
+	if (verif_shell(cmd[0], shell, 0) == 1)
 		return (shell->status);
 	envp = env_in_stars(shell);
 	path = find_command_path(cmd[0], envp);

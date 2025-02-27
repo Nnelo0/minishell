@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 08:36:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/27 12:24:25 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:37:36 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	verif_shell(char *input, t_shell *shell, int type)
 			, shell->status = 127, type = 1);
 	if (input[0] == '.' && !input[1])
 		return (ft_putstr_fd(".: filename argument required\n\
-.: usage: . filename [arguments]\n", 2), 2);
+.: usage: . filename [arguments]\n", 2),shell->status = 2, type = 1);
 	if (input[0] == '/' && !input[1])
 		return (input = NULL, ft_putstr_fd("/: Is a directory\n", 2)
 			, shell->status = 126, type = 1);

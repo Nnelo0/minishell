@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/27 12:27:02 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:35:34 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ int	commands(char *input, t_shell *shell, int *status)
 	status_ctrl_c(status, shell);
 	if (!ft_quotes(input))
 		return (ft_printf("open quote\n"), 127);
-	verif_shell(input, shell, 0);
 	shell->tmp = ft_strdup(input);
 	input = ft_add_space(input, -1);
 	if (verif_input(input) == 2)
