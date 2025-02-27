@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/26 15:22:13 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/27 11:01:47 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ char		*ft_add_quotes(char *input);
 char		*find_command_path(char *cmd, char **envp);
 char		*get_command_from_path(char *input);
 char		**ft_split_quote(char *s, char c);
-char		**get_command(t_shell *shell, int i);
+char		**get_command(char **input, t_shell *shell, int i);
 char		*get_after_equal(char *arg);
 int			is_valid_var_char(char c);
 

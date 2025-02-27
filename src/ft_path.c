@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:11:29 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/27 09:25:05 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 11:14:58 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,15 +91,15 @@ char	*ft_dollar(char *in, t_shell *shell, int i, int j)
 		free(in), ft_dollar(shell->res, shell, 0, 0));
 }
 
-char	**get_commande_utils(t_shell *shell, int i, char **res)
+char	**get_commande_utils(char **input, t_shell *shell, int i, char **res)
 {
 	int		j;
 	char	*tmp;
 
 	j = 0;
-	while (shell->input[++i])
+	while (input[++i])
 	{
-		tmp = ft_strdup(shell->input[i]);
+		tmp = ft_strdup(input[i]);
 		if (ft_strchr(tmp, '$') && !ft_strchr(tmp, '\''))
 		{
 			ft_remove_quotes(tmp);
@@ -119,14 +119,14 @@ char	**get_commande_utils(t_shell *shell, int i, char **res)
 	return (res[j] = NULL, res);
 }
 
-char	**get_command(t_shell *shell, int i)
+char	**get_command(char **input, t_shell *shell, int i)
 {
 	char	**res;
 
-	res = ft_calloc(ft_strlen_tab(shell->input) + 1, sizeof(char *));
+	res = ft_calloc(ft_strlen_tab(input) + 1, sizeof(char *));
 	if (!res)
-		return (shell->input);
-	res = get_commande_utils(shell, i, res);
-	free_args(shell->input);
+		return (input);
+	res = get_commande_utils(input, shell, i, res);
+	free_args(input);
 	return (res);
 }

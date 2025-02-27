@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/26 10:19:45 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 11:16:41 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,22 @@ int	execute_pipe(t_shell *shell, char **envp, int i)
 		close(shell->pipefd[0]);
 	}
 	close(shell->pipefd[0]);
+	shell->pipe = get_command(shell->pipe, shell, -1);
 	shell->status = which_commands(shell->pipe, envp, shell);
+	if (shell->save_in != -1)
+	{
+		if (dup2(shell->save_in, STDIN_FILENO) == -1)
+			perror("dup2 save IN");
+		close (shell->save_in);
+		shell->save_in = -1;
+	}
+	if (shell->save_out != -1)
+	{
+		if (dup2(shell->save_out, STDOUT_FILENO) == -1)
+			perror("dup2 save OUT");
+		close (shell->save_out);
+		shell->save_out = -1;
+	}
 	verif_close(shell);
 	free(shell->tmp);
 	free_args(shell->pipe);
@@ -89,7 +104,6 @@ int	ft_pipe(char **envp, t_shell *shell)
 			if (valid_pipe(shell->input[i], i) == 1 || !shell->input[i + 1])
 				return (free_args(shell->input), shell->input = NULL,
 					ft_putstr_fd("Invalid Pipes\n", 2), shell->status);
-			shell->input = get_command(shell, -1);
 			shell->input = merge_args(shell->input, "|", -1, 0);
 			shell->status = parse_commands_pipe(shell, envp, -1, 0);
 			return (shell->status);
