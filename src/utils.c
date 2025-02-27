@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:01:16 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/24 08:58:14 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:36:13 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	ft_execute(char **args, char **envp, t_shell *shell)
 		perror(args[0]);
 		free(shell->tmp);
 		free_args(args);
-		free_args(shell->env);
+		free_args(envp);
 		free_env_list(shell->env_list);
 		free_export_list(shell->export_list);
 		exit(127);

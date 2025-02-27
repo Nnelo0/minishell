@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 21:37:00 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/27 09:43:07 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:36:02 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,10 @@ int	ft_exe(char **args, char **envp, t_shell *shell)
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork"), 1);
+	envp = env_in_stars(shell);
 	if (pid == 0)
 		ft_execute(args, envp, shell);
-	return (waitpid(pid, &status, 0), (status >> 8) & 0xFF);
+	return (waitpid(pid, &status, 0), free_args(envp), (status >> 8) & 0xFF);
 }
 
 int	ft_cd(char **args)
