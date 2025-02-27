@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 20:50:58 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/27 13:27:19 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:42:42 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ char	**ft_parse(char **input, int append, t_shell *shell)
 		return (NULL);
 	return (free(shell->in_file), free(shell->cmd),
 		free_args(shell->out_file), shell->input);
-
 }
 
 char	**ft_redirection(char **input, t_shell *shell, int j)
@@ -130,7 +129,7 @@ char	**ft_redirection(char **input, t_shell *shell, int j)
 				break ;
 			if (!input[i + 1])
 				return (free_args(shell->input), shell->input = NULL
-					, ft_putstr_fd("Invalid Rediredwadwactions\n", 2), shell->input);
+					, ft_putstr_fd("Invalid Redirections\n", 2), shell->input);
 			shell->input = ft_parse(input, 0, shell);
 			while (shell->copy[++j])
 				if (ft_strcmp(shell->copy[j], "<<") == 0)
