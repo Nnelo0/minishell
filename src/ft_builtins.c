@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 21:37:00 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/26 12:36:29 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/27 09:43:07 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_exit(char **input, t_shell *shell)
 {
-	ft_putstr_fd("exit\n", 2);
+	ft_putstr_fd("exit\n", 1);
 	if (input[1])
 		ft_remove_quotes(input[1]);
 	if (input[1])
