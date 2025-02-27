@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_path.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:11:29 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/27 11:14:58 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:55:52 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,26 @@ char	*ft_dollar(char *in, t_shell *shell, int i, int j)
 		free(in), ft_dollar(shell->res, shell, 0, 0));
 }
 
+int	quote_isgood(char *input)
+{
+	int	i;
+
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == '"')
+		{
+			i++;
+			while (input[i] != '"')
+				i++;
+		}
+		if (input[i] == '\'')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 char	**get_commande_utils(char **input, t_shell *shell, int i, char **res)
 {
 	int		j;
@@ -100,7 +120,7 @@ char	**get_commande_utils(char **input, t_shell *shell, int i, char **res)
 	while (input[++i])
 	{
 		tmp = ft_strdup(input[i]);
-		if (ft_strchr(tmp, '$') && !ft_strchr(tmp, '\''))
+		if (ft_strchr(tmp, '$') && quote_isgood(tmp))
 		{
 			ft_remove_quotes(tmp);
 			tmp = ft_dollar(tmp, shell, 0, 0);
