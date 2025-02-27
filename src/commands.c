@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/27 11:18:50 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 12:27:02 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	which_commands(char **input, char **envp, t_shell *shell)
 	int	i;
 
 	i = -1;
-	input = ft_redirection(input, shell);
+	input = ft_redirection(input, shell, -1);
 	if (!input)
 		return (shell->status);
 	while (input[++i])

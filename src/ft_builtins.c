@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 21:37:00 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/27 10:36:02 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 12:32:19 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_exit(char **input, t_shell *shell)
 			shell->status = ft_atoi(input[1]);
 			if (input[2])
 				return (shell->status = 1,
-					ft_putstr_fd("too many arguments\n", 2), shell->status);
+					ft_putstr_fd(" too many arguments\n", 2), shell->status);
 		}
 		if (!ft_isdigit_s(input[1]) || ft_strlen(input[1]) >= 20)
 		{
@@ -74,7 +74,7 @@ int	ft_cd(char **args)
 			return (ft_putstr_fd("HOME not set\n", 2), 1);
 	}
 	else if (args[2])
-		return (ft_putstr_fd("too many arguments\n", 2), 1);
+		return (ft_putstr_fd(" too many arguments\n", 2), 1);
 	else
 		target = args[1];
 	if (chdir(target) == -1)

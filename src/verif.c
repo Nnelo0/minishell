@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 08:36:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/26 14:00:00 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 12:24:25 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,6 @@ int	valid_redirection(char *input)
 
 int	verif_shell(char *input, t_shell *shell, int type)
 {
-	if (input[0] == '$' && !input[1])
-		return (input = NULL, ft_putstr_fd("$: command not found\n", 2)
-			, shell->status = 127, type = 1);
 	if ((input[0] == '\'' && input[1] == '\'' )
 		|| (input[0] == '"' && input[1] == '"'))
 		return (input = NULL, ft_putstr_fd("Command '' not found\n", 2)

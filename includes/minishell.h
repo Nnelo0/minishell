@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/27 11:01:47 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 12:27:22 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ int			is_valid_var_char(char c);
 
 /*---------------redirection---------------*/
 
-char		**ft_redirection(char **input, t_shell *shell);
+char		**ft_redirection(char **input, t_shell *shell, int j);
 void		parse_commands(char **commands, char *tmp, char *args);
 int			parse_out(t_shell *shell, int i, int *out_count, int *append);
 int			parse_in(t_shell *shell, int i);
