@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/27 11:16:41 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 12:21:52 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,24 @@ int	is_pipe(t_shell *shell, int i)
 		&& ft_strcmp(shell->input[i + 1], "|") == 0)
 		return (1);
 	return (0);
+}
+
+void	ft_exe_pipe_utils(t_shell *shell)
+{
+	if (shell->save_in != -1)
+	{
+		if (dup2(shell->save_in, STDIN_FILENO) == -1)
+			perror("dup2 save IN");
+		close (shell->save_in);
+		shell->save_in = -1;
+	}
+	if (shell->save_out != -1)
+	{
+		if (dup2(shell->save_out, STDOUT_FILENO) == -1)
+			perror("dup2 save OUT");
+		close (shell->save_out);
+		shell->save_out = -1;
+	}
 }
 
 int	execute_pipe(t_shell *shell, char **envp, int i)
@@ -37,20 +55,7 @@ int	execute_pipe(t_shell *shell, char **envp, int i)
 	close(shell->pipefd[0]);
 	shell->pipe = get_command(shell->pipe, shell, -1);
 	shell->status = which_commands(shell->pipe, envp, shell);
-	if (shell->save_in != -1)
-	{
-		if (dup2(shell->save_in, STDIN_FILENO) == -1)
-			perror("dup2 save IN");
-		close (shell->save_in);
-		shell->save_in = -1;
-	}
-	if (shell->save_out != -1)
-	{
-		if (dup2(shell->save_out, STDOUT_FILENO) == -1)
-			perror("dup2 save OUT");
-		close (shell->save_out);
-		shell->save_out = -1;
-	}
+	ft_exe_pipe_utils(shell);
 	verif_close(shell);
 	free(shell->tmp);
 	free_args(shell->pipe);
