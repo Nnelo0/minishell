@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 20:50:58 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/26 14:14:51 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 09:39:25 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ char	**ft_parse(char **input, int append, t_shell *shell)
 		return (NULL);
 	parse_redirection(shell, &out_count, &append, -1);
 	if (open_files(shell, out_count, append))
-		return (NULL);
+		return (free_args(shell->input), NULL);
 	if (!shell->cmd)
 		return (free(shell->in_file), free(shell->cmd),
 			free_args(shell->out_file), NULL);

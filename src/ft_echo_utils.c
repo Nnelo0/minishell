@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:20:44 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/26 14:09:30 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 09:23:02 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,6 @@ char	*ft_add_quotes(char *input)
 	tmp = ft_strjoin("\"", input);
 	free(input);
 	input = ft_strjoin(tmp, "\"");
+	free(tmp);
 	return (input);
 }

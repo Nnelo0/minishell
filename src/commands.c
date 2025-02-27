@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/26 14:14:18 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 09:39:50 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ void	command_utils(t_shell *shell)
 	{
 		shell->input = get_command(shell, -1);
 		if (!shell->input[0])
+		{
+			free_args(shell->input);
 			return ;
+		}
 		shell->status = which_commands(shell->input, shell->env, shell);
 		if (shell->save_in != -1)
 		{
