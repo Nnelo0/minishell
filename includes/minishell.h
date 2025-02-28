@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/27 13:58:37 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/28 18:57:15 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ int			quote_isgood(char *input);
 
 /*---------------redirection---------------*/
 
-char		**ft_redirection(char **input, t_shell *shell, int j);
+char		**ft_redirection(char **input, t_shell *shell);
 void		parse_commands(char **commands, char *tmp, char *args);
 int			parse_out(t_shell *shell, int i, int *out_count, int *append);
 int			parse_in(t_shell *shell, int i);

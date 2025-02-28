@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 13:31:41 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/27 12:06:38 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/28 18:40:07 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	write_heredoc(char *line, char *delimiter, int fd)
 	}
 	ft_putstr_fd(line, fd);
 	free(line);
+	get_next_line(-1);
 	return (0);
 }
 
@@ -54,13 +55,15 @@ void	read_heredoc(t_shell *shell, char *delimiter)
 			free(line);
 			ft_putstr_fd("\nHeredoc: warning: end-of-file \
 (CTRL+D) detected\n", 2);
+			get_next_line(-1);
 			break ;
 		}
 		if (write_heredoc(line, delimiter, shell->fd_in) == 1)
 			break ;
 	}
-	close(shell->fd_in);
-	unlink(".tmp_heredoc");
+	close (shell->fd_in);
+	shell->fd_in = -1;
+	shell->in_file = ft_strdup(".tmp_heredoc");
 }
 
 int	parse_heredoc(t_shell *shell, int i)
