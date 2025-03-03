@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 13:31:41 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/03 13:48:34 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/03 13:55:54 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	read_heredoc(t_shell *shell, char *delimiter)
 	if (pid == -1)
 		return ;
 	if (pid == 0)
-	{	
+	{
 		handle_signal(handle_heredoc);
 		while (1)
 		{
@@ -77,7 +77,7 @@ void	read_heredoc(t_shell *shell, char *delimiter)
 		shell->in_file = ft_strdup(".tmp_heredoc");
 }
 
-void	handle_heredoc(int	sig)
+void	handle_heredoc(int sig)
 {
 	(void)sig;
 	g_status = 130;
@@ -92,7 +92,7 @@ int	parse_heredoc(t_shell *shell, int i)
 		if (!shell->copy[i + 1])
 			return (1);
 		read_heredoc(shell, shell->copy[++i]);
-		handle_signal(handle_sigint);		
+		handle_signal(handle_sigint);
 	}
 	return (0);
 }

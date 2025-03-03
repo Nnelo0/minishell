@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/03/03 12:49:38 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/03 13:54:44 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # include <sys/stat.h>
 # include <errno.h>
 
-extern	int g_status;
+extern int	g_status;
 
 typedef struct s_env
 {
@@ -158,7 +158,7 @@ void		handle_prompt(t_shell *shell);
 int			keypress(char *input, t_shell *shell);
 void		handle_sigint(int sig);
 void		handle_signal(void (*f)(int));
-void		handle_heredoc(int	sig);
+void		handle_heredoc(int sig);
 
 /*---------------utils---------------*/
 
