@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/03 12:48:57 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/03 13:54:45 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,13 @@ void	handle_prompt(t_shell *shell)
 			free(input);
 	}
 }
+
 void	handle_signal(void (*f)(int))
 {
 	signal(SIGINT, (*f));
 	signal(SIGQUIT, SIG_IGN);
 }
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
