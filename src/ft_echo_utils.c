@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:20:44 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/27 09:23:02 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/02/27 17:20:00 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	ft_remove_quotes(char *input)
 	i = 0;
 	j = 0;
 	quote_type = '\0';
+	if (!ft_quotes(input))
+		return ;
 	while (input[i])
 	{
 		if (input[i] == quote_type)
@@ -39,13 +41,31 @@ void	ft_remove_quotes(char *input)
 	input[j] = '\0';
 }
 
-char	*ft_add_quotes(char *input)
+char	*ft_add_quotes(char *input, int i)
 {
 	char	*tmp;
 
-	tmp = ft_strjoin("\"", input);
-	free(input);
-	input = ft_strjoin(tmp, "\"");
-	free(tmp);
-	return (input);
+	if (!ft_quotes(input))
+		return (input);
+	while (input[i++])
+	{
+		if (input[i] == '\"')
+			break ;
+		if (input[i] == '\'')
+			break ;
+	}
+	if (input[i] == '\"')
+	{
+		tmp = ft_strjoin("'", input);
+		free(input);
+		input = ft_strjoin(tmp, "'");
+		return (free(tmp), input);
+	}
+	else
+	{
+		tmp = ft_strjoin("\"", input);
+		free(input);
+		input = ft_strjoin(tmp, "\"");
+		return (free(tmp), input);
+	}
 }

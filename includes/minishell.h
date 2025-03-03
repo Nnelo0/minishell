@@ -3,28 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/02/28 18:57:15 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/03/03 09:50:38 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
-# define WELOVESHELDON 42
-# define RED     "\033[31m"
-# define GREEN   "\033[32m"
-# define YELLOW  "\033[33m"
-# define BLUE    "\033[34m"
-# define MAGENTA "\033[35m"
-# define CYAN    "\033[36m"
-# define RESET   "\033[0m"
-# define PINK "\033[38;5;206m"
-# define HOT_PINK "\033[38;5;198m"
-# define LIGHT_PINK "\033[38;5;217m"
-# define BG_PINK "\033[48;5;206m"
 
 # include "libft/libft/libft.h"
 # include "libft/printf/ft_printf.h"
@@ -130,7 +117,7 @@ int			valid_pipe(char *input, int i);
 
 int			ft_quotes(char *input);
 void		ft_remove_quotes(char *input);
-char		*ft_add_quotes(char *input);
+char		*ft_add_quotes(char *input, int i);
 
 /*---------------path---------------*/
 

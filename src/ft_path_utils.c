@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_path_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:22:03 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/27 13:58:15 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:48:43 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,15 @@ int	quote_isgood(char *input)
 				i++;
 		}
 		if (input[i] == '\'')
-			return (0);
+		{
+			i++;
+			while (input[i] != '\'')
+			{
+				if (input[i] == '$')
+					return (0);
+				i++;
+			}
+		}
 		i++;
 	}
 	return (1);

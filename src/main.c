@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/28 18:53:24 by nnelo            ###   ########.fr       */
+/*   Updated: 2025/03/03 09:42:04 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int		g_status = 0;
 void	handle_sigint(int sig)
 {
 	(void)sig;
+	g_status = 130;
 	if (waitpid(-1, NULL, WNOHANG) == 0)
 	{
 		ft_printf("\n");
@@ -26,7 +27,6 @@ void	handle_sigint(int sig)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	g_status = 130;
 }
 
 int	keypress(char *input, t_shell *shell)
@@ -53,7 +53,7 @@ void	handle_prompt(t_shell *shell)
 {
 	char	*input;
 
-	while (WELOVESHELDON)
+	while (42)
 	{
 		input = readline("minishell> ");
 		keypress(input, shell);

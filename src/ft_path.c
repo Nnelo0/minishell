@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_path.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:11:29 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/27 13:58:21 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/02/27 17:18:41 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ char	**get_commande_utils(char **input, t_shell *shell, int i, char **res)
 				free(tmp);
 				continue ;
 			}
-			tmp = ft_add_quotes(tmp);
+			tmp = ft_add_quotes(tmp, 0);
 		}
 		res[j] = ft_strdup(tmp);
 		res[j] = get_command_from_path(res[j]);
