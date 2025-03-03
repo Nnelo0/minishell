@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/03 13:54:45 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:57:24 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int		g_status = 0;
+t_shell	shell;
 
 void	handle_sigint(int sig)
 {
 	(void)sig;
-	g_status = 130;
+	shell.status = 130;
 	if (waitpid(-1, NULL, WNOHANG) == 0)
 	{
 		ft_printf("\n");
@@ -33,11 +33,6 @@ int	keypress(char *input, t_shell *shell)
 {
 	if (!input)
 	{
-		if (g_status == 130)
-		{
-			shell->status = 130;
-			g_status = 0;
-		}
 		printf("exit\n");
 		rl_clear_history();
 		free_args(shell->env);
@@ -59,7 +54,7 @@ void	handle_prompt(t_shell *shell)
 		keypress(input, shell);
 		if (*input)
 			add_history(input);
-		shell->status = commands(input, shell, &g_status);
+		shell->status = commands(input, shell);
 		if (input)
 			free(input);
 	}
@@ -73,11 +68,9 @@ void	handle_signal(void (*f)(int))
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_shell	shell;
-
 	(void)argc;
 	(void)argv;
-	shell.status = g_status;
+	shell.status = 0;
 	shell.fd_out = -1;
 	shell.fd_in = -1;
 	shell.prev_fd = -1;

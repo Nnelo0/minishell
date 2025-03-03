@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/03 12:38:07 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:53:54 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,12 @@ void	parse_input(char *input, t_shell *shell)
 	shell->status = ft_pipe(shell->env, shell);
 }
 
-int	commands(char *input, t_shell *shell, int *status)
+int	commands(char *input, t_shell *shell)
 {
 	while (*input && (*input == ' ' || *input == '\t'))
 		input++;
 	if (*input == '\0')
 		return (0);
-	status_ctrl_c(status, shell);
 	if (!ft_quotes(input))
 		return (ft_printf("open quote\n"), 127);
 	shell->tmp = ft_strdup(input);

@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/03/03 13:54:44 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:54:06 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <errno.h>
-
-extern int	g_status;
 
 typedef struct s_env
 {
@@ -69,6 +67,8 @@ typedef struct s_shell
 	t_env			*env_list;
 	t_export		*export_list;
 }	t_shell;
+
+extern t_shell	shell;
 
 /*---------------builtins---------------*/
 
@@ -143,7 +143,7 @@ void		setup_redirection(t_shell *shell);
 
 /*---------------commands---------------*/
 
-int			commands(char *input, t_shell *shell, int *status);
+int			commands(char *input, t_shell *shell);
 int			which_commands(char **input, char **envp, t_shell *shell);
 char		*ft_add_space(char *input, int i);
 
