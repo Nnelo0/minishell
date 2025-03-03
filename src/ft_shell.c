@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_shell.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/27 13:41:36 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/03 11:02:22 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,17 @@ void	verif_close(t_shell *shell)
 		close(shell->fd_out);
 }
 
+void	ft_execute_shell(t_shell *shell, char **cmd, char *path, char **envp)
+{
+	verif_close_save(shell);
+	verif_close(shell);
+	execve(path, cmd, envp);
+	ft_putstr_fd(cmd[0], 2);
+	ft_putstr_fd(": command not found\n", 2);
+	free_args(envp);
+	exit(127);
+}
+
 int	ft_shell(char **cmd, char **envp, t_shell *shell, int status)
 {
 	pid_t	pid;
@@ -37,24 +48,18 @@ int	ft_shell(char **cmd, char **envp, t_shell *shell, int status)
 		return (shell->status);
 	envp = env_in_stars(shell);
 	path = find_command_path(cmd[0], envp);
-	if (!path)
-		return (ft_putstr_fd(cmd[0], 2), ft_putstr_fd(": command not found\n", 2
-			), free_args(envp), 127);
-	pid = fork();
-	if (pid == -1)
-		return (127);
-	if (pid == 0)
+	if (access(path, F_OK) == 0)
 	{
-		verif_close_save(shell);
-		verif_close(shell);
-		execve(path, cmd, envp);
-		ft_putstr_fd(cmd[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		free_args(envp);
-		exit(127);
+		pid = fork();
+		if (pid == -1)
+			return (127);
+		if (pid == 0)
+			ft_execute_shell(shell, cmd, path, envp);
+		return (waitpid(pid, &status, 0), free(path), free_args(envp)
+			, (status >> 8) & 0xFF);
 	}
-	return (waitpid(pid, &status, 0), free(path), free_args(envp)
-		, (status >> 8) & 0xFF);
+	return (ft_putstr_fd(cmd[0], 2), ft_putstr_fd(": command not found\n", 2
+		), free_args(envp), free(path), 127);
 }
 
 void	free_args(char **args)

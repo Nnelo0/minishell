@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_path.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:11:29 by cle-berr          #+#    #+#             */
-/*   Updated: 2025/02/27 17:18:41 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/03 10:54:37 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*find_command_path(char *cmd, char **envp)
 	while (envp[i] && ft_strnstr(envp[i], "PATH=", 5) == 0)
 		i++;
 	if (!envp[i])
-		return (NULL);
+		return (ft_strdup(cmd));
 	paths = ft_split(envp[i] + 5, ':');
 	i = 0;
 	while (paths[i])
@@ -36,8 +36,7 @@ char	*find_command_path(char *cmd, char **envp)
 		free(path);
 		i++;
 	}
-	free_args(paths);
-	return (0);
+	return (free_args(paths), ft_strdup(cmd));
 }
 
 char	*ft_dollar_env(char *args, t_shell *shell)
@@ -112,7 +111,6 @@ char	**get_commande_utils(char **input, t_shell *shell, int i, char **res)
 			tmp = ft_add_quotes(tmp, 0);
 		}
 		res[j] = ft_strdup(tmp);
-		res[j] = get_command_from_path(res[j]);
 		j++;
 		free(tmp);
 	}

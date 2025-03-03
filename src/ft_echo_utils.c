@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:20:44 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/02/27 17:20:00 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/03 11:08:13 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,25 +47,20 @@ char	*ft_add_quotes(char *input, int i)
 
 	if (!ft_quotes(input))
 		return (input);
-	while (input[i++])
+	while (input[i])
 	{
 		if (input[i] == '\"')
 			break ;
 		if (input[i] == '\'')
 			break ;
+		i++;
 	}
+	if (!input[i])
+		return (input);
 	if (input[i] == '\"')
-	{
-		tmp = ft_strjoin("'", input);
-		free(input);
-		input = ft_strjoin(tmp, "'");
-		return (free(tmp), input);
-	}
+		return (tmp = ft_strjoin("'", input), free(input),
+			input = ft_strjoin(tmp, "'"), free(tmp), input);
 	else
-	{
-		tmp = ft_strjoin("\"", input);
-		free(input);
-		input = ft_strjoin(tmp, "\"");
-		return (free(tmp), input);
-	}
+		return (tmp = ft_strjoin("\"", input), free(input),
+			input = ft_strjoin(tmp, "\""), free(tmp), input);
 }
