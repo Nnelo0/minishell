@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 13:31:41 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/03 09:32:38 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/03 12:54:44 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,29 +41,44 @@ int	write_heredoc(char *line, char *delimiter, int fd)
 
 void	read_heredoc(t_shell *shell, char *delimiter)
 {
+	pid_t	pid;
 	char	*line;
 
 	shell->fd_in = create_tmp_file();
 	if (shell->fd_in == -1)
 		return ;
-	while (1)
-	{
-		ft_putstr_fd("> ", 1);
-		line = get_next_line(0);
-		if (!line || line[0] == '\0')
+	pid = fork();
+	if (pid == -1)
+		return ;
+	if (pid == 0)
+	{	
+		while (1)
 		{
-			free(line);
-			ft_putstr_fd("\nHeredoc: warning: end-of-file \
-(CTRL+D) detected\n", 2);
-			get_next_line(-1);
-			break ;
+			ft_putstr_fd("> ", 1);
+			line = get_next_line(0);
+			if (!line || line[0] == '\0')
+			{
+				free(line);
+				ft_putstr_fd("\nHeredoc: warning: end-of-file \
+	(CTRL+D) detected\n", 2);
+				get_next_line(-1);
+				break ;
+			}
+			if (write_heredoc(line, delimiter, shell->fd_in) == 1)
+				break ;
 		}
-		if (write_heredoc(line, delimiter, shell->fd_in) == 1)
-			break ;
+		exit(shell->status);
 	}
 	close (shell->fd_in);
 	shell->fd_in = -1;
 	shell->in_file = ft_strdup(".tmp_heredoc");
+}
+
+void	handle_heredoc(int	sig)
+{
+	(void)sig;
+	exit (12);
+	return ;
 }
 
 int	parse_heredoc(t_shell *shell, int i)
@@ -72,7 +87,10 @@ int	parse_heredoc(t_shell *shell, int i)
 	{
 		if (!shell->copy[i + 1])
 			return (1);
+		handle_signal(handle_heredoc);
 		read_heredoc(shell, shell->copy[++i]);
+		handle_signal(handle_sigint);
+
 	}
 	return (0);
 }

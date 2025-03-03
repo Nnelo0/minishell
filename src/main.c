@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/03 09:42:04 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/03 12:48:57 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,11 @@ void	handle_prompt(t_shell *shell)
 			free(input);
 	}
 }
-
+void	handle_signal(void (*f)(int))
+{
+	signal(SIGINT, (*f));
+	signal(SIGQUIT, SIG_IGN);
+}
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
@@ -80,8 +84,7 @@ int	main(int argc, char **argv, char **envp)
 	shell.env_list = init_env_list(envp);
 	shell.export_list = init_export_list(envp);
 	shell.env = NULL;
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
+	handle_signal(handle_sigint);
 	handle_prompt(&shell);
 	free_env_list(shell.env_list);
 	free_export_list(shell.export_list);
