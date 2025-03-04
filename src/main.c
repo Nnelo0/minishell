@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/04 10:11:21 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/04 16:48:36 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,15 @@ int	keypress(char *input, t_shell *shell)
 void	handle_prompt(t_shell *shell)
 {
 	char	*input;
+	char	*pwd;
+	char	*tmp;
 
 	while (42)
 	{
-		input = readline("minishell> ");
+		tmp = getcwd(NULL, 0);
+		pwd = ft_strjoin(tmp, "$ ");
+		input = readline(pwd);
+		(free(pwd), free(tmp));
 		keypress(input, shell);
 		if (*input)
 			add_history(input);
@@ -66,8 +71,6 @@ void	handle_signal(void (*f)(int), t_shell *shell)
 	(void)shell;
 	signal(SIGINT, (*f));
 	signal(SIGQUIT, SIG_IGN);
-	// if (shell->delimiter)
-	// 	free(shell->delimiter);
 }
 
 int	main(int argc, char **argv, char **envp)

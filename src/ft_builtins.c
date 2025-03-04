@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 09:47:40 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/03 09:47:42 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/04 10:44:50 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	ft_cd(char **args)
 		target = args[1];
 	if (chdir(target) == -1)
 	{
-		perror("cd");
+		perror(target);
 		return (1);
 	}
 	return (0);

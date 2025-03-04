@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/04 08:55:24 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/04 15:32:31 by cle-berr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,6 @@ int	commands(char *input, t_shell *shell)
 	if (verif_input(input) == 1)
 		return (ft_putstr_fd("Invalid Redirections\n", 2), free(input)
 			, free(shell->tmp), free_args(shell->env), shell->status);
-	parse_input(input, shell);
-	command_utils(shell);
-	unlink(".tmp_heredoc");
+	(parse_input(input, shell), command_utils(shell), unlink(".tmp_heredoc"));
 	return (free(shell->tmp), shell->status);
 }
