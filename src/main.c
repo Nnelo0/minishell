@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/04 16:48:36 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:19:26 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@ int	g_status = 0;
 void	handle_sigint(int sig)
 {
 	(void)sig;
+	if (g_status == 43)
+	{
+		g_status = 42;
+		return ;
+	}
 	g_status = 130;
 	if (waitpid(-1, NULL, WNOHANG) == 0)
 	{
@@ -71,6 +76,8 @@ void	handle_signal(void (*f)(int), t_shell *shell)
 	(void)shell;
 	signal(SIGINT, (*f));
 	signal(SIGQUIT, SIG_IGN);
+	if (shell->fd_in != -1)
+		close(shell->fd_in);
 }
 
 int	main(int argc, char **argv, char **envp)
