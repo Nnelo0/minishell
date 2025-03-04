@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/03 15:53:54 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/04 08:55:24 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	parse_input(char *input, t_shell *shell)
 
 int	commands(char *input, t_shell *shell)
 {
+	status_ctrl_c(shell);
 	while (*input && (*input == ' ' || *input == '\t'))
 		input++;
 	if (*input == '\0')

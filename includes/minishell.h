@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/03/03 15:54:06 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/04 09:40:21 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,13 @@ typedef struct s_shell
 	char			*res;
 	int				save_in;
 	int				save_out;
+	char			*delimiter;
+	char			*line;
 	t_env			*env_list;
 	t_export		*export_list;
 }	t_shell;
 
-extern t_shell	shell;
+extern int	g_status;
 
 /*---------------builtins---------------*/
 
@@ -157,7 +159,7 @@ void		free_all(t_shell *shell);
 void		handle_prompt(t_shell *shell);
 int			keypress(char *input, t_shell *shell);
 void		handle_sigint(int sig);
-void		handle_signal(void (*f)(int));
+void		handle_signal(void (*f)(int), t_shell *shell);
 void		handle_heredoc(int sig);
 
 /*---------------utils---------------*/
@@ -168,6 +170,6 @@ int			ft_isdigit_s(char *s);
 char		**merge_args(char **input, char *c, int i, int j);
 char		**copy_string(char **input);
 int			verif_input(char *input);
-void		status_ctrl_c(int *status, t_shell *shell);
+void		status_ctrl_c(t_shell *shell);
 
 #endif

@@ -6,18 +6,18 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/03 15:57:24 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/04 10:11:21 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_shell	shell;
+int	g_status = 0;
 
 void	handle_sigint(int sig)
 {
 	(void)sig;
-	shell.status = 130;
+	g_status = 130;
 	if (waitpid(-1, NULL, WNOHANG) == 0)
 	{
 		ft_printf("\n");
@@ -33,6 +33,7 @@ int	keypress(char *input, t_shell *shell)
 {
 	if (!input)
 	{
+		status_ctrl_c(shell);
 		printf("exit\n");
 		rl_clear_history();
 		free_args(shell->env);
@@ -60,14 +61,19 @@ void	handle_prompt(t_shell *shell)
 	}
 }
 
-void	handle_signal(void (*f)(int))
+void	handle_signal(void (*f)(int), t_shell *shell)
 {
+	(void)shell;
 	signal(SIGINT, (*f));
 	signal(SIGQUIT, SIG_IGN);
+	// if (shell->delimiter)
+	// 	free(shell->delimiter);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
+	t_shell	shell;
+
 	(void)argc;
 	(void)argv;
 	shell.status = 0;
@@ -79,7 +85,8 @@ int	main(int argc, char **argv, char **envp)
 	shell.env_list = init_env_list(envp);
 	shell.export_list = init_export_list(envp);
 	shell.env = NULL;
-	handle_signal(handle_sigint);
+	shell.delimiter = NULL;
+	handle_signal(handle_sigint, &shell);
 	handle_prompt(&shell);
 	free_env_list(shell.env_list);
 	free_export_list(shell.export_list);

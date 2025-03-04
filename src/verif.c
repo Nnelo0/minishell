@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 08:36:36 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/03 12:38:04 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/04 09:39:34 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,11 @@ int	verif_input(char *input)
 	return (0);
 }
 
-void	status_ctrl_c(int *status, t_shell *shell)
+void	status_ctrl_c(t_shell *shell)
 {
-	if (*status == 130)
+	if (g_status == 130)
 	{
 		shell->status = 130;
-		*status = 0;
+		g_status = 0;
 	}
 }

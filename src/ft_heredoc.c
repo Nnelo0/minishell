@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 13:31:41 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/03 15:55:55 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/04 09:43:48 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int	write_heredoc(char *line, char *delimiter, int fd)
 void	read_heredoc(t_shell *shell, char *delimiter)
 {
 	pid_t	pid;
-	char	*line;
 
 	shell->fd_in = create_tmp_file();
 	if (shell->fd_in == -1)
@@ -60,22 +59,22 @@ void	read_heredoc(t_shell *shell, char *delimiter)
 		free(shell->cmd);
 		free(shell->out_file);
 		free(shell->tmp);
-		handle_signal(handle_heredoc);
+		handle_signal(handle_heredoc, shell);
 		while (1)
 		{
 			ft_putstr_fd("> ", 1);
-			line = get_next_line(0);
-			if (!line || line[0] == '\0')
+			shell->line = get_next_line(0);
+			if (!shell->line || shell->line[0] == '\0')
 			{
 				free(delimiter);
-				free(line);
+				free(shell->line);
 				ft_putstr_fd("\nHeredoc: warning: end-of-file \
-	(CTRL+D) detected\n", 2);
+(CTRL+D) detected\n", 2);
 				close(shell->fd_in);
 				get_next_line(-1);
 				break ;
 			}
-			if (write_heredoc(line, delimiter, shell->fd_in) == 1)
+			if (write_heredoc(shell->line, delimiter, shell->fd_in) == 1)
 				break ;
 		}
 		exit(shell->status);
@@ -90,24 +89,20 @@ void	read_heredoc(t_shell *shell, char *delimiter)
 void	handle_heredoc(int sig)
 {
 	(void)sig;
-	shell.status = 130;
-	close (shell.fd_in);
+	g_status = 130;
 	exit(1);
-	return ;
 }
 
 int	parse_heredoc(t_shell *shell, int i)
 {
-	char *delimiter;
-
 	if (ft_strcmp(shell->copy[i], "<<") == 0)
 	{
 		if (!shell->copy[i + 1])
 			return (1);
-		delimiter = ft_strdup(shell->copy[++i]);
-		read_heredoc(shell, delimiter);
-		free(delimiter);
-		handle_signal(handle_sigint);
+		shell->delimiter = ft_strdup(shell->copy[++i]);
+		read_heredoc(shell, shell->delimiter);
+		free(shell->delimiter);
+		handle_signal(handle_sigint, shell);
 	}
 	return (0);
 }
