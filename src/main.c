@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/04 17:19:26 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/05 10:52:26 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ void	handle_signal(void (*f)(int), t_shell *shell)
 {
 	(void)shell;
 	signal(SIGINT, (*f));
-	signal(SIGQUIT, SIG_IGN);
 	if (shell->fd_in != -1)
 		close(shell->fd_in);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 int	main(int argc, char **argv, char **envp)

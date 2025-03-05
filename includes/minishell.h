@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/03/04 09:40:21 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/05 10:52:50 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,6 @@ void		handle_prompt(t_shell *shell);
 int			keypress(char *input, t_shell *shell);
 void		handle_sigint(int sig);
 void		handle_signal(void (*f)(int), t_shell *shell);
-void		handle_heredoc(int sig);
 
 /*---------------utils---------------*/
 

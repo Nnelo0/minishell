@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_shell.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/03 11:02:22 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/03/05 10:52:39 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ int	ft_shell(char **cmd, char **envp, t_shell *shell, int status)
 		if (pid == -1)
 			return (127);
 		if (pid == 0)
-			ft_execute_shell(shell, cmd, path, envp);
+			(signal(SIGQUIT, SIG_DFL),
+				ft_execute_shell(shell, cmd, path, envp));
 		return (waitpid(pid, &status, 0), free(path), free_args(envp)
 			, (status >> 8) & 0xFF);
 	}
