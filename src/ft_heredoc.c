@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 13:31:41 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/04 17:24:46 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/05 09:33:04 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ static int	create_tmp_file(void)
 
 int	write_heredoc(char *line, char *delimiter, int fd)
 {
-	if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
+	if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0
+		&& line[ft_strlen(delimiter)] == '\n')
 	{
 		close(fd);
 		return (1);
@@ -44,26 +45,22 @@ void	read_heredoc(t_shell *shell, char *delimiter)
 	g_status = 43;
 	while (1)
 	{
-		ft_putstr_fd("> ", 1);
-		shell->line = get_next_line(0);
+		(ft_putstr_fd("> ", 1), shell->line = get_next_line(0));
 		if (g_status == 42)
 		{
-			get_next_line(-1);
-			g_status = 130;
+			(get_next_line(-1), g_status = 130);
 			break ;
 		}
-		if (!shell->line)
+		if (!shell->line || shell->line[0] == '\0')
 		{
-			ft_putstr_fd("\nHeredoc: warning: end-of-file \
-(CTRL+D) detected\n", 2);
-			close(shell->fd_in);
+			(ft_putstr_fd("\nHeredoc: warning: end-of-file \
+(CTRL+D) detected\n", 2), close(shell->fd_in));
 			break ;
 		}
 		if (write_heredoc(shell->line, delimiter, shell->fd_in) == 1)
 			break ;
 	}
-	close (shell->fd_in);
-	shell->fd_in = -1;
+	(close (shell->fd_in), shell->fd_in = -1);
 	if (shell->status != 130)
 		shell->in_file = ft_strdup(".tmp_heredoc");
 }
