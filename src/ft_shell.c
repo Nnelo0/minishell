@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_shell.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:37:48 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/05 10:52:39 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/05 19:02:57 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,11 @@ void	ft_execute_shell(t_shell *shell, char **cmd, char *path, char **envp)
 	exit(127);
 }
 
-int	ft_shell(char **cmd, char **envp, t_shell *shell, int status)
+int	ft_shell(char **cmd, t_shell *shell, int status)
 {
 	pid_t	pid;
 	char	*path;
+	char	**envp;
 
 	if (ft_strcmp(cmd[0], "") == 0 || verif_shell(cmd[0], shell, 0) == 1)
 		return (shell->status);

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:01:33 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/04 15:32:31 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/03/05 19:03:13 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	which_commands(char **input, char **envp, t_shell *shell)
+int	which_commands(char **input, t_shell *shell)
 {
 	int	i;
 
@@ -29,7 +29,7 @@ int	which_commands(char **input, char **envp, t_shell *shell)
 	if (ft_strncmp(input[0], "cd", 2) == 0 && input[0][2] == '\0')
 		return (ft_cd(input));
 	if (ft_strncmp(input[0], "./", 2) == 0)
-		return (ft_exe(input, envp, shell));
+		return (ft_exe(input, shell));
 	if (ft_strncmp(input[0], "env", 3) == 0 && input[0][3] == '\0')
 		return (ft_env(shell));
 	if (ft_strncmp(input[0], "pwd", 3) == 0 && input[0][3] == '\0')
@@ -38,7 +38,7 @@ int	which_commands(char **input, char **envp, t_shell *shell)
 		return (ft_export(shell));
 	if (ft_strncmp(input[0], "unset", 5) == 0 && input[0][5] == '\0')
 		return (ft_unset(shell));
-	return (ft_shell(input, envp, shell, 0));
+	return (ft_shell(input, shell, 0));
 }
 
 void	command_utils(t_shell *shell)
@@ -51,7 +51,7 @@ void	command_utils(t_shell *shell)
 			free_args(shell->input);
 			return ;
 		}
-		shell->status = which_commands(shell->input, shell->env, shell);
+		shell->status = which_commands(shell->input, shell);
 		if (shell->save_in != -1)
 		{
 			if (dup2(shell->save_in, STDIN_FILENO) == -1)
@@ -75,7 +75,7 @@ void	parse_input(char *input, t_shell *shell)
 	shell->input = ft_split_quote(input, ' ');
 	free(input);
 	shell->cmd = NULL;
-	shell->status = ft_pipe(shell->env, shell);
+	shell->status = ft_pipe(shell);
 }
 
 int	commands(char *input, t_shell *shell)
@@ -91,10 +91,10 @@ int	commands(char *input, t_shell *shell)
 	input = ft_add_space(input, -1);
 	if (verif_input(input) == 2)
 		return (ft_putstr_fd("Invalid Pipes\n", 2), free(input)
-			, free(shell->tmp), free_args(shell->env), shell->status);
+			, free(shell->tmp), shell->status);
 	if (verif_input(input) == 1)
 		return (ft_putstr_fd("Invalid Redirections\n", 2), free(input)
-			, free(shell->tmp), free_args(shell->env), shell->status);
+			, free(shell->tmp), shell->status);
 	(parse_input(input, shell), command_utils(shell), unlink(".tmp_heredoc"));
 	return (free(shell->tmp), shell->status);
 }

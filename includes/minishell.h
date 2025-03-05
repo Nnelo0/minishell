@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:53:43 by nnelo             #+#    #+#             */
-/*   Updated: 2025/03/05 10:52:50 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/05 19:04:43 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef struct s_shell
 	char			*tmp;
 	int				prev_fd;
 	char			**pipe;
-	char			**env;
 	char			**copy;
 	char			*before;
 	char			*var;
@@ -103,18 +102,18 @@ int			ft_export_verif(char **args, int i, int status, int j);
 
 /*---------------ft_shell---------------*/
 
-int			ft_shell(char **cmd, char **envp, t_shell *shell, int status);
+int			ft_shell(char **cmd, t_shell *shell, int status);
 int			verif_shell(char *input, t_shell *shell, int type);
 void		verif_close(t_shell *shell);
 
 /*---------------execute---------------*/
 
 void		ft_execute(char **args, char **envp, t_shell *shell);
-int			ft_exe(char **args, char **envp, t_shell *shell);
+int			ft_exe(char **args, t_shell *shell);
 
 /*---------------pipe---------------*/
 
-int			ft_pipe(char **envp, t_shell *shell);
+int			ft_pipe(t_shell *shell);
 int			valid_pipe(char *input, int i);
 
 /*---------------quotes---------------*/
@@ -146,7 +145,7 @@ void		setup_redirection(t_shell *shell);
 /*---------------commands---------------*/
 
 int			commands(char *input, t_shell *shell);
-int			which_commands(char **input, char **envp, t_shell *shell);
+int			which_commands(char **input, t_shell *shell);
 char		*ft_add_space(char *input, int i);
 
 /*---------------free---------------*/

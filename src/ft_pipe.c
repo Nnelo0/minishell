@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:50:57 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/05 09:48:57 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/05 19:08:07 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	ft_exe_pipe_utils(t_shell *shell)
 	}
 }
 
-int	execute_pipe(t_shell *shell, char **envp, int i)
+int	execute_pipe(t_shell *shell, int i)
 {
 	shell->pipe = ft_split_quote(shell->input[i], ' ');
 	if (shell->prev_fd != -1)
@@ -54,19 +54,18 @@ int	execute_pipe(t_shell *shell, char **envp, int i)
 	}
 	close(shell->pipefd[0]);
 	shell->pipe = get_command(shell->pipe, shell, -1);
-	shell->status = which_commands(shell->pipe, envp, shell);
+	shell->status = which_commands(shell->pipe, shell);
 	ft_exe_pipe_utils(shell);
 	verif_close(shell);
-	free(shell->tmp);
 	free_args(shell->pipe);
 	free_args(shell->input);
 	free_env_list(shell->env_list);
-	free_args(shell->env);
 	free_export_list(shell->export_list);
+	free(shell->tmp);
 	exit(shell->status);
 }
 
-int	parse_commands_pipe(t_shell *shell, char **envp, int i, int status)
+int	parse_commands_pipe(t_shell *shell, int i, int status)
 {
 	pid_t	pid;
 
@@ -81,7 +80,7 @@ int	parse_commands_pipe(t_shell *shell, char **envp, int i, int status)
 		if (pid == -1)
 			return (perror("fork: "), 127);
 		if (pid == 0)
-			execute_pipe(shell, envp, i);
+			execute_pipe(shell, i);
 		if (shell->prev_fd != -1)
 			close(shell->prev_fd);
 		if (is_pipe(shell, i))
@@ -95,7 +94,7 @@ int	parse_commands_pipe(t_shell *shell, char **envp, int i, int status)
 	return (free_args(shell->input), shell->input = NULL, (status >> 8) & 0xFF);
 }
 
-int	ft_pipe(char **envp, t_shell *shell)
+int	ft_pipe(t_shell *shell)
 {
 	int	i;
 
@@ -110,7 +109,7 @@ int	ft_pipe(char **envp, t_shell *shell)
 				return (free_args(shell->input), shell->input = NULL,
 					ft_putstr_fd("Invalid Pipes\n", 2), shell->status);
 			shell->input = merge_args(shell->input, "|", -1, 0);
-			shell->status = parse_commands_pipe(shell, envp, -1, 0);
+			shell->status = parse_commands_pipe(shell, -1, 0);
 			return (shell->status);
 		}
 		i++;

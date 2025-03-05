@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnelo <nnelo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 09:47:40 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/04 10:44:50 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/03/05 19:03:26 by nnelo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,12 @@ int	ft_exit(char **input, t_shell *shell)
 		exit(shell->status), shell->status);
 }
 
-int	ft_exe(char **args, char **envp, t_shell *shell)
+int	ft_exe(char **args, t_shell *shell)
 {
 	pid_t		pid;
 	int			status;
 	struct stat	path_stat;
+	char		**envp;
 
 	if (!args || !args[0])
 		return (ft_putstr_fd("command not found\n", 2), 1);
