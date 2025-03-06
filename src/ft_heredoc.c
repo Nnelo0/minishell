@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 13:31:41 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/05 09:33:04 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:39:52 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	read_heredoc(t_shell *shell, char *delimiter)
 		(ft_putstr_fd("> ", 1), shell->line = get_next_line(0));
 		if (g_status == 42)
 		{
-			(get_next_line(-1), g_status = 130);
+			(get_next_line(-1), g_status = 130, ft_putstr_fd("\n", 1));
 			break ;
 		}
 		if (!shell->line || shell->line[0] == '\0')

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-berr <cle-berr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/06 11:18:39 by cle-berr         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:45:45 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,14 @@ void	handle_prompt(t_shell *shell)
 	}
 }
 
-void	handle_signal(void (*f)(int), t_shell *shell)
+void	handle_signal(t_shell *shell)
 {
-	(void)shell;
-	signal(SIGINT, (*f));
+	struct sigaction	sa;
+
+	sa.sa_handler = handle_sigint;
+	sa.sa_flags = 0;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGINT, &sa, NULL);
 	if (shell->fd_in != -1)
 		close(shell->fd_in);
 	signal(SIGQUIT, SIG_IGN);
@@ -82,6 +86,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	signal(SIGINT, handle_sigint);
 	shell.status = 0;
 	shell.fd_out = -1;
 	shell.fd_in = -1;
@@ -91,7 +96,7 @@ int	main(int argc, char **argv, char **envp)
 	shell.env_list = init_env_list(envp);
 	shell.export_list = init_export_list(envp);
 	shell.delimiter = NULL;
-	handle_signal(handle_sigint, &shell);
+	handle_signal(&shell);
 	handle_prompt(&shell);
 	free_env_list(shell.env_list);
 	free_export_list(shell.export_list);
