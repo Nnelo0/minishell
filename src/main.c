@@ -6,7 +6,7 @@
 /*   By: ebroudic <ebroudic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:16:59 by ebroudic          #+#    #+#             */
-/*   Updated: 2025/03/06 09:01:27 by ebroudic         ###   ########.fr       */
+/*   Updated: 2025/03/06 11:14:20 by ebroudic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ void	handle_sigint(int sig)
 	}
 	g_status = 130;
 	if (waitpid(-1, NULL, WNOHANG) == 0)
-	{
-		ft_printf("\n");
 		return ;
-	}
 	ft_printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
